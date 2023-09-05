@@ -1,7 +1,5 @@
 # Etptypes
 
-[![License](https://img.shields.io/pypi/l/etptypes)](https://github.com/geosiris-technologies/etptypes-rs/blob/main/LICENSE)
-
 
 ## Introduction
 
@@ -20,7 +18,13 @@ ETP rust dev kit
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the `LICENSE` file for details
+Licensed under either of
+
+    Apache License, Version 2.0, (LICENSE-APACHE or [https://www.apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0))
+    MIT license (LICENSE-MIT or [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT))
+    
+    at your option.
+
 
 ## Support
 
