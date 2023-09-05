@@ -9,12 +9,9 @@ use std::collections::HashMap;
 // ['i64']
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "camelCase")]
-pub struct ArrayOfNullableLong{
-
-	#[serde(rename = "values")]
-    pub values:Vec<Option<i64>>,
-
+pub struct ArrayOfNullableLong {
+    #[serde(rename = "values")]
+    pub values: Vec<Option<i64>>,
 }
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ArrayOfNullableLong", "fields": [{"name": "values", "type": {"type": "array", "items": ["null", "long"]}}], "fullName": "Energistics.Etp.v12.Datatypes.ArrayOfNullableLong", "depends": []}"#;
-

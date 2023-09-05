@@ -12,14 +12,16 @@ env:
 
 jobs:
   build:
+    env:
+      CODE_ROOT_DIR: gen/
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      working-directory: ./gen
+      working-directory: ${{ CODE_ROOT_DIR }}
       run: cargo build --verbose
     - name: Run tests
-      working-directory: ./gen
+      working-directory: ${{ CODE_ROOT_DIR }}
       run: cargo test --verbose

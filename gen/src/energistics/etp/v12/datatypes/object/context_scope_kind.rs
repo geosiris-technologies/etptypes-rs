@@ -6,23 +6,20 @@ use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 
-
-
-
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub enum ContextScopeKind{
-    self_ ,
+pub enum ContextScopeKind {
+    self_,
     sources,
     targets,
     sources_or_self,
     targets_or_self,
 }
 
-impl fmt::Display for ContextScopeKind{
-     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl fmt::Display for ContextScopeKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
@@ -36,5 +33,3 @@ impl fmt::Display for ContextScopeKind{
         )
     }
 }
-
-

@@ -2,22 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::EtpMessageBody;
+use avro_rs::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use avro_rs::{Schema, Error};
-use crate::helpers::EtpMessageBody;
-
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "camelCase")]
-pub struct ReplacePartsByRangeResponse{
-}
+pub struct ReplacePartsByRangeResponse {}
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.GrowingObject", "name": "ReplacePartsByRangeResponse", "protocol": "6", "messageType": "18", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [], "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.ReplacePartsByRangeResponse", "depends": []}"#;
 
-impl EtpMessageBody for ReplacePartsByRangeResponse{
-    fn avro_schema() -> Option<Schema>{
+impl EtpMessageBody for ReplacePartsByRangeResponse {
+    fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
             Err(e) => {
@@ -25,20 +23,19 @@ impl EtpMessageBody for ReplacePartsByRangeResponse{
             }
         }
     }
-    fn protocol(&self) ->i32{
+    fn protocol(&self) -> i32 {
         6
     }
-    fn message_type(&self) ->i32{
+    fn message_type(&self) -> i32 {
         18
     }
-    fn sender_role(&self) ->String{
+    fn sender_role(&self) -> String {
         "store".to_string()
     }
-    fn protocol_roles(&self) ->String{
+    fn protocol_roles(&self) -> String {
         "store,customer".to_string()
     }
-    fn multipart_flag(&self) ->bool{
+    fn multipart_flag(&self) -> bool {
         false
     }
 }
-

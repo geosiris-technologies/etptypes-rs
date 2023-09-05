@@ -6,14 +6,11 @@ use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 
-
-
-
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub enum AnyArrayType{
+pub enum AnyArrayType {
     array_of_boolean,
     array_of_int,
     array_of_long,
@@ -23,8 +20,8 @@ pub enum AnyArrayType{
     bytes,
 }
 
-impl fmt::Display for AnyArrayType{
-     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl fmt::Display for AnyArrayType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
@@ -40,5 +37,3 @@ impl fmt::Display for AnyArrayType{
         )
     }
 }
-
-

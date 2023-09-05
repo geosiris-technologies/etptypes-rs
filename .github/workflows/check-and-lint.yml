@@ -1,0 +1,67 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+
+name: Check and Lint
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    env:
+      CODE_ROOT_DIR: gen/
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          command: check
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    env:
+      CODE_ROOT_DIR: gen/
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          command: fmt
+          args: --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    env:
+      CODE_ROOT_DIR: gen/
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          toolchain: stable
+          components: clippy
+          override: true
+      - uses: actions-rs/clippy-check@v1
+        working-directory: ${{ CODE_ROOT_DIR }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
+          name: Clippy Output

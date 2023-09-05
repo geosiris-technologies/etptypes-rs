@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Release Packaging
+
+jobs:
+  release:
+    name: Release Packaging
+    env:
+      CODE_ROOT_DIR: gen/
+    #   PROJECT_NAME_UNDERSCORE: etptypes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Release Build
+        working-directory: ${{ CODE_ROOT_DIR }}
+        run: cargo build --release
+      - name: 'Upload Artifact'
+        working-directory: ${{ CODE_ROOT_DIR }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: etptypes
+          path: target/release/etptypes

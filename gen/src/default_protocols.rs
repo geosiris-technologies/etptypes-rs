@@ -6,156 +6,162 @@ use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 
-use std::time::{SystemTime};
 use crate::energistics::etp::v12::datatypes::uuid::Uuid;
-use crate::helpers::*;impl Default for crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
-	/* Protocol 0, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
-		crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
-			application_name : "".to_string(),
-			application_version : "".to_string(),
-			client_instance_id : Uuid::new_v4(),
-			requested_protocols : vec![],
-			supported_data_objects : vec![],
-			supported_compression : vec!(),
-			supported_formats : vec!("xml".to_string(),),
-			current_date_time : time_to_etp(SystemTime::now()),
-			earliest_retained_change_time : time_to_etp(SystemTime::now()),
-			server_authorization_required : false,
-			endpoint_capabilities : HashMap::new(),
-		}
-	}
+use crate::helpers::*;
+use std::time::SystemTime;
+impl Default for crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
+    /* Protocol 0, MessageType : 1 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
+        crate::energistics::etp::v12::protocol::core::request_session::RequestSession {
+            application_name: "".to_string(),
+            application_version: "".to_string(),
+            client_instance_id: Uuid::new_v4(),
+            requested_protocols: vec![],
+            supported_data_objects: vec![],
+            supported_compression: vec![],
+            supported_formats: vec!["xml".to_string()],
+            current_date_time: time_to_etp(SystemTime::now()),
+            earliest_retained_change_time: time_to_etp(SystemTime::now()),
+            server_authorization_required: false,
+            endpoint_capabilities: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::open_session::OpenSession {
-	/* Protocol 0, MessageType : 2 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::open_session::OpenSession {
-		crate::energistics::etp::v12::protocol::core::open_session::OpenSession {
-			application_name : "".to_string(),
-			application_version : "".to_string(),
-			server_instance_id : Uuid::new_v4(),
-			supported_protocols : vec![],
-			supported_data_objects : vec![],
-			supported_compression : "".to_string(),
-			supported_formats : vec!("xml".to_string(),),
-			current_date_time : time_to_etp(SystemTime::now()),
-			earliest_retained_change_time : time_to_etp(SystemTime::now()),
-			session_id : Uuid::new_v4(),
-			endpoint_capabilities : HashMap::new(),
-		}
-	}
+    /* Protocol 0, MessageType : 2 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::open_session::OpenSession {
+        crate::energistics::etp::v12::protocol::core::open_session::OpenSession {
+            application_name: "".to_string(),
+            application_version: "".to_string(),
+            server_instance_id: Uuid::new_v4(),
+            supported_protocols: vec![],
+            supported_data_objects: vec![],
+            supported_compression: "".to_string(),
+            supported_formats: vec!["xml".to_string()],
+            current_date_time: time_to_etp(SystemTime::now()),
+            earliest_retained_change_time: time_to_etp(SystemTime::now()),
+            session_id: Uuid::new_v4(),
+            endpoint_capabilities: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::close_session::CloseSession {
-	/* Protocol 0, MessageType : 5 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::close_session::CloseSession {
-		crate::energistics::etp::v12::protocol::core::close_session::CloseSession {
-			reason : "".to_string(),
-		}
-	}
+    /* Protocol 0, MessageType : 5 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::close_session::CloseSession {
+        crate::energistics::etp::v12::protocol::core::close_session::CloseSession {
+            reason: "".to_string(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::authorize::Authorize {
-	/* Protocol 0, MessageType : 6 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::authorize::Authorize {
-		crate::energistics::etp::v12::protocol::core::authorize::Authorize {
-			authorization : "".to_string(),
-			supplemental_authorization : HashMap::new(),
-		}
-	}
+    /* Protocol 0, MessageType : 6 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::authorize::Authorize {
+        crate::energistics::etp::v12::protocol::core::authorize::Authorize {
+            authorization: "".to_string(),
+            supplemental_authorization: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse {
-	/* Protocol 0, MessageType : 7 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse {
-		crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse {
-			success : true,
-			challenges : vec![],
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse
+{
+    /* Protocol 0, MessageType : 7 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse {
+        crate::energistics::etp::v12::protocol::core::authorize_response::AuthorizeResponse {
+            success: true,
+            challenges: vec![],
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::ping::Ping {
-	/* Protocol 0, MessageType : 8 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::ping::Ping {
-		crate::energistics::etp::v12::protocol::core::ping::Ping {
-			current_date_time : time_to_etp(SystemTime::now()),
-		}
-	}
+    /* Protocol 0, MessageType : 8 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::ping::Ping {
+        crate::energistics::etp::v12::protocol::core::ping::Ping {
+            current_date_time: time_to_etp(SystemTime::now()),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::pong::Pong {
-	/* Protocol 0, MessageType : 9 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::pong::Pong {
-		crate::energistics::etp::v12::protocol::core::pong::Pong {
-			current_date_time : time_to_etp(SystemTime::now()),
-		}
-	}
+    /* Protocol 0, MessageType : 9 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::pong::Pong {
+        crate::energistics::etp::v12::protocol::core::pong::Pong {
+            current_date_time: time_to_etp(SystemTime::now()),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException {
-	/* Protocol 0, MessageType : 1000 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException {
-		crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException {
-			error : None,
-			errors : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException
+{
+    /* Protocol 0, MessageType : 1000 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException {
+        crate::energistics::etp::v12::protocol::core::protocol_exception::ProtocolException {
+            error: None,
+            errors: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::core::acknowledge::Acknowledge {
-	/* Protocol 0, MessageType : 1001 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::core::acknowledge::Acknowledge {
-		crate::energistics::etp::v12::protocol::core::acknowledge::Acknowledge {
-		}
-	}
+    /* Protocol 0, MessageType : 1001 */
+    fn default() -> crate::energistics::etp::v12::protocol::core::acknowledge::Acknowledge {
+        crate::energistics::etp::v12::protocol::core::acknowledge::Acknowledge {}
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata {
-	/* Protocol 1, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata {
-		crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata {
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata
+{
+    /* Protocol 1, MessageType : 1 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata
+    {
+        crate::energistics::etp::v12::protocol::channel_streaming::channel_metadata::ChannelMetadata {
 			channels : vec![],
 		}
-	}
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData {
-	/* Protocol 1, MessageType : 2 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData {
-		crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData {
-			data : vec![],
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData
+{
+    /* Protocol 1, MessageType : 2 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData {
+        crate::energistics::etp::v12::protocol::channel_streaming::channel_data::ChannelData {
+            data: vec![],
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming {
-	/* Protocol 1, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming {
-		crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming {
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming
+{
+    /* Protocol 1, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming
+    {
+        crate::energistics::etp::v12::protocol::channel_streaming::start_streaming::StartStreaming {}
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming {
-	/* Protocol 1, MessageType : 4 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming {
-		crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming {
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming
+{
+    /* Protocol 1, MessageType : 4 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming
+    {
+        crate::energistics::etp::v12::protocol::channel_streaming::stop_streaming::StopStreaming {}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_streaming::truncate_channels::TruncateChannels {
@@ -192,17 +198,18 @@ impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::get
 }
 
 impl crate::energistics::etp::v12::protocol::channel_data_frame::get_frame::GetFrame {
-	/* Protocol 2, MessageType : 3 */
-	pub fn default_with_params(_requested_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,)
-	-> crate::energistics::etp::v12::protocol::channel_data_frame::get_frame::GetFrame {
-		crate::energistics::etp::v12::protocol::channel_data_frame::get_frame::GetFrame {
-			uri : "".to_string(),
-			include_all_channel_secondary_indexes : false,
-			requested_interval : _requested_interval,
-			request_uuid : Uuid::new_v4(),
-			requested_secondary_intervals : vec!(),
-		}
-	}
+    /* Protocol 2, MessageType : 3 */
+    pub fn default_with_params(
+        _requested_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,
+    ) -> crate::energistics::etp::v12::protocol::channel_data_frame::get_frame::GetFrame {
+        crate::energistics::etp::v12::protocol::channel_data_frame::get_frame::GetFrame {
+            uri: "".to_string(),
+            include_all_channel_secondary_indexes: false,
+            requested_interval: _requested_interval,
+            request_uuid: Uuid::new_v4(),
+            requested_secondary_intervals: vec![],
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::get_frame_response_header::GetFrameResponseHeader {
@@ -216,14 +223,17 @@ impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::get
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame {
-	/* Protocol 2, MessageType : 5 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame {
-		crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame {
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame
+{
+    /* Protocol 2, MessageType : 5 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame
+    {
+        crate::energistics::etp::v12::protocol::channel_data_frame::cancel_get_frame::CancelGetFrame {
 			request_uuid : Uuid::new_v4(),
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::get_frame_response_rows::GetFrameResponseRows {
@@ -237,18 +247,20 @@ impl Default for crate::energistics::etp::v12::protocol::channel_data_frame::get
 }
 
 impl crate::energistics::etp::v12::protocol::discovery::get_resources::GetResources {
-	/* Protocol 3, MessageType : 1 */
-	pub fn default_with_params(_context :crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,_scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,)
-	-> crate::energistics::etp::v12::protocol::discovery::get_resources::GetResources {
-		crate::energistics::etp::v12::protocol::discovery::get_resources::GetResources {
-			context : _context,
-			scope : _scope,
-			count_objects : false,
-			store_last_write_filter : None,
-			active_status_filter : None,
-			include_edges : false,
-		}
-	}
+    /* Protocol 3, MessageType : 1 */
+    pub fn default_with_params(
+        _context: crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,
+        _scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,
+    ) -> crate::energistics::etp::v12::protocol::discovery::get_resources::GetResources {
+        crate::energistics::etp::v12::protocol::discovery::get_resources::GetResources {
+            context: _context,
+            scope: _scope,
+            count_objects: false,
+            store_last_write_filter: None,
+            active_status_filter: None,
+            include_edges: false,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::discovery::get_resources_response::GetResourcesResponse {
@@ -294,36 +306,38 @@ impl Default for crate::energistics::etp::v12::protocol::discovery::get_resource
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store::get_data_objects::GetDataObjects {
-	/* Protocol 4, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::store::get_data_objects::GetDataObjects {
-		crate::energistics::etp::v12::protocol::store::get_data_objects::GetDataObjects {
-			uris : HashMap::new(),
-			format : "xml".to_string(),
-		}
-	}
+    /* Protocol 4, MessageType : 1 */
+    fn default() -> crate::energistics::etp::v12::protocol::store::get_data_objects::GetDataObjects
+    {
+        crate::energistics::etp::v12::protocol::store::get_data_objects::GetDataObjects {
+            uris: HashMap::new(),
+            format: "xml".to_string(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store::put_data_objects::PutDataObjects {
-	/* Protocol 4, MessageType : 2 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::store::put_data_objects::PutDataObjects {
-		crate::energistics::etp::v12::protocol::store::put_data_objects::PutDataObjects {
-			data_objects : HashMap::new(),
-			prune_contained_objects : false,
-		}
-	}
+    /* Protocol 4, MessageType : 2 */
+    fn default() -> crate::energistics::etp::v12::protocol::store::put_data_objects::PutDataObjects
+    {
+        crate::energistics::etp::v12::protocol::store::put_data_objects::PutDataObjects {
+            data_objects: HashMap::new(),
+            prune_contained_objects: false,
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects {
-	/* Protocol 4, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects {
-		crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects {
-			uris : HashMap::new(),
-			prune_contained_objects : false,
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects
+{
+    /* Protocol 4, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects {
+        crate::energistics::etp::v12::protocol::store::delete_data_objects::DeleteDataObjects {
+            uris: HashMap::new(),
+            prune_contained_objects: false,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store::get_data_objects_response::GetDataObjectsResponse {
@@ -337,15 +351,16 @@ impl Default for crate::energistics::etp::v12::protocol::store::get_data_objects
 }
 
 impl crate::energistics::etp::v12::protocol::store::chunk::Chunk {
-	/* Protocol 4, MessageType : 8 */
-	pub fn default_with_params(_data :Vec<u8>,)
-	-> crate::energistics::etp::v12::protocol::store::chunk::Chunk {
-		crate::energistics::etp::v12::protocol::store::chunk::Chunk {
-			blob_id : Uuid::new_v4(),
-			data : _data,
-			final_  : true,
-		}
-	}
+    /* Protocol 4, MessageType : 8 */
+    pub fn default_with_params(
+        _data: Vec<u8>,
+    ) -> crate::energistics::etp::v12::protocol::store::chunk::Chunk {
+        crate::energistics::etp::v12::protocol::store::chunk::Chunk {
+            blob_id: Uuid::new_v4(),
+            data: _data,
+            final_: true,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store::put_data_objects_response::PutDataObjectsResponse {
@@ -369,26 +384,31 @@ impl Default for crate::energistics::etp::v12::protocol::store::delete_data_obje
 }
 
 impl crate::energistics::etp::v12::protocol::store_notification::object_changed::ObjectChanged {
-	/* Protocol 5, MessageType : 2 */
-	pub fn default_with_params(_change :crate::energistics::etp::v12::datatypes::object::object_change::ObjectChange,)
-	-> crate::energistics::etp::v12::protocol::store_notification::object_changed::ObjectChanged {
-		crate::energistics::etp::v12::protocol::store_notification::object_changed::ObjectChanged {
-			change : _change,
-			request_uuid : Uuid::new_v4(),
-		}
-	}
+    /* Protocol 5, MessageType : 2 */
+    pub fn default_with_params(
+        _change: crate::energistics::etp::v12::datatypes::object::object_change::ObjectChange,
+    ) -> crate::energistics::etp::v12::protocol::store_notification::object_changed::ObjectChanged
+    {
+        crate::energistics::etp::v12::protocol::store_notification::object_changed::ObjectChanged {
+            change: _change,
+            request_uuid: Uuid::new_v4(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted {
-	/* Protocol 5, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted {
-		crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted {
-			uri : "".to_string(),
-			change_time : time_to_etp(SystemTime::now()),
-			request_uuid : Uuid::new_v4(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted
+{
+    /* Protocol 5, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted
+    {
+        crate::energistics::etp::v12::protocol::store_notification::object_deleted::ObjectDeleted {
+            uri: "".to_string(),
+            change_time: time_to_etp(SystemTime::now()),
+            request_uuid: Uuid::new_v4(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store_notification::unsubscribe_notifications::UnsubscribeNotifications {
@@ -445,15 +465,16 @@ impl Default for crate::energistics::etp::v12::protocol::store_notification::uns
 }
 
 impl crate::energistics::etp::v12::protocol::store_notification::chunk::Chunk {
-	/* Protocol 5, MessageType : 9 */
-	pub fn default_with_params(_data :Vec<u8>,)
-	-> crate::energistics::etp::v12::protocol::store_notification::chunk::Chunk {
-		crate::energistics::etp::v12::protocol::store_notification::chunk::Chunk {
-			blob_id : Uuid::new_v4(),
-			data : _data,
-			final_  : true,
-		}
-	}
+    /* Protocol 5, MessageType : 9 */
+    pub fn default_with_params(
+        _data: Vec<u8>,
+    ) -> crate::energistics::etp::v12::protocol::store_notification::chunk::Chunk {
+        crate::energistics::etp::v12::protocol::store_notification::chunk::Chunk {
+            blob_id: Uuid::new_v4(),
+            data: _data,
+            final_: true,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store_notification::subscribe_notifications_response::SubscribeNotificationsResponse {
@@ -480,63 +501,66 @@ impl crate::energistics::etp::v12::protocol::store_notification::object_active_s
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object::delete_parts::DeleteParts {
-	/* Protocol 6, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::delete_parts::DeleteParts {
-		crate::energistics::etp::v12::protocol::growing_object::delete_parts::DeleteParts {
-			uri : "".to_string(),
-			uids : HashMap::new(),
-		}
-	}
+    /* Protocol 6, MessageType : 1 */
+    fn default() -> crate::energistics::etp::v12::protocol::growing_object::delete_parts::DeleteParts
+    {
+        crate::energistics::etp::v12::protocol::growing_object::delete_parts::DeleteParts {
+            uri: "".to_string(),
+            uids: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object::get_parts::GetParts {
-	/* Protocol 6, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::get_parts::GetParts {
-		crate::energistics::etp::v12::protocol::growing_object::get_parts::GetParts {
-			uri : "".to_string(),
-			format : "xml".to_string(),
-			uids : HashMap::new(),
-		}
-	}
+    /* Protocol 6, MessageType : 3 */
+    fn default() -> crate::energistics::etp::v12::protocol::growing_object::get_parts::GetParts {
+        crate::energistics::etp::v12::protocol::growing_object::get_parts::GetParts {
+            uri: "".to_string(),
+            format: "xml".to_string(),
+            uids: HashMap::new(),
+        }
+    }
 }
 
 impl crate::energistics::etp::v12::protocol::growing_object::get_parts_by_range::GetPartsByRange {
-	/* Protocol 6, MessageType : 4 */
-	pub fn default_with_params(_index_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,)
-	-> crate::energistics::etp::v12::protocol::growing_object::get_parts_by_range::GetPartsByRange {
-		crate::energistics::etp::v12::protocol::growing_object::get_parts_by_range::GetPartsByRange {
+    /* Protocol 6, MessageType : 4 */
+    pub fn default_with_params(
+        _index_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,
+    ) -> crate::energistics::etp::v12::protocol::growing_object::get_parts_by_range::GetPartsByRange
+    {
+        crate::energistics::etp::v12::protocol::growing_object::get_parts_by_range::GetPartsByRange {
 			uri : "".to_string(),
 			format : "xml".to_string(),
 			index_interval : _index_interval,
 			include_overlapping_intervals : true,
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object::put_parts::PutParts {
-	/* Protocol 6, MessageType : 5 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::put_parts::PutParts {
-		crate::energistics::etp::v12::protocol::growing_object::put_parts::PutParts {
-			uri : "".to_string(),
-			format : "xml".to_string(),
-			parts : HashMap::new(),
-		}
-	}
+    /* Protocol 6, MessageType : 5 */
+    fn default() -> crate::energistics::etp::v12::protocol::growing_object::put_parts::PutParts {
+        crate::energistics::etp::v12::protocol::growing_object::put_parts::PutParts {
+            uri: "".to_string(),
+            format: "xml".to_string(),
+            parts: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse {
-	/* Protocol 6, MessageType : 6 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse {
-		crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse {
+impl Default
+    for crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse
+{
+    /* Protocol 6, MessageType : 6 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse
+    {
+        crate::energistics::etp::v12::protocol::growing_object::get_parts_response::GetPartsResponse {
 			uri : "".to_string(),
 			format : "xml".to_string(),
 			parts : HashMap::new(),
 		}
-	}
+    }
 }
 
 impl crate::energistics::etp::v12::protocol::growing_object::replace_parts_by_range::ReplacePartsByRange {
@@ -553,14 +577,17 @@ impl crate::energistics::etp::v12::protocol::growing_object::replace_parts_by_ra
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata {
-	/* Protocol 6, MessageType : 8 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata {
-		crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata {
+impl Default
+    for crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata
+{
+    /* Protocol 6, MessageType : 8 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata
+    {
+        crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata::GetPartsMetadata {
 			uris : HashMap::new(),
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object::get_parts_metadata_response::GetPartsMetadataResponse {
@@ -595,14 +622,17 @@ impl Default for crate::energistics::etp::v12::protocol::growing_object::delete_
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse {
-	/* Protocol 6, MessageType : 13 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse {
-		crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse {
+impl Default
+    for crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse
+{
+    /* Protocol 6, MessageType : 13 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse
+    {
+        crate::energistics::etp::v12::protocol::growing_object::put_parts_response::PutPartsResponse {
 			success : HashMap::new(),
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object::get_growing_data_objects_header::GetGrowingDataObjectsHeader {
@@ -677,11 +707,13 @@ impl Default for crate::energistics::etp::v12::protocol::growing_object::get_cha
 	}
 }
 
-impl crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged {
-	/* Protocol 7, MessageType : 2 */
+impl
+    crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged
+{
+    /* Protocol 7, MessageType : 2 */
 	pub fn default_with_params(_change_kind :crate::energistics::etp::v12::datatypes::object::object_change_kind::ObjectChangeKind,)
-	-> crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged {
-		crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged {
+    -> crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged{
+        crate::energistics::etp::v12::protocol::growing_object_notification::parts_changed::PartsChanged {
 			uri : "".to_string(),
 			request_uuid : Uuid::new_v4(),
 			change_kind : _change_kind,
@@ -689,7 +721,7 @@ impl crate::energistics::etp::v12::protocol::growing_object_notification::parts_
 			format : "".to_string(),
 			parts : vec![],
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object_notification::parts_deleted::PartsDeleted {
@@ -782,44 +814,54 @@ impl Default for crate::energistics::etp::v12::protocol::data_array::get_data_ar
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays {
-	/* Protocol 9, MessageType : 2 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays {
-		crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays {
-			data_arrays : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays
+{
+    /* Protocol 9, MessageType : 2 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays {
+        crate::energistics::etp::v12::protocol::data_array::get_data_arrays::GetDataArrays {
+            data_arrays: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays {
-	/* Protocol 9, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays {
-		crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays {
-			data_subarrays : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays
+{
+    /* Protocol 9, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays
+    {
+        crate::energistics::etp::v12::protocol::data_array::get_data_subarrays::GetDataSubarrays {
+            data_subarrays: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays {
-	/* Protocol 9, MessageType : 4 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays {
-		crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays {
-			data_arrays : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays
+{
+    /* Protocol 9, MessageType : 4 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays {
+        crate::energistics::etp::v12::protocol::data_array::put_data_arrays::PutDataArrays {
+            data_arrays: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays {
-	/* Protocol 9, MessageType : 5 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays {
-		crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays {
-			data_subarrays : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays
+{
+    /* Protocol 9, MessageType : 5 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays
+    {
+        crate::energistics::etp::v12::protocol::data_array::put_data_subarrays::PutDataSubarrays {
+            data_subarrays: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::data_array::get_data_array_metadata::GetDataArrayMetadata {
@@ -893,16 +935,19 @@ impl Default for crate::energistics::etp::v12::protocol::data_array::put_uniniti
 }
 
 impl crate::energistics::etp::v12::protocol::discovery_query::find_resources::FindResources {
-	/* Protocol 13, MessageType : 1 */
-	pub fn default_with_params(_context :crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,_scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,)
-	-> crate::energistics::etp::v12::protocol::discovery_query::find_resources::FindResources {
-		crate::energistics::etp::v12::protocol::discovery_query::find_resources::FindResources {
-			context : _context,
-			scope : _scope,
-			store_last_write_filter : None,
-			active_status_filter : None,
-		}
-	}
+    /* Protocol 13, MessageType : 1 */
+    pub fn default_with_params(
+        _context: crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,
+        _scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,
+    ) -> crate::energistics::etp::v12::protocol::discovery_query::find_resources::FindResources
+    {
+        crate::energistics::etp::v12::protocol::discovery_query::find_resources::FindResources {
+            context: _context,
+            scope: _scope,
+            store_last_write_filter: None,
+            active_status_filter: None,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::discovery_query::find_resources_response::FindResourcesResponse {
@@ -917,17 +962,20 @@ impl Default for crate::energistics::etp::v12::protocol::discovery_query::find_r
 }
 
 impl crate::energistics::etp::v12::protocol::store_query::find_data_objects::FindDataObjects {
-	/* Protocol 14, MessageType : 1 */
-	pub fn default_with_params(_context :crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,_scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,)
-	-> crate::energistics::etp::v12::protocol::store_query::find_data_objects::FindDataObjects {
-		crate::energistics::etp::v12::protocol::store_query::find_data_objects::FindDataObjects {
-			context : _context,
-			scope : _scope,
-			store_last_write_filter : None,
-			active_status_filter : None,
-			format : "xml".to_string(),
-		}
-	}
+    /* Protocol 14, MessageType : 1 */
+    pub fn default_with_params(
+        _context: crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo,
+        _scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,
+    ) -> crate::energistics::etp::v12::protocol::store_query::find_data_objects::FindDataObjects
+    {
+        crate::energistics::etp::v12::protocol::store_query::find_data_objects::FindDataObjects {
+            context: _context,
+            scope: _scope,
+            store_last_write_filter: None,
+            active_status_filter: None,
+            format: "xml".to_string(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::store_query::find_data_objects_response::FindDataObjectsResponse {
@@ -942,26 +990,29 @@ impl Default for crate::energistics::etp::v12::protocol::store_query::find_data_
 }
 
 impl crate::energistics::etp::v12::protocol::store_query::chunk::Chunk {
-	/* Protocol 14, MessageType : 3 */
-	pub fn default_with_params(_data :Vec<u8>,)
-	-> crate::energistics::etp::v12::protocol::store_query::chunk::Chunk {
-		crate::energistics::etp::v12::protocol::store_query::chunk::Chunk {
-			blob_id : Uuid::new_v4(),
-			data : _data,
-			final_  : true,
-		}
-	}
+    /* Protocol 14, MessageType : 3 */
+    pub fn default_with_params(
+        _data: Vec<u8>,
+    ) -> crate::energistics::etp::v12::protocol::store_query::chunk::Chunk {
+        crate::energistics::etp::v12::protocol::store_query::chunk::Chunk {
+            blob_id: Uuid::new_v4(),
+            data: _data,
+            final_: true,
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts {
-	/* Protocol 16, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts {
-		crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts {
-			uri : "".to_string(),
-			format : "xml".to_string(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts
+{
+    /* Protocol 16, MessageType : 1 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts {
+        crate::energistics::etp::v12::protocol::growing_object_query::find_parts::FindParts {
+            uri: "".to_string(),
+            format: "xml".to_string(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::growing_object_query::find_parts_response::FindPartsResponse {
@@ -977,16 +1028,19 @@ impl Default for crate::energistics::etp::v12::protocol::growing_object_query::f
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction {
-	/* Protocol 18, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction {
-		crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction {
-			read_only : true,
-			message : "".to_string(),
-			dataspace_uris : vec!("".to_string(),),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction
+{
+    /* Protocol 18, MessageType : 1 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction
+    {
+        crate::energistics::etp::v12::protocol::transaction::start_transaction::StartTransaction {
+            read_only: true,
+            message: "".to_string(),
+            dataspace_uris: vec!["".to_string()],
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::transaction::start_transaction_response::StartTransactionResponse {
@@ -1001,14 +1055,17 @@ impl Default for crate::energistics::etp::v12::protocol::transaction::start_tran
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction {
-	/* Protocol 18, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction {
-		crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction {
-			transaction_uuid : Uuid::new_v4(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction
+{
+    /* Protocol 18, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction
+    {
+        crate::energistics::etp::v12::protocol::transaction::commit_transaction::CommitTransaction {
+            transaction_uuid: Uuid::new_v4(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::transaction::rollback_transaction::RollbackTransaction {
@@ -1075,27 +1132,31 @@ impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::subs
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData {
-	/* Protocol 21, MessageType : 4 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData {
-		crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData {
-			data : vec![],
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData
+{
+    /* Protocol 21, MessageType : 4 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData {
+        crate::energistics::etp::v12::protocol::channel_subscribe::channel_data::ChannelData {
+            data: vec![],
+        }
+    }
 }
 
 impl crate::energistics::etp::v12::protocol::channel_subscribe::range_replaced::RangeReplaced {
-	/* Protocol 21, MessageType : 6 */
-	pub fn default_with_params(_changed_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,)
-	-> crate::energistics::etp::v12::protocol::channel_subscribe::range_replaced::RangeReplaced {
-		crate::energistics::etp::v12::protocol::channel_subscribe::range_replaced::RangeReplaced {
-			change_time : time_to_etp(SystemTime::now()),
-			channel_ids : vec![],
-			changed_interval : _changed_interval,
-			data : vec![],
-		}
-	}
+    /* Protocol 21, MessageType : 6 */
+    pub fn default_with_params(
+        _changed_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,
+    ) -> crate::energistics::etp::v12::protocol::channel_subscribe::range_replaced::RangeReplaced
+    {
+        crate::energistics::etp::v12::protocol::channel_subscribe::range_replaced::RangeReplaced {
+            change_time: time_to_etp(SystemTime::now()),
+            channel_ids: vec![],
+            changed_interval: _changed_interval,
+            data: vec![],
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::unsubscribe_channels::UnsubscribeChannels {
@@ -1120,14 +1181,14 @@ impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::subs
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges::GetRanges {
-	/* Protocol 21, MessageType : 9 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges::GetRanges {
-		crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges::GetRanges {
-			request_uuid : Uuid::new_v4(),
-			channel_ranges : vec![],
-		}
-	}
+    /* Protocol 21, MessageType : 9 */
+    fn default() -> crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges::GetRanges
+    {
+        crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges::GetRanges {
+            request_uuid: Uuid::new_v4(),
+            channel_ranges: vec![],
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::get_ranges_response::GetRangesResponse {
@@ -1192,14 +1253,17 @@ impl Default for crate::energistics::etp::v12::protocol::channel_subscribe::get_
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels {
-	/* Protocol 22, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels {
-		crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels {
-			uris : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels
+{
+    /* Protocol 22, MessageType : 1 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels
+    {
+        crate::energistics::etp::v12::protocol::channel_data_load::open_channels::OpenChannels {
+            uris: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_data_load::open_channels_response::OpenChannelsResponse {
@@ -1212,47 +1276,57 @@ impl Default for crate::energistics::etp::v12::protocol::channel_data_load::open
 	}
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels {
-	/* Protocol 22, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels {
-		crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels {
-			id : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels
+{
+    /* Protocol 22, MessageType : 3 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels
+    {
+        crate::energistics::etp::v12::protocol::channel_data_load::close_channels::CloseChannels {
+            id: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData {
-	/* Protocol 22, MessageType : 4 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData {
-		crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData {
-			data : vec![],
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData
+{
+    /* Protocol 22, MessageType : 4 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData {
+        crate::energistics::etp::v12::protocol::channel_data_load::channel_data::ChannelData {
+            data: vec![],
+        }
+    }
 }
 
 impl crate::energistics::etp::v12::protocol::channel_data_load::replace_range::ReplaceRange {
-	/* Protocol 22, MessageType : 6 */
-	pub fn default_with_params(_changed_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,)
-	-> crate::energistics::etp::v12::protocol::channel_data_load::replace_range::ReplaceRange {
-		crate::energistics::etp::v12::protocol::channel_data_load::replace_range::ReplaceRange {
-			changed_interval : _changed_interval,
-			channel_ids : vec![],
-			data : vec![],
-		}
-	}
+    /* Protocol 22, MessageType : 6 */
+    pub fn default_with_params(
+        _changed_interval :crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval,
+    ) -> crate::energistics::etp::v12::protocol::channel_data_load::replace_range::ReplaceRange
+    {
+        crate::energistics::etp::v12::protocol::channel_data_load::replace_range::ReplaceRange {
+            changed_interval: _changed_interval,
+            channel_ids: vec![],
+            data: vec![],
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed {
-	/* Protocol 22, MessageType : 7 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed {
-		crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed {
-			reason : "".to_string(),
-			id : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed
+{
+    /* Protocol 22, MessageType : 7 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed
+    {
+        crate::energistics::etp::v12::protocol::channel_data_load::channels_closed::ChannelsClosed {
+            reason: "".to_string(),
+            id: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::channel_data_load::replace_range_response::ReplaceRangeResponse {
@@ -1286,13 +1360,13 @@ impl Default for crate::energistics::etp::v12::protocol::channel_data_load::trun
 }
 
 impl Default for crate::energistics::etp::v12::protocol::dataspace::get_dataspaces::GetDataspaces {
-	/* Protocol 24, MessageType : 1 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::dataspace::get_dataspaces::GetDataspaces {
-		crate::energistics::etp::v12::protocol::dataspace::get_dataspaces::GetDataspaces {
-			store_last_write_filter : None,
-		}
-	}
+    /* Protocol 24, MessageType : 1 */
+    fn default() -> crate::energistics::etp::v12::protocol::dataspace::get_dataspaces::GetDataspaces
+    {
+        crate::energistics::etp::v12::protocol::dataspace::get_dataspaces::GetDataspaces {
+            store_last_write_filter: None,
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::dataspace::get_dataspaces_response::GetDataspacesResponse {
@@ -1306,23 +1380,26 @@ impl Default for crate::energistics::etp::v12::protocol::dataspace::get_dataspac
 }
 
 impl Default for crate::energistics::etp::v12::protocol::dataspace::put_dataspaces::PutDataspaces {
-	/* Protocol 24, MessageType : 3 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::dataspace::put_dataspaces::PutDataspaces {
-		crate::energistics::etp::v12::protocol::dataspace::put_dataspaces::PutDataspaces {
-			dataspaces : HashMap::new(),
-		}
-	}
+    /* Protocol 24, MessageType : 3 */
+    fn default() -> crate::energistics::etp::v12::protocol::dataspace::put_dataspaces::PutDataspaces
+    {
+        crate::energistics::etp::v12::protocol::dataspace::put_dataspaces::PutDataspaces {
+            dataspaces: HashMap::new(),
+        }
+    }
 }
 
-impl Default for crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces {
-	/* Protocol 24, MessageType : 4 */
-	fn default()
-	-> crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces {
-		crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces {
-			uris : HashMap::new(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces
+{
+    /* Protocol 24, MessageType : 4 */
+    fn default(
+    ) -> crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces
+    {
+        crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces::DeleteDataspaces {
+            uris: HashMap::new(),
+        }
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::dataspace::delete_dataspaces_response::DeleteDataspacesResponse {
@@ -1345,17 +1422,19 @@ impl Default for crate::energistics::etp::v12::protocol::dataspace::put_dataspac
 	}
 }
 
-impl crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes {
-	/* Protocol 25, MessageType : 1 */
+impl
+    crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes
+{
+    /* Protocol 25, MessageType : 1 */
 	pub fn default_with_params(_scope :crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind,)
-	-> crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes {
-		crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes {
+    -> crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes{
+        crate::energistics::etp::v12::protocol::supported_types::get_supported_types::GetSupportedTypes {
 			uri : "".to_string(),
 			scope : _scope,
 			return_empty_types : false,
 			count_objects : false,
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::protocol::supported_types::get_supported_types_response::GetSupportedTypesResponse {
@@ -1416,14 +1495,16 @@ impl crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_delete_f
 	}
 }
 
-impl crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg {
-	/* Protocol 2100, MessageType : 5 */
+impl
+    crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg
+{
+    /* Protocol 2100, MessageType : 5 */
 	pub fn default_with_params(_return_value_in :i32,)
-	-> crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg {
-		crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg {
+    -> crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg{
+        crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg::WMLS_GetBaseMsg {
 			return_value_in : _return_value_in,
 		}
-	}
+    }
 }
 
 impl Default for crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_base_msg_response::WMLS_GetBaseMsgResponse {
@@ -1436,14 +1517,17 @@ impl Default for crate::energistics::etp::v12::private_protocols::witsml_soap::w
 	}
 }
 
-impl Default for crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap {
-	/* Protocol 2100, MessageType : 7 */
-	fn default()
-	-> crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap {
-		crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap {
-			options_in : "".to_string(),
-		}
-	}
+impl Default
+    for crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap
+{
+    /* Protocol 2100, MessageType : 7 */
+    fn default(
+    ) -> crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap
+    {
+        crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap::WMLS_GetCap {
+            options_in: "".to_string(),
+        }
+    }
 }
 
 impl crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_get_cap_response::WMLS_GetCapResponse {
@@ -1526,8 +1610,8 @@ impl crate::energistics::etp::v12::private_protocols::witsml_soap::wmls_update_i
 	}
 }
 
-pub fn get_message_schema(protocol: i32, message_type: i32) -> &'static str{
-	match (protocol, message_type) {
+pub fn get_message_schema(protocol: i32, message_type: i32) -> &'static str {
+    match (protocol, message_type) {
 		(0, 1) => crate::energistics::etp::v12::protocol::core::request_session::AVRO_SCHEMA,
 		(0, 2) => crate::energistics::etp::v12::protocol::core::open_session::AVRO_SCHEMA,
 		(0, 5) => crate::energistics::etp::v12::protocol::core::close_session::AVRO_SCHEMA,

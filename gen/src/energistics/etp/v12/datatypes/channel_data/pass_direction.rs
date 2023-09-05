@@ -6,21 +6,18 @@ use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 
-
-
-
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub enum PassDirection{
+pub enum PassDirection {
     up,
     holding_steady,
     down,
 }
 
-impl fmt::Display for PassDirection{
-     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl fmt::Display for PassDirection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
@@ -32,5 +29,3 @@ impl fmt::Display for PassDirection{
         )
     }
 }
-
-
