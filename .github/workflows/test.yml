@@ -18,6 +18,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
+      working-directory: ./gen
       run: cargo build --verbose
     - name: Run tests
+      working-directory: ./gen
       run: cargo test --verbose
