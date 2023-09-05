@@ -21,10 +21,10 @@ jobs:
           toolchain: stable
           override: true
       - name: Release Build
-        working-directory: ${{ CODE_ROOT_DIR }}
+        working-directory: ${{ env.CODE_ROOT_DIR }}
         run: cargo build --release
       - name: 'Upload Artifact'
-        working-directory: ${{ CODE_ROOT_DIR }}
+        working-directory: ${{ env.CODE_ROOT_DIR }}
         uses: actions/upload-artifact@v2
         with:
           name: etptypes

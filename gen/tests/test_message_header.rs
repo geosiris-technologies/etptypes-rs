@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2023 Geosiris
 // SPDX-License-Identifier: Apache-2.0 OR MIT
+#[cfg(feature = "helpers")]
 use etptypes::message::*;
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_0() {
     let full_0: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: false,
@@ -19,6 +21,7 @@ fn test_message_flags_0() {
 }
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_0_parse() {
     let full_0: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: false,
@@ -30,6 +33,7 @@ fn test_message_flags_0_parse() {
 }
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_1() {
     let full_1: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: true,
@@ -49,6 +53,7 @@ fn test_message_flags_1() {
 }
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_1_parse() {
     let full_1: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: true,
@@ -60,6 +65,7 @@ fn test_message_flags_1_parse() {
 }
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_mix_as_int32() {
     let full_1: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: true,
@@ -76,6 +82,7 @@ fn test_message_flags_mix_as_int32() {
 }
 
 #[test]
+#[cfg(feature = "helpers")]
 fn test_message_flags_mix_parse() {
     let full_1: MessageHeaderFlag = MessageHeaderFlag {
         msg_final: true,
