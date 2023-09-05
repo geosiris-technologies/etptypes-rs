@@ -5,12 +5,13 @@ on:
 
 name: Release Packaging
 
+env:
+  CODE_ROOT_DIR: gen/
+#   PROJECT_NAME_UNDERSCORE: etptypes
+    
 jobs:
   release:
     name: Release Packaging
-    env:
-      CODE_ROOT_DIR: gen/
-    #   PROJECT_NAME_UNDERSCORE: etptypes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

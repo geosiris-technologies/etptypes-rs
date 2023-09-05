@@ -9,11 +9,10 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CODE_ROOT_DIR: gen/
 
 jobs:
   build:
-    env:
-      CODE_ROOT_DIR: gen/
 
     runs-on: ubuntu-latest
 
