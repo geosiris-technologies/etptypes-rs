@@ -5,12 +5,17 @@
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::time::{SystemTime};
+use crate::helpers::*;
+
+
+
 
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub enum ChannelIndexKind {
+pub enum ChannelIndexKind{
     date_time,
     elapsed_time,
     measured_depth,
@@ -21,8 +26,8 @@ pub enum ChannelIndexKind {
     scalar,
 }
 
-impl fmt::Display for ChannelIndexKind {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl fmt::Display for ChannelIndexKind{
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
@@ -39,3 +44,5 @@ impl fmt::Display for ChannelIndexKind {
         )
     }
 }
+
+

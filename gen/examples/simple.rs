@@ -2,51 +2,48 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 use std::env;
 
+use std::time::{SystemTime};
+use std::collections::HashMap;
 use etptypes::energistics::etp::v12::datatypes::protocol::Protocol;
 use etptypes::energistics::etp::v12::datatypes::supported_protocol::SupportedProtocol;
-use std::collections::HashMap;
-use std::time::SystemTime;
 
 use etptypes::energistics::etp::v12::protocol::core::request_session::RequestSession;
 
 use etptypes::energistics::etp::v12::datatypes::uuid::Uuid;
 
-use etptypes::error::*;
 use etptypes::helpers::*;
+use etptypes::error::*;
 
-fn test_trait<T: EtpMessageBody>(obj: &T) {
-    println!(
-        "Protocol {:?}; Messagetype {:?}",
-        obj.protocol(),
-        obj.message_type()
-    );
+
+fn test_trait<T: EtpMessageBody>(obj: &T){
+    println!("Protocol {:?}; Messagetype {:?}", obj.protocol(), obj.message_type());
 }
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
 
     let protocols = vec![
-        SupportedProtocol {
-            protocol: Protocol::core as i32,
-            protocol_version: ETP12VERSION,
-            role: "Server".to_string(),
-            protocol_capabilities: HashMap::new(),
-        },
-        SupportedProtocol {
-            protocol: 3,
-            protocol_version: ETP12VERSION,
-            role: "Server".to_string(),
-            protocol_capabilities: HashMap::new(),
-        },
-        SupportedProtocol {
-            protocol: 4,
-            protocol_version: ETP12VERSION,
-            role: "Server".to_string(),
-            protocol_capabilities: HashMap::new(),
-        },
+    SupportedProtocol{
+        protocol: Protocol::core as i32,
+        protocol_version: ETP12VERSION,
+        role: "Server".to_string(),
+        protocol_capabilities: HashMap::new()
+    },
+    SupportedProtocol{
+        protocol: 3,
+        protocol_version: ETP12VERSION,
+        role: "Server".to_string(),
+        protocol_capabilities: HashMap::new()
+    },
+    SupportedProtocol{
+        protocol: 4,
+        protocol_version: ETP12VERSION,
+        role: "Server".to_string(),
+        protocol_capabilities: HashMap::new()
+    }
     ];
 
-    let now = SystemTime::now();
+    let now = SystemTime::now(); 
 
     let rq = RequestSession {
         application_name: "etp-rs Client Library Application".to_string(),

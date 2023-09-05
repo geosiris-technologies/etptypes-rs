@@ -5,12 +5,28 @@
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::time::{SystemTime};
+use crate::helpers::*;
+
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "camelCase")]
-pub struct ArrayOfString {
-    #[serde(rename = "values")]
-    pub values: Vec<String>,
+pub struct ArrayOfString{
+
+	#[serde(rename = "values")]
+    pub values:Vec<String>,
+
 }
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ArrayOfString", "fields": [{"name": "values", "type": {"type": "array", "items": "string"}}], "fullName": "Energistics.Etp.v12.Datatypes.ArrayOfString", "depends": []}"#;
+
+impl Default for ArrayOfString{
+    /* Protocol , MessageType :  */
+    fn default()
+    -> ArrayOfString {
+        ArrayOfString {
+            values : vec![],
+        }
+    }
+}
+

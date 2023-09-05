@@ -5,15 +5,33 @@
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::time::{SystemTime};
+use crate::helpers::*;
+
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "camelCase")]
-pub struct ErrorInfo {
-    #[serde(rename = "message")]
-    pub message: String,
+pub struct ErrorInfo{
 
-    #[serde(rename = "code")]
-    pub code: i32,
+	#[serde(rename = "message")]
+    pub message:String,
+
+
+	#[serde(rename = "code")]
+    pub code:i32,
+
 }
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ErrorInfo", "fields": [{"name": "message", "type": "string"}, {"name": "code", "type": "int"}], "fullName": "Energistics.Etp.v12.Datatypes.ErrorInfo", "depends": []}"#;
+
+impl ErrorInfo{
+    /* Protocol , MessageType :  */
+    pub fn default_with_params(_code: i32, )
+    -> ErrorInfo {
+        ErrorInfo {
+            message : "".to_string(),
+            code : _code,
+        }
+    }
+}
+

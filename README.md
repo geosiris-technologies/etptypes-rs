@@ -29,3 +29,17 @@ at your option.
 ## Support
 
 Please enter an issue in the repo for any questions or problems.
+
+
+## Examples :
+
+```console
+cargo run --example simple
+```
+
+
+## Tests :
+
+```console
+cargo test --all-features
+```

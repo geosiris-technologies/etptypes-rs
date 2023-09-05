@@ -2,25 +2,29 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::EtpMessageBody;
-use avro_rs::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::time::{SystemTime};
+use crate::helpers::*;
+use avro_rs::{Schema, Error};
+use crate::helpers::EtpMessageBody;
 
 use crate::energistics::etp::v12::datatypes::object::put_response::PutResponse;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "camelCase")]
-pub struct PutDataObjectsResponse {
-    #[serde(rename = "success")]
-    pub success: HashMap<String, PutResponse>,
+pub struct PutDataObjectsResponse{
+
+	#[serde(rename = "success")]
+    pub success:HashMap<String, PutResponse,>,
+
 }
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Store", "name": "PutDataObjectsResponse", "protocol": "4", "messageType": "9", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": true, "fields": [{"name": "success", "type": {"type": "map", "values": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "PutResponse", "fields": [{"name": "createdContainedObjectUris", "type": {"type": "array", "items": "string"}, "default": []}, {"name": "deletedContainedObjectUris", "type": {"type": "array", "items": "string"}, "default": []}, {"name": "joinedContainedObjectUris", "type": {"type": "array", "items": "string"}, "default": []}, {"name": "unjoinedContainedObjectUris", "type": {"type": "array", "items": "string"}, "default": []}], "fullName": "Energistics.Etp.v12.Datatypes.Object.PutResponse", "depends": []}}}], "fullName": "Energistics.Etp.v12.Protocol.Store.PutDataObjectsResponse", "depends": ["Energistics.Etp.v12.Datatypes.Object.PutResponse"]}"#;
 
-impl EtpMessageBody for PutDataObjectsResponse {
-    fn avro_schema() -> Option<Schema> {
+impl EtpMessageBody for PutDataObjectsResponse{
+    fn avro_schema() -> Option<Schema>{
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
             Err(e) => {
@@ -28,19 +32,30 @@ impl EtpMessageBody for PutDataObjectsResponse {
             }
         }
     }
-    fn protocol(&self) -> i32 {
+    fn protocol(&self) ->i32{
         4
     }
-    fn message_type(&self) -> i32 {
+    fn message_type(&self) ->i32{
         9
     }
-    fn sender_role(&self) -> String {
+    fn sender_role(&self) ->String{
         "store".to_string()
     }
-    fn protocol_roles(&self) -> String {
+    fn protocol_roles(&self) ->String{
         "store,customer".to_string()
     }
-    fn multipart_flag(&self) -> bool {
+    fn multipart_flag(&self) ->bool{
         true
     }
 }
+
+impl Default for PutDataObjectsResponse{
+    /* Protocol 4, MessageType : 9 */
+    fn default()
+    -> PutDataObjectsResponse {
+        PutDataObjectsResponse {
+            success : HashMap::new(),
+        }
+    }
+}
+

@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: 2023 Geosiris
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-pub mod channel_data;
 pub mod channels_closed;
+pub mod channel_data;
 pub mod close_channels;
 pub mod open_channels;
 pub mod open_channels_response;
