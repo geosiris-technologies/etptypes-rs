@@ -23,7 +23,7 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          command: check --manifest-path ${{ env.CARGO_TOML_PATH }}
+          command: check -Zscript --manifest-path ${{ env.CARGO_TOML_PATH }}
 
   fmt:
     name: Rustfmt
@@ -39,7 +39,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --all -- --check --manifest-path ${{ env.CARGO_TOML_PATH }}
+          args: --all -- --check -Zscript --manifest-path ${{ env.CARGO_TOML_PATH }}
 
   clippy:
     name: Clippy
@@ -54,5 +54,5 @@ jobs:
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features --manifest-path ${{ env.CARGO_TOML_PATH }}
+          args: --all-features -Zscript --manifest-path ${{ env.CARGO_TOML_PATH }}
           name: Clippy Output
