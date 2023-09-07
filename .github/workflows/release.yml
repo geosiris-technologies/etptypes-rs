@@ -1,4 +1,5 @@
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -26,4 +27,6 @@ jobs:
         uses: katyo/publish-crates@v2
         with:
           path: ${{ env.CODE_ROOT_DIR }}
+          # only real publish on push, not on pull-request
+          dry-run: ${{ github.event_name != 'push' }}
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
