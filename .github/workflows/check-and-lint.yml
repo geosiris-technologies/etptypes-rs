@@ -23,7 +23,8 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          command: check --manifest-path ${{ env.CARGO_TOML_PATH }}
+          command: check
+          args: --manifest-path ${{ env.CARGO_TOML_PATH }}
 
   fmt:
     name: Rustfmt
@@ -39,7 +40,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --all -Zscript -- --check --manifest-path ${{ env.CARGO_TOML_PATH }}
+          args: --all --manifest-path ${{ env.CARGO_TOML_PATH }} -- --check 
 
   clippy:
     name: Clippy
