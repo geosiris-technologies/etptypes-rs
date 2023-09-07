@@ -3,5 +3,3 @@
 pub mod energistics;
 pub mod error;
 pub mod helpers;
-#[cfg(feature = "helpers")]
-pub mod message;
