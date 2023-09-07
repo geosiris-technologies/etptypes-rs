@@ -8,7 +8,7 @@ on:
 name: Check and Lint
 
 env:
-  CODE_ROOT_DIR: gen/
+  CARGO_TOML_PATH: gen/Cargo.toml
 
 jobs:
   check:
@@ -23,7 +23,7 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          command: check --manifest-path ${{ env.CODE_ROOT_DIR }}
+          command: check --manifest-path ${{ env.CARGO_TOML_PATH }}
 
   fmt:
     name: Rustfmt
@@ -39,7 +39,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --all -- --check --manifest-path ${{ env.CODE_ROOT_DIR }}
+          args: --all -- --check --manifest-path ${{ env.CARGO_TOML_PATH }}
 
   clippy:
     name: Clippy
@@ -54,5 +54,5 @@ jobs:
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features --manifest-path ${{ env.CODE_ROOT_DIR }}
+          args: --all-features --manifest-path ${{ env.CARGO_TOML_PATH }}
           name: Clippy Output
