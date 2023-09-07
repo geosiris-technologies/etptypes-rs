@@ -2,18 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-
-
-
+use std::time::SystemTime;
 
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub enum AnyLogicalArrayType{
+pub enum AnyLogicalArrayType {
     array_of_boolean,
     array_of_int8,
     array_of_uint8,
@@ -37,8 +36,8 @@ pub enum AnyLogicalArrayType{
     array_of_custom,
 }
 
-impl fmt::Display for AnyLogicalArrayType{
-     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl fmt::Display for AnyLogicalArrayType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
@@ -68,5 +67,3 @@ impl fmt::Display for AnyLogicalArrayType{
         )
     }
 }
-
-
