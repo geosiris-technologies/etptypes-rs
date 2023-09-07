@@ -14,6 +14,7 @@ pub fn time_to_etp(time: SystemTime) -> i64 {
 }
 
 pub enum Role {
+    All,
     Client,
     Server,
     Customer,
@@ -25,6 +26,7 @@ pub enum Role {
 impl Role {
     pub fn to_string(self) -> String {
         match self {
+            Self::All => "*".to_string(),
             Self::Client => "client".to_string(),
             Self::Server => "server".to_string(),
             Self::Customer => "customer".to_string(),
@@ -49,56 +51,59 @@ pub const ETP11VERSION: Version = Version {
     patch: 0,
 };
 
-pub trait EtpMessageBody {
+pub trait ETPMetadata {
     fn avro_schema() -> Option<Schema>;
 
     fn protocol(&self) -> i32;
     fn message_type(&self) -> i32;
-    fn sender_role(&self) -> String;
-    fn protocol_roles(&self) -> String;
+    fn sender_role(&self) -> Vec<Role>;
+    fn protocol_roles(&self) -> Vec<Role>;
     fn multipart_flag(&self) -> bool;
 
-    fn avro_serialize(&self) -> Option<Vec<u8>> where Self: serde::Serialize{
-        if let Some(schema) = Self::avro_schema(){
+    fn avro_serialize(&self) -> Option<Vec<u8>>
+    where
+        Self: serde::Serialize,
+    {
+        if let Some(schema) = Self::avro_schema() {
             let mut writer = Writer::with_codec(&schema, Vec::new(), Codec::Deflate);
             let _ = writer.append_ser(self);
             Some(writer.into_inner().unwrap())
-        }else{
+        } else {
             None
         }
     }
 
     /*fn avro_deserialize<'de>(input: &Vec<u8>) -> Result<Self, Error> where Self: serde::Deserialize<'de> {
-        let schema = Self::avro_schema()?;
-        if let Some(result) = Reader::with_schema(&schema, &input[..])?.next(){
-            /*match &result.next(){
-                None => panic!("{:?}", "nothing to Deserialize")
-                Some(x) => from_value::<Self>(&x.unwrap())
-            }*/
-            let value = result.unwrap();
-            Ok(from_value::<Self>(&value).unwrap())
-        }else{
-            Err(None)
+            let schema = Self::avro_schema()?;
+            if let Some(result) = Reader::with_schema(&schema, &input[..])?.next(){
+                /*match &result.next(){
+                    None => panic!("{:?}", "nothing to Deserialize")
+                    Some(x) => from_value::<Self>(&x.unwrap())
+                }*/
+                let value = result.unwrap();
+                Ok(from_value::<Self>(&value).unwrap())
+            }else{
+                Err(None)
+
+            }
 
         }
-        
-    }
-    fn avro_deserialize<'de>(input: &Vec<u8>) -> AvroResult<Self> where Self: serde::Deserialize<'de> {
-        match Self::avro_schema(){
-            Some(schema) => {
-                let mut reader = Reader::with_schema(&schema, &input[..]).unwrap();
-                let value = reader.next().unwrap();
-                let val = value.unwrap();
-                from_value(&val)
-                /*match from_value::<'de ,Self>(&val){
-                    Ok(result) => Some(result),
-                    Err(_) => None
-                }*/
-            },
-            None => None
+        fn avro_deserialize<'de>(input: &Vec<u8>) -> AvroResult<Self> where Self: serde::Deserialize<'de> {
+            match Self::avro_schema(){
+                Some(schema) => {
+                    let mut reader = Reader::with_schema(&schema, &input[..]).unwrap();
+                    let value = reader.next().unwrap();
+                    let val = value.unwrap();
+                    from_value(&val)
+                    /*match from_value::<'de ,Self>(&val){
+                        Ok(result) => Some(result),
+                        Err(_) => None
+                    }*/
+                },
+                None => None
+            }
         }
-    }
-*/
+    */
     /*fn avro_deserialize<'de>(input: &Vec<u8>) -> AvroResult<Self> where Self: serde::Deserialize<'de> {
         from_value::<'de ,Self>(&Reader::with_schema(&Self::avro_schema().unwrap(), &input[..]).unwrap().iter().collect().as_slice().unwrap()?.unwrap())
     }*/
