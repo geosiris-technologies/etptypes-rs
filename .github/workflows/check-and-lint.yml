@@ -24,7 +24,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         working-directory: ${{ env.CODE_ROOT_DIR }}
         with:
-          command: check
+          command: check --manifest-path ${{ env.CODE_ROOT_DIR }}
 
   fmt:
     name: Rustfmt
@@ -41,7 +41,7 @@ jobs:
         working-directory: ${{ env.CODE_ROOT_DIR }}
         with:
           command: fmt
-          args: --all -- --check
+          args: --all -- --check --manifest-path ${{ env.CODE_ROOT_DIR }}
 
   clippy:
     name: Clippy
@@ -57,5 +57,5 @@ jobs:
         working-directory: ${{ env.CODE_ROOT_DIR }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features
+          args: --all-features --manifest-path ${{ env.CODE_ROOT_DIR }}
           name: Clippy Output
