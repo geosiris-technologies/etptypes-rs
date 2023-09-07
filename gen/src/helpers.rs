@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Geosiris
 // SPDX-License-Identifier: Apache-2.0 OR MIT
-use avro_rs::{Schema};
+use avro_rs::Schema;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::energistics::etp::v12::datatypes::version::Version;
