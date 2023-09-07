@@ -6,8 +6,8 @@ authors = [
 	"Lionel Untereiner <lionel.untereiner@geosiris.com>", 
     "Valentin Gauthier <valentin.gauthier@geosiris.com>"
 ]
-license = "Apache-2.0"
-keywords = ["etp", "rust"]
+license = "MIT OR Apache-2.0"
+keywords = ["etp", "energistics"]
 
 [dependencies]
 bytes = "1.4.0"
