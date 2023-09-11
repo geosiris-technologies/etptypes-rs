@@ -6,11 +6,9 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::time::SystemTime;
-
-// ['bool']
+use std::time::SystemTime; // ['bool']
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ArrayOfNullableBoolean {
     #[serde(rename = "values")]
     pub values: Vec<Option<bool>>,

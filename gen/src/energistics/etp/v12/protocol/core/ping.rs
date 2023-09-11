@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::time::SystemTime;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct Ping {
     #[serde(rename = "currentDateTime")]
     pub current_date_time: i64,

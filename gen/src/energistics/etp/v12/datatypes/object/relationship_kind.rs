@@ -6,16 +6,17 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum RelationshipKind {
-    primary,
-    secondary,
-    both,
+    /* None */
+    Primary,
+    Secondary,
+    Both,
 }
 
 impl fmt::Display for RelationshipKind {
@@ -24,10 +25,21 @@ impl fmt::Display for RelationshipKind {
             f,
             "{}",
             match self {
-                RelationshipKind::primary => "Primary",
-                RelationshipKind::secondary => "Secondary",
-                RelationshipKind::both => "Both",
+                RelationshipKind::Primary => "Primary",
+                RelationshipKind::Secondary => "Secondary",
+                RelationshipKind::Both => "Both",
             }
         )
+    }
+}
+
+impl RelationshipKind {
+    pub fn iter() -> Iter<'static, RelationshipKind> {
+        static VEC_ENUM: [RelationshipKind; 3] = [
+            RelationshipKind::Primary,
+            RelationshipKind::Secondary,
+            RelationshipKind::Both,
+        ];
+        VEC_ENUM.iter()
     }
 }

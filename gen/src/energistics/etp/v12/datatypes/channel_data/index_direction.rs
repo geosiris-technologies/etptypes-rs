@@ -6,16 +6,17 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum IndexDirection {
-    increasing,
-    decreasing,
-    unordered,
+    /* None */
+    Increasing,
+    Decreasing,
+    Unordered,
 }
 
 impl fmt::Display for IndexDirection {
@@ -24,10 +25,21 @@ impl fmt::Display for IndexDirection {
             f,
             "{}",
             match self {
-                IndexDirection::increasing => "Increasing",
-                IndexDirection::decreasing => "Decreasing",
-                IndexDirection::unordered => "Unordered",
+                IndexDirection::Increasing => "Increasing",
+                IndexDirection::Decreasing => "Decreasing",
+                IndexDirection::Unordered => "Unordered",
             }
         )
+    }
+}
+
+impl IndexDirection {
+    pub fn iter() -> Iter<'static, IndexDirection> {
+        static VEC_ENUM: [IndexDirection; 3] = [
+            IndexDirection::Increasing,
+            IndexDirection::Decreasing,
+            IndexDirection::Unordered,
+        ];
+        VEC_ENUM.iter()
     }
 }

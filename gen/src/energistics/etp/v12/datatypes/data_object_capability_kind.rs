@@ -6,21 +6,22 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum DataObjectCapabilityKind {
-    active_timeout_period,
-    max_contained_data_object_count,
-    max_data_object_size,
-    orphaned_children_pruned_on_delete,
-    supports_get,
-    supports_put,
-    supports_delete,
-    max_secondary_index_count,
+    /* None */
+    ActiveTimeoutPeriod,
+    MaxContainedDataObjectCount,
+    MaxDataObjectSize,
+    OrphanedChildrenPrunedOnDelete,
+    SupportsGet,
+    SupportsPut,
+    SupportsDelete,
+    MaxSecondaryIndexCount,
 }
 
 impl fmt::Display for DataObjectCapabilityKind {
@@ -29,17 +30,33 @@ impl fmt::Display for DataObjectCapabilityKind {
             f,
             "{}",
             match self {
-                DataObjectCapabilityKind::active_timeout_period => "ActiveTimeoutPeriod",
-                DataObjectCapabilityKind::max_contained_data_object_count =>
+                DataObjectCapabilityKind::ActiveTimeoutPeriod => "ActiveTimeoutPeriod",
+                DataObjectCapabilityKind::MaxContainedDataObjectCount =>
                     "MaxContainedDataObjectCount",
-                DataObjectCapabilityKind::max_data_object_size => "MaxDataObjectSize",
-                DataObjectCapabilityKind::orphaned_children_pruned_on_delete =>
+                DataObjectCapabilityKind::MaxDataObjectSize => "MaxDataObjectSize",
+                DataObjectCapabilityKind::OrphanedChildrenPrunedOnDelete =>
                     "OrphanedChildrenPrunedOnDelete",
-                DataObjectCapabilityKind::supports_get => "SupportsGet",
-                DataObjectCapabilityKind::supports_put => "SupportsPut",
-                DataObjectCapabilityKind::supports_delete => "SupportsDelete",
-                DataObjectCapabilityKind::max_secondary_index_count => "MaxSecondaryIndexCount",
+                DataObjectCapabilityKind::SupportsGet => "SupportsGet",
+                DataObjectCapabilityKind::SupportsPut => "SupportsPut",
+                DataObjectCapabilityKind::SupportsDelete => "SupportsDelete",
+                DataObjectCapabilityKind::MaxSecondaryIndexCount => "MaxSecondaryIndexCount",
             }
         )
+    }
+}
+
+impl DataObjectCapabilityKind {
+    pub fn iter() -> Iter<'static, DataObjectCapabilityKind> {
+        static VEC_ENUM: [DataObjectCapabilityKind; 8] = [
+            DataObjectCapabilityKind::ActiveTimeoutPeriod,
+            DataObjectCapabilityKind::MaxContainedDataObjectCount,
+            DataObjectCapabilityKind::MaxDataObjectSize,
+            DataObjectCapabilityKind::OrphanedChildrenPrunedOnDelete,
+            DataObjectCapabilityKind::SupportsGet,
+            DataObjectCapabilityKind::SupportsPut,
+            DataObjectCapabilityKind::SupportsDelete,
+            DataObjectCapabilityKind::MaxSecondaryIndexCount,
+        ];
+        VEC_ENUM.iter()
     }
 }

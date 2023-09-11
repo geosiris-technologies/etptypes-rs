@@ -6,18 +6,19 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ContextScopeKind {
-    self_,
-    sources,
-    targets,
-    sources_or_self,
-    targets_or_self,
+    /* None */
+    Self_,
+    Sources,
+    Targets,
+    SourcesOrSelf,
+    TargetsOrSelf,
 }
 
 impl fmt::Display for ContextScopeKind {
@@ -26,12 +27,25 @@ impl fmt::Display for ContextScopeKind {
             f,
             "{}",
             match self {
-                ContextScopeKind::self_ => "self",
-                ContextScopeKind::sources => "sources",
-                ContextScopeKind::targets => "targets",
-                ContextScopeKind::sources_or_self => "sourcesOrSelf",
-                ContextScopeKind::targets_or_self => "targetsOrSelf",
+                ContextScopeKind::Self_ => "self",
+                ContextScopeKind::Sources => "sources",
+                ContextScopeKind::Targets => "targets",
+                ContextScopeKind::SourcesOrSelf => "sourcesOrSelf",
+                ContextScopeKind::TargetsOrSelf => "targetsOrSelf",
             }
         )
+    }
+}
+
+impl ContextScopeKind {
+    pub fn iter() -> Iter<'static, ContextScopeKind> {
+        static VEC_ENUM: [ContextScopeKind; 5] = [
+            ContextScopeKind::Self_,
+            ContextScopeKind::Sources,
+            ContextScopeKind::Targets,
+            ContextScopeKind::SourcesOrSelf,
+            ContextScopeKind::TargetsOrSelf,
+        ];
+        VEC_ENUM.iter()
     }
 }

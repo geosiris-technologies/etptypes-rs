@@ -2,19 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::energistics::etp::v12::datatypes::attribute_metadata_record::AttributeMetadataRecord;
+use crate::energistics::etp::v12::datatypes::channel_data::channel_data_kind::ChannelDataKind;
+use crate::energistics::etp::v12::datatypes::data_value::DataValue;
+use crate::energistics::etp::v12::datatypes::object::active_status_kind::ActiveStatusKind;
 use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use crate::energistics::etp::v12::datatypes::attribute_metadata_record::AttributeMetadataRecord;
-use crate::energistics::etp::v12::datatypes::channel_data::channel_data_kind::ChannelDataKind;
-use crate::energistics::etp::v12::datatypes::data_value::DataValue;
-use crate::energistics::etp::v12::datatypes::object::active_status_kind::ActiveStatusKind;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct FrameChannelMetadataRecord {
     #[serde(rename = "uri")]
     pub uri: String,

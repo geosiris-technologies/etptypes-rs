@@ -6,30 +6,31 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum EndpointCapabilityKind {
-    active_timeout_period,
-    authorization_details,
-    change_propagation_period,
-    change_retention_period,
-    max_concurrent_multipart,
-    max_data_object_size,
-    max_part_size,
-    max_session_client_count,
-    max_session_global_count,
-    max_web_socket_frame_payload_size,
-    max_web_socket_message_payload_size,
-    multipart_message_timeout_period,
-    response_timeout_period,
-    request_session_timeout_period,
-    session_establishment_timeout_period,
-    supports_alternate_request_uris,
-    supports_message_header_extensions,
+    /* None */
+    ActiveTimeoutPeriod,
+    AuthorizationDetails,
+    ChangePropagationPeriod,
+    ChangeRetentionPeriod,
+    MaxConcurrentMultipart,
+    MaxDataObjectSize,
+    MaxPartSize,
+    MaxSessionClientCount,
+    MaxSessionGlobalCount,
+    MaxWebSocketFramePayloadSize,
+    MaxWebSocketMessagePayloadSize,
+    MultipartMessageTimeoutPeriod,
+    ResponseTimeoutPeriod,
+    RequestSessionTimeoutPeriod,
+    SessionEstablishmentTimeoutPeriod,
+    SupportsAlternateRequestUris,
+    SupportsMessageHeaderExtensions,
 }
 
 impl fmt::Display for EndpointCapabilityKind {
@@ -38,31 +39,56 @@ impl fmt::Display for EndpointCapabilityKind {
             f,
             "{}",
             match self {
-                EndpointCapabilityKind::active_timeout_period => "ActiveTimeoutPeriod",
-                EndpointCapabilityKind::authorization_details => "AuthorizationDetails",
-                EndpointCapabilityKind::change_propagation_period => "ChangePropagationPeriod",
-                EndpointCapabilityKind::change_retention_period => "ChangeRetentionPeriod",
-                EndpointCapabilityKind::max_concurrent_multipart => "MaxConcurrentMultipart",
-                EndpointCapabilityKind::max_data_object_size => "MaxDataObjectSize",
-                EndpointCapabilityKind::max_part_size => "MaxPartSize",
-                EndpointCapabilityKind::max_session_client_count => "MaxSessionClientCount",
-                EndpointCapabilityKind::max_session_global_count => "MaxSessionGlobalCount",
-                EndpointCapabilityKind::max_web_socket_frame_payload_size =>
+                EndpointCapabilityKind::ActiveTimeoutPeriod => "ActiveTimeoutPeriod",
+                EndpointCapabilityKind::AuthorizationDetails => "AuthorizationDetails",
+                EndpointCapabilityKind::ChangePropagationPeriod => "ChangePropagationPeriod",
+                EndpointCapabilityKind::ChangeRetentionPeriod => "ChangeRetentionPeriod",
+                EndpointCapabilityKind::MaxConcurrentMultipart => "MaxConcurrentMultipart",
+                EndpointCapabilityKind::MaxDataObjectSize => "MaxDataObjectSize",
+                EndpointCapabilityKind::MaxPartSize => "MaxPartSize",
+                EndpointCapabilityKind::MaxSessionClientCount => "MaxSessionClientCount",
+                EndpointCapabilityKind::MaxSessionGlobalCount => "MaxSessionGlobalCount",
+                EndpointCapabilityKind::MaxWebSocketFramePayloadSize =>
                     "MaxWebSocketFramePayloadSize",
-                EndpointCapabilityKind::max_web_socket_message_payload_size =>
+                EndpointCapabilityKind::MaxWebSocketMessagePayloadSize =>
                     "MaxWebSocketMessagePayloadSize",
-                EndpointCapabilityKind::multipart_message_timeout_period =>
+                EndpointCapabilityKind::MultipartMessageTimeoutPeriod =>
                     "MultipartMessageTimeoutPeriod",
-                EndpointCapabilityKind::response_timeout_period => "ResponseTimeoutPeriod",
-                EndpointCapabilityKind::request_session_timeout_period =>
+                EndpointCapabilityKind::ResponseTimeoutPeriod => "ResponseTimeoutPeriod",
+                EndpointCapabilityKind::RequestSessionTimeoutPeriod =>
                     "RequestSessionTimeoutPeriod",
-                EndpointCapabilityKind::session_establishment_timeout_period =>
+                EndpointCapabilityKind::SessionEstablishmentTimeoutPeriod =>
                     "SessionEstablishmentTimeoutPeriod",
-                EndpointCapabilityKind::supports_alternate_request_uris =>
+                EndpointCapabilityKind::SupportsAlternateRequestUris =>
                     "SupportsAlternateRequestUris",
-                EndpointCapabilityKind::supports_message_header_extensions =>
+                EndpointCapabilityKind::SupportsMessageHeaderExtensions =>
                     "SupportsMessageHeaderExtensions",
             }
         )
+    }
+}
+
+impl EndpointCapabilityKind {
+    pub fn iter() -> Iter<'static, EndpointCapabilityKind> {
+        static VEC_ENUM: [EndpointCapabilityKind; 17] = [
+            EndpointCapabilityKind::ActiveTimeoutPeriod,
+            EndpointCapabilityKind::AuthorizationDetails,
+            EndpointCapabilityKind::ChangePropagationPeriod,
+            EndpointCapabilityKind::ChangeRetentionPeriod,
+            EndpointCapabilityKind::MaxConcurrentMultipart,
+            EndpointCapabilityKind::MaxDataObjectSize,
+            EndpointCapabilityKind::MaxPartSize,
+            EndpointCapabilityKind::MaxSessionClientCount,
+            EndpointCapabilityKind::MaxSessionGlobalCount,
+            EndpointCapabilityKind::MaxWebSocketFramePayloadSize,
+            EndpointCapabilityKind::MaxWebSocketMessagePayloadSize,
+            EndpointCapabilityKind::MultipartMessageTimeoutPeriod,
+            EndpointCapabilityKind::ResponseTimeoutPeriod,
+            EndpointCapabilityKind::RequestSessionTimeoutPeriod,
+            EndpointCapabilityKind::SessionEstablishmentTimeoutPeriod,
+            EndpointCapabilityKind::SupportsAlternateRequestUris,
+            EndpointCapabilityKind::SupportsMessageHeaderExtensions,
+        ];
+        VEC_ENUM.iter()
     }
 }

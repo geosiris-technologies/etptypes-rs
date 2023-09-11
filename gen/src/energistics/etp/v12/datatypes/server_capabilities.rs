@@ -2,19 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::energistics::etp::v12::datatypes::contact::Contact;
+use crate::energistics::etp::v12::datatypes::data_value::DataValue;
+use crate::energistics::etp::v12::datatypes::supported_data_object::SupportedDataObject;
+use crate::energistics::etp::v12::datatypes::supported_protocol::SupportedProtocol;
 use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use crate::energistics::etp::v12::datatypes::contact::Contact;
-use crate::energistics::etp::v12::datatypes::data_value::DataValue;
-use crate::energistics::etp::v12::datatypes::supported_data_object::SupportedDataObject;
-use crate::energistics::etp::v12::datatypes::supported_protocol::SupportedProtocol;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ServerCapabilities {
     #[serde(rename = "applicationName")]
     pub application_name: String,

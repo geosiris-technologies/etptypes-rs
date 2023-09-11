@@ -2,16 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
 use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ChannelRangeInfo {
     #[serde(rename = "channelIds")]
     pub channel_ids: Vec<i64>,

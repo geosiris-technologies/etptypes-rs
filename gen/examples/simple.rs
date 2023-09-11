@@ -1,16 +1,15 @@
 // SPDX-FileCopyrightText: 2023 Geosiris
 // SPDX-License-Identifier: Apache-2.0 OR MIT
-use std::env;
-
-use etptypes::energistics::etp::v12::datatypes::protocol::Protocol;
-use etptypes::energistics::etp::v12::datatypes::supported_protocol::SupportedProtocol;
+use serde_json;
 use std::collections::HashMap;
+use std::env;
 use std::time::SystemTime;
 
-use etptypes::energistics::etp::v12::protocol::core::request_session::RequestSession;
-
+use etptypes::energistics::etp::v12::datatypes::endpoint_capability_kind::EndpointCapabilityKind;
+use etptypes::energistics::etp::v12::datatypes::protocol::Protocol;
+use etptypes::energistics::etp::v12::datatypes::supported_protocol::SupportedProtocol;
 use etptypes::energistics::etp::v12::datatypes::uuid::Uuid;
-
+use etptypes::energistics::etp::v12::protocol::core::request_session::RequestSession;
 use etptypes::error::*;
 use etptypes::helpers::*;
 
@@ -27,7 +26,7 @@ fn main() {
 
     let protocols = vec![
         SupportedProtocol {
-            protocol: Protocol::core as i32,
+            protocol: Protocol::Core as i32,
             protocol_version: ETP12VERSION,
             role: "Server".to_string(),
             protocol_capabilities: HashMap::new(),
@@ -62,9 +61,22 @@ fn main() {
         endpoint_capabilities: HashMap::new(),
     };
 
+    for s in EndpointCapabilityKind::iter() {
+        println!("> {:?}", s);
+    }
+
     println!("{:?}", rq);
     println!("{:?}", einvalid_messagetype());
-    println!("{:?}", Protocol::core);
+    println!("{:?}", Protocol::Core);
+    println!(
+        "{:?}",
+        serde_json::from_str::<EndpointCapabilityKind>(r#""MaxWebSocketMessagePayloadSize""#)
+            .unwrap()
+    );
+    println!(
+        "{:?}",
+        serde_json::to_string_pretty(&EndpointCapabilityKind::ActiveTimeoutPeriod).unwrap()
+    );
     println!("{:?}", RequestSession::default());
 
     test_trait(&rq);

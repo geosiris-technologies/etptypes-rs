@@ -2,17 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::energistics::etp::v12::datatypes::data_array_types::data_array_identifier::DataArrayIdentifier;
+use crate::energistics::etp::v12::datatypes::data_array_types::data_array_metadata::DataArrayMetadata;
 use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use crate::energistics::etp::v12::datatypes::data_array_types::data_array_identifier::DataArrayIdentifier;
-use crate::energistics::etp::v12::datatypes::data_array_types::data_array_metadata::DataArrayMetadata;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct PutUninitializedDataArrayType {
     #[serde(rename = "uid")]
     pub uid: DataArrayIdentifier,

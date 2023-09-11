@@ -7,9 +7,8 @@ use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct Version {
     #[serde(rename = "major")]
     #[derivative(Default(value = "0"))]

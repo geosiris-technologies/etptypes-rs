@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::time::SystemTime;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ReplacePartsByRangeResponse {}
 
 pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.GrowingObject", "name": "ReplacePartsByRangeResponse", "protocol": "6", "messageType": "18", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [], "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.ReplacePartsByRangeResponse", "depends": []}"#;

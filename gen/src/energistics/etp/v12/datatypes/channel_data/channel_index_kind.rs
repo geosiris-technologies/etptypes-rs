@@ -6,21 +6,22 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ChannelIndexKind {
-    date_time,
-    elapsed_time,
-    measured_depth,
-    true_vertical_depth,
-    pass_indexed_depth,
-    pressure,
-    temperature,
-    scalar,
+    /* None */
+    DateTime,
+    ElapsedTime,
+    MeasuredDepth,
+    TrueVerticalDepth,
+    PassIndexedDepth,
+    Pressure,
+    Temperature,
+    Scalar,
 }
 
 impl fmt::Display for ChannelIndexKind {
@@ -29,15 +30,31 @@ impl fmt::Display for ChannelIndexKind {
             f,
             "{}",
             match self {
-                ChannelIndexKind::date_time => "DateTime",
-                ChannelIndexKind::elapsed_time => "ElapsedTime",
-                ChannelIndexKind::measured_depth => "MeasuredDepth",
-                ChannelIndexKind::true_vertical_depth => "TrueVerticalDepth",
-                ChannelIndexKind::pass_indexed_depth => "PassIndexedDepth",
-                ChannelIndexKind::pressure => "Pressure",
-                ChannelIndexKind::temperature => "Temperature",
-                ChannelIndexKind::scalar => "Scalar",
+                ChannelIndexKind::DateTime => "DateTime",
+                ChannelIndexKind::ElapsedTime => "ElapsedTime",
+                ChannelIndexKind::MeasuredDepth => "MeasuredDepth",
+                ChannelIndexKind::TrueVerticalDepth => "TrueVerticalDepth",
+                ChannelIndexKind::PassIndexedDepth => "PassIndexedDepth",
+                ChannelIndexKind::Pressure => "Pressure",
+                ChannelIndexKind::Temperature => "Temperature",
+                ChannelIndexKind::Scalar => "Scalar",
             }
         )
+    }
+}
+
+impl ChannelIndexKind {
+    pub fn iter() -> Iter<'static, ChannelIndexKind> {
+        static VEC_ENUM: [ChannelIndexKind; 8] = [
+            ChannelIndexKind::DateTime,
+            ChannelIndexKind::ElapsedTime,
+            ChannelIndexKind::MeasuredDepth,
+            ChannelIndexKind::TrueVerticalDepth,
+            ChannelIndexKind::PassIndexedDepth,
+            ChannelIndexKind::Pressure,
+            ChannelIndexKind::Temperature,
+            ChannelIndexKind::Scalar,
+        ];
+        VEC_ENUM.iter()
     }
 }

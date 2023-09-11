@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
+use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
+use crate::energistics::etp::v12::datatypes::uuid::Uuid;
 use crate::helpers::ETPMetadata;
 use crate::helpers::*;
 use avro_rs::{Error, Schema};
@@ -10,12 +13,8 @@ use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
-use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
-use crate::energistics::etp::v12::datatypes::uuid::Uuid;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct PartsReplacedByRange {
     #[serde(rename = "uri")]
     pub uri: String,

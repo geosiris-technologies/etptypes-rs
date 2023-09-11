@@ -6,15 +6,16 @@ use crate::helpers::*;
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ActiveStatusKind {
-    active,
-    inactive,
+    /* None */
+    Active,
+    Inactive,
 }
 
 impl fmt::Display for ActiveStatusKind {
@@ -23,9 +24,17 @@ impl fmt::Display for ActiveStatusKind {
             f,
             "{}",
             match self {
-                ActiveStatusKind::active => "Active",
-                ActiveStatusKind::inactive => "Inactive",
+                ActiveStatusKind::Active => "Active",
+                ActiveStatusKind::Inactive => "Inactive",
             }
         )
+    }
+}
+
+impl ActiveStatusKind {
+    pub fn iter() -> Iter<'static, ActiveStatusKind> {
+        static VEC_ENUM: [ActiveStatusKind; 2] =
+            [ActiveStatusKind::Active, ActiveStatusKind::Inactive];
+        VEC_ENUM.iter()
     }
 }
