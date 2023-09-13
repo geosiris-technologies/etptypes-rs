@@ -9,7 +9,7 @@ use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-enum ProtocolMessage {
+pub enum ProtocolMessage {
     Core_RequestSession(crate::energistics::etp::v12::protocol::core::request_session::RequestSession),
 	Core_OpenSession(crate::energistics::etp::v12::protocol::core::open_session::OpenSession),
 	Core_CloseSession(crate::energistics::etp::v12::protocol::core::close_session::CloseSession),
