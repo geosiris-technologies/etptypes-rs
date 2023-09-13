@@ -2,14 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::energistics::etp::v12::datatypes::error_info::ErrorInfo;
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
+
+use crate::energistics::etp::v12::datatypes::error_info::ErrorInfo;
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -22,9 +26,7 @@ pub struct ProtocolException {
     pub errors: HashMap<String, ErrorInfo>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Core", "name": "ProtocolException", "protocol": "0", "messageType": "1000", "senderRole": "*", "protocolRoles": "client, server", "multipartFlag": true, "fields": [{"name": "error", "type": ["null", {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ErrorInfo", "fields": [{"name": "message", "type": "string"}, {"name": "code", "type": "int"}], "fullName": "Energistics.Etp.v12.Datatypes.ErrorInfo", "depends": []}]}, {"name": "errors", "type": {"type": "map", "values": "Energistics.Etp.v12.Datatypes.ErrorInfo"}, "default": {}}], "fullName": "Energistics.Etp.v12.Protocol.Core.ProtocolException", "depends": ["Energistics.Etp.v12.Datatypes.ErrorInfo"]}"#;
-
-impl ETPMetadata for ProtocolException {
+impl Schemable for ProtocolException {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -33,6 +35,12 @@ impl ETPMetadata for ProtocolException {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for ProtocolException {
     fn protocol(&self) -> i32 {
         0
     }
@@ -48,6 +56,12 @@ impl ETPMetadata for ProtocolException {
     fn multipart_flag(&self) -> bool {
         true
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ProtocolException> {
+        let record =
+            from_avro_datum(&ProtocolException::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<ProtocolException>(&record)
+    }
 }
 
 impl ProtocolException {
@@ -59,3 +73,51 @@ impl ProtocolException {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Core",
+    "name": "ProtocolException",
+    "protocol": "0",
+    "messageType": "1000",
+    "senderRole": "*",
+    "protocolRoles": "client, server",
+    "multipartFlag": true,
+    "fields": [
+        {
+            "name": "error",
+            "type": [
+                "null",
+                {
+                    "type": "record",
+                    "namespace": "Energistics.Etp.v12.Datatypes",
+                    "name": "ErrorInfo",
+                    "fields": [
+                        {
+                            "name": "message",
+                            "type": "string"
+                        },
+                        {
+                            "name": "code",
+                            "type": "int"
+                        }
+                    ],
+                    "fullName": "Energistics.Etp.v12.Datatypes.ErrorInfo",
+                    "depends": []
+                }
+            ]
+        },
+        {
+            "name": "errors",
+            "type": {
+                "type": "map",
+                "values": "Energistics.Etp.v12.Datatypes.ErrorInfo"
+            },
+            "default": {}
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Core.ProtocolException",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.ErrorInfo"
+    ]
+}"#;

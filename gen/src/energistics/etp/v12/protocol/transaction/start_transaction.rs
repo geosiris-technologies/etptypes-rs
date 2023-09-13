@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct StartTransaction {
@@ -25,9 +28,7 @@ pub struct StartTransaction {
     pub dataspace_uris: Vec<String>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Transaction", "name": "StartTransaction", "protocol": "18", "messageType": "1", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "readOnly", "type": "boolean"}, {"name": "message", "type": "string", "default": ""}, {"name": "dataspaceUris", "type": {"type": "array", "items": "string"}, "default": [""]}], "fullName": "Energistics.Etp.v12.Protocol.Transaction.StartTransaction", "depends": []}"#;
-
-impl ETPMetadata for StartTransaction {
+impl Schemable for StartTransaction {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -36,6 +37,12 @@ impl ETPMetadata for StartTransaction {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for StartTransaction {
     fn protocol(&self) -> i32 {
         18
     }
@@ -51,6 +58,12 @@ impl ETPMetadata for StartTransaction {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<StartTransaction> {
+        let record =
+            from_avro_datum(&StartTransaction::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<StartTransaction>(&record)
+    }
 }
 
 impl Default for StartTransaction {
@@ -63,3 +76,37 @@ impl Default for StartTransaction {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Transaction",
+    "name": "StartTransaction",
+    "protocol": "18",
+    "messageType": "1",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "readOnly",
+            "type": "boolean"
+        },
+        {
+            "name": "message",
+            "type": "string",
+            "default": ""
+        },
+        {
+            "name": "dataspaceUris",
+            "type": {
+                "type": "array",
+                "items": "string"
+            },
+            "default": [
+                ""
+            ]
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Transaction.StartTransaction",
+    "depends": []
+}"#;

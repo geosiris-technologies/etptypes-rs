@@ -2,14 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::energistics::etp::v12::datatypes::object::subscription_info::SubscriptionInfo;
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
+
+use crate::energistics::etp::v12::datatypes::object::subscription_info::SubscriptionInfo;
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -18,9 +22,7 @@ pub struct SubscribeNotifications {
     pub request: HashMap<String, SubscriptionInfo>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.StoreNotification", "name": "SubscribeNotifications", "protocol": "5", "messageType": "6", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "request", "type": {"type": "map", "values": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "SubscriptionInfo", "fields": [{"name": "context", "type": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "ContextInfo", "fields": [{"name": "uri", "type": "string"}, {"name": "depth", "type": "int"}, {"name": "dataObjectTypes", "type": {"type": "array", "items": "string"}, "default": []}, {"name": "navigableEdges", "type": {"type": "enum", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "RelationshipKind", "symbols": ["Primary", "Secondary", "Both"], "fullName": "Energistics.Etp.v12.Datatypes.Object.RelationshipKind", "depends": []}}, {"name": "includeSecondaryTargets", "type": "boolean", "default": false}, {"name": "includeSecondarySources", "type": "boolean", "default": false}], "fullName": "Energistics.Etp.v12.Datatypes.Object.ContextInfo", "depends": ["Energistics.Etp.v12.Datatypes.Object.RelationshipKind"]}}, {"name": "scope", "type": {"type": "enum", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "ContextScopeKind", "symbols": ["self", "sources", "targets", "sourcesOrSelf", "targetsOrSelf"], "fullName": "Energistics.Etp.v12.Datatypes.Object.ContextScopeKind", "depends": []}}, {"name": "requestUuid", "type": {"type": "fixed", "namespace": "Energistics.Etp.v12.Datatypes", "name": "Uuid", "size": 16, "fullName": "Energistics.Etp.v12.Datatypes.Uuid", "depends": []}}, {"name": "includeObjectData", "type": "boolean"}, {"name": "format", "type": "string", "default": "xml"}], "fullName": "Energistics.Etp.v12.Datatypes.Object.SubscriptionInfo", "depends": ["Energistics.Etp.v12.Datatypes.Object.ContextInfo", "Energistics.Etp.v12.Datatypes.Object.ContextScopeKind", "Energistics.Etp.v12.Datatypes.Uuid"]}}}], "fullName": "Energistics.Etp.v12.Protocol.StoreNotification.SubscribeNotifications", "depends": ["Energistics.Etp.v12.Datatypes.Object.SubscriptionInfo"]}"#;
-
-impl ETPMetadata for SubscribeNotifications {
+impl Schemable for SubscribeNotifications {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -29,6 +31,12 @@ impl ETPMetadata for SubscribeNotifications {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for SubscribeNotifications {
     fn protocol(&self) -> i32 {
         5
     }
@@ -44,6 +52,12 @@ impl ETPMetadata for SubscribeNotifications {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<SubscribeNotifications> {
+        let record =
+            from_avro_datum(&SubscribeNotifications::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<SubscribeNotifications>(&record)
+    }
 }
 
 impl Default for SubscribeNotifications {
@@ -54,3 +68,131 @@ impl Default for SubscribeNotifications {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.StoreNotification",
+    "name": "SubscribeNotifications",
+    "protocol": "5",
+    "messageType": "6",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "request",
+            "type": {
+                "type": "map",
+                "values": {
+                    "type": "record",
+                    "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                    "name": "SubscriptionInfo",
+                    "fields": [
+                        {
+                            "name": "context",
+                            "type": {
+                                "type": "record",
+                                "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                                "name": "ContextInfo",
+                                "fields": [
+                                    {
+                                        "name": "uri",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "name": "depth",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "name": "dataObjectTypes",
+                                        "type": {
+                                            "type": "array",
+                                            "items": "string"
+                                        },
+                                        "default": []
+                                    },
+                                    {
+                                        "name": "navigableEdges",
+                                        "type": {
+                                            "type": "enum",
+                                            "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                                            "name": "RelationshipKind",
+                                            "symbols": [
+                                                "Primary",
+                                                "Secondary",
+                                                "Both"
+                                            ],
+                                            "fullName": "Energistics.Etp.v12.Datatypes.Object.RelationshipKind",
+                                            "depends": []
+                                        }
+                                    },
+                                    {
+                                        "name": "includeSecondaryTargets",
+                                        "type": "boolean",
+                                        "default": false
+                                    },
+                                    {
+                                        "name": "includeSecondarySources",
+                                        "type": "boolean",
+                                        "default": false
+                                    }
+                                ],
+                                "fullName": "Energistics.Etp.v12.Datatypes.Object.ContextInfo",
+                                "depends": [
+                                    "Energistics.Etp.v12.Datatypes.Object.RelationshipKind"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "scope",
+                            "type": {
+                                "type": "enum",
+                                "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                                "name": "ContextScopeKind",
+                                "symbols": [
+                                    "self",
+                                    "sources",
+                                    "targets",
+                                    "sourcesOrSelf",
+                                    "targetsOrSelf"
+                                ],
+                                "fullName": "Energistics.Etp.v12.Datatypes.Object.ContextScopeKind",
+                                "depends": []
+                            }
+                        },
+                        {
+                            "name": "requestUuid",
+                            "type": {
+                                "type": "fixed",
+                                "namespace": "Energistics.Etp.v12.Datatypes",
+                                "name": "Uuid",
+                                "size": 16,
+                                "fullName": "Energistics.Etp.v12.Datatypes.Uuid",
+                                "depends": []
+                            }
+                        },
+                        {
+                            "name": "includeObjectData",
+                            "type": "boolean"
+                        },
+                        {
+                            "name": "format",
+                            "type": "string",
+                            "default": "xml"
+                        }
+                    ],
+                    "fullName": "Energistics.Etp.v12.Datatypes.Object.SubscriptionInfo",
+                    "depends": [
+                        "Energistics.Etp.v12.Datatypes.Object.ContextInfo",
+                        "Energistics.Etp.v12.Datatypes.Object.ContextScopeKind",
+                        "Energistics.Etp.v12.Datatypes.Uuid"
+                    ]
+                }
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.StoreNotification.SubscribeNotifications",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.Object.SubscriptionInfo"
+    ]
+}"#;

@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct CloseChannels {
@@ -17,9 +20,7 @@ pub struct CloseChannels {
     pub id: HashMap<String, i64>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad", "name": "CloseChannels", "protocol": "22", "messageType": "3", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "id", "type": {"type": "map", "values": "long"}}], "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.CloseChannels", "depends": []}"#;
-
-impl ETPMetadata for CloseChannels {
+impl Schemable for CloseChannels {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for CloseChannels {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for CloseChannels {
     fn protocol(&self) -> i32 {
         22
     }
@@ -43,6 +50,11 @@ impl ETPMetadata for CloseChannels {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<CloseChannels> {
+        let record = from_avro_datum(&CloseChannels::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<CloseChannels>(&record)
+    }
 }
 
 impl Default for CloseChannels {
@@ -51,3 +63,25 @@ impl Default for CloseChannels {
         CloseChannels { id: HashMap::new() }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad",
+    "name": "CloseChannels",
+    "protocol": "22",
+    "messageType": "3",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "id",
+            "type": {
+                "type": "map",
+                "values": "long"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.CloseChannels",
+    "depends": []
+}"#;

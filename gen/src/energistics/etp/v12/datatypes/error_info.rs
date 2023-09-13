@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -17,7 +19,19 @@ pub struct ErrorInfo {
     pub code: i32,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ErrorInfo", "fields": [{"name": "message", "type": "string"}, {"name": "code", "type": "int"}], "fullName": "Energistics.Etp.v12.Datatypes.ErrorInfo", "depends": []}"#;
+impl Schemable for ErrorInfo {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
 
 impl ErrorInfo {
     /* Protocol , MessageType :  */
@@ -28,3 +42,21 @@ impl ErrorInfo {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes",
+    "name": "ErrorInfo",
+    "fields": [
+        {
+            "name": "message",
+            "type": "string"
+        },
+        {
+            "name": "code",
+            "type": "int"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.ErrorInfo",
+    "depends": []
+}"#;

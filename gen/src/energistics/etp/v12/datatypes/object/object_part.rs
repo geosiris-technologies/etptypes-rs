@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -17,7 +19,19 @@ pub struct ObjectPart {
     pub data: Vec<u8>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "ObjectPart", "fields": [{"name": "uid", "type": "string"}, {"name": "data", "type": "bytes"}], "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart", "depends": []}"#;
+impl Schemable for ObjectPart {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
 
 impl ObjectPart {
     /* Protocol , MessageType :  */
@@ -28,3 +42,21 @@ impl ObjectPart {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes.Object",
+    "name": "ObjectPart",
+    "fields": [
+        {
+            "name": "uid",
+            "type": "string"
+        },
+        {
+            "name": "data",
+            "type": "bytes"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart",
+    "depends": []
+}"#;

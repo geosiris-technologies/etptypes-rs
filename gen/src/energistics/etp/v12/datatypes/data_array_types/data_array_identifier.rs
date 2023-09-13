@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -17,7 +19,19 @@ pub struct DataArrayIdentifier {
     pub path_in_resource: String,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes", "name": "DataArrayIdentifier", "fields": [{"name": "uri", "type": "string"}, {"name": "pathInResource", "type": "string"}], "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier", "depends": []}"#;
+impl Schemable for DataArrayIdentifier {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
 
 impl Default for DataArrayIdentifier {
     /* Protocol , MessageType :  */
@@ -28,3 +42,21 @@ impl Default for DataArrayIdentifier {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes",
+    "name": "DataArrayIdentifier",
+    "fields": [
+        {
+            "name": "uri",
+            "type": "string"
+        },
+        {
+            "name": "pathInResource",
+            "type": "string"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier",
+    "depends": []
+}"#;

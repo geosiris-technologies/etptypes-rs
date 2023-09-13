@@ -3,7 +3,9 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::energistics::etp::v12::datatypes::data_array_types::data_array_identifier::DataArrayIdentifier;
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -24,7 +26,19 @@ pub struct GetDataSubarraysType {
     pub counts: Vec<i64>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes", "name": "GetDataSubarraysType", "fields": [{"name": "uid", "type": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes", "name": "DataArrayIdentifier", "fields": [{"name": "uri", "type": "string"}, {"name": "pathInResource", "type": "string"}], "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier", "depends": []}}, {"name": "starts", "type": {"type": "array", "items": "long"}, "default": []}, {"name": "counts", "type": {"type": "array", "items": "long"}, "default": []}], "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.GetDataSubarraysType", "depends": ["Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier"]}"#;
+impl Schemable for GetDataSubarraysType {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
 
 impl GetDataSubarraysType {
     /* Protocol , MessageType :  */
@@ -36,3 +50,51 @@ impl GetDataSubarraysType {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes",
+    "name": "GetDataSubarraysType",
+    "fields": [
+        {
+            "name": "uid",
+            "type": {
+                "type": "record",
+                "namespace": "Energistics.Etp.v12.Datatypes.DataArrayTypes",
+                "name": "DataArrayIdentifier",
+                "fields": [
+                    {
+                        "name": "uri",
+                        "type": "string"
+                    },
+                    {
+                        "name": "pathInResource",
+                        "type": "string"
+                    }
+                ],
+                "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier",
+                "depends": []
+            }
+        },
+        {
+            "name": "starts",
+            "type": {
+                "type": "array",
+                "items": "long"
+            },
+            "default": []
+        },
+        {
+            "name": "counts",
+            "type": {
+                "type": "array",
+                "items": "long"
+            },
+            "default": []
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.DataArrayTypes.GetDataSubarraysType",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.DataArrayTypes.DataArrayIdentifier"
+    ]
+}"#;

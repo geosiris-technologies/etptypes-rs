@@ -3,7 +3,9 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::energistics::etp::v12::datatypes::channel_data::channel_data_kind::ChannelDataKind;
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -34,7 +36,19 @@ pub struct AttributeMetadataRecord {
     pub axis_vector_lengths: Vec<i32>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "AttributeMetadataRecord", "fields": [{"name": "attributeId", "type": "int"}, {"name": "attributeName", "type": "string"}, {"name": "dataKind", "type": {"type": "enum", "namespace": "Energistics.Etp.v12.Datatypes.ChannelData", "name": "ChannelDataKind", "symbols": ["DateTime", "ElapsedTime", "MeasuredDepth", "PassIndexedDepth", "TrueVerticalDepth", "typeBoolean", "typeInt", "typeLong", "typeFloat", "typeDouble", "typeString", "typeBytes"], "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.ChannelDataKind", "depends": []}}, {"name": "uom", "type": "string"}, {"name": "depthDatum", "type": "string"}, {"name": "attributePropertyKindUri", "type": "string"}, {"name": "axisVectorLengths", "type": {"type": "array", "items": "int"}}], "fullName": "Energistics.Etp.v12.Datatypes.AttributeMetadataRecord", "depends": ["Energistics.Etp.v12.Datatypes.ChannelData.ChannelDataKind"]}"#;
+impl Schemable for AttributeMetadataRecord {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
 
 impl AttributeMetadataRecord {
     /* Protocol , MessageType :  */
@@ -53,3 +67,66 @@ impl AttributeMetadataRecord {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes",
+    "name": "AttributeMetadataRecord",
+    "fields": [
+        {
+            "name": "attributeId",
+            "type": "int"
+        },
+        {
+            "name": "attributeName",
+            "type": "string"
+        },
+        {
+            "name": "dataKind",
+            "type": {
+                "type": "enum",
+                "namespace": "Energistics.Etp.v12.Datatypes.ChannelData",
+                "name": "ChannelDataKind",
+                "symbols": [
+                    "DateTime",
+                    "ElapsedTime",
+                    "MeasuredDepth",
+                    "PassIndexedDepth",
+                    "TrueVerticalDepth",
+                    "typeBoolean",
+                    "typeInt",
+                    "typeLong",
+                    "typeFloat",
+                    "typeDouble",
+                    "typeString",
+                    "typeBytes"
+                ],
+                "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.ChannelDataKind",
+                "depends": []
+            }
+        },
+        {
+            "name": "uom",
+            "type": "string"
+        },
+        {
+            "name": "depthDatum",
+            "type": "string"
+        },
+        {
+            "name": "attributePropertyKindUri",
+            "type": "string"
+        },
+        {
+            "name": "axisVectorLengths",
+            "type": {
+                "type": "array",
+                "items": "int"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.AttributeMetadataRecord",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.ChannelData.ChannelDataKind"
+    ]
+}"#;

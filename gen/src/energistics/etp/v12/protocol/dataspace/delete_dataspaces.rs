@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct DeleteDataspaces {
@@ -17,9 +20,7 @@ pub struct DeleteDataspaces {
     pub uris: HashMap<String, String>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Dataspace", "name": "DeleteDataspaces", "protocol": "24", "messageType": "4", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "uris", "type": {"type": "map", "values": "string"}}], "fullName": "Energistics.Etp.v12.Protocol.Dataspace.DeleteDataspaces", "depends": []}"#;
-
-impl ETPMetadata for DeleteDataspaces {
+impl Schemable for DeleteDataspaces {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for DeleteDataspaces {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for DeleteDataspaces {
     fn protocol(&self) -> i32 {
         24
     }
@@ -43,6 +50,12 @@ impl ETPMetadata for DeleteDataspaces {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DeleteDataspaces> {
+        let record =
+            from_avro_datum(&DeleteDataspaces::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<DeleteDataspaces>(&record)
+    }
 }
 
 impl Default for DeleteDataspaces {
@@ -53,3 +66,25 @@ impl Default for DeleteDataspaces {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Dataspace",
+    "name": "DeleteDataspaces",
+    "protocol": "24",
+    "messageType": "4",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "uris",
+            "type": {
+                "type": "map",
+                "values": "string"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Dataspace.DeleteDataspaces",
+    "depends": []
+}"#;

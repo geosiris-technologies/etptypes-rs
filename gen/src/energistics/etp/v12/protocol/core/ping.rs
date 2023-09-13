@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct Ping {
@@ -17,9 +20,7 @@ pub struct Ping {
     pub current_date_time: i64,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Core", "name": "Ping", "protocol": "0", "messageType": "8", "senderRole": "client,server", "protocolRoles": "client, server", "multipartFlag": false, "fields": [{"name": "currentDateTime", "type": "long"}], "fullName": "Energistics.Etp.v12.Protocol.Core.Ping", "depends": []}"#;
-
-impl ETPMetadata for Ping {
+impl Schemable for Ping {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for Ping {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for Ping {
     fn protocol(&self) -> i32 {
         0
     }
@@ -43,6 +50,11 @@ impl ETPMetadata for Ping {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Ping> {
+        let record = from_avro_datum(&Ping::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<Ping>(&record)
+    }
 }
 
 impl Default for Ping {
@@ -53,3 +65,22 @@ impl Default for Ping {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Core",
+    "name": "Ping",
+    "protocol": "0",
+    "messageType": "8",
+    "senderRole": "client,server",
+    "protocolRoles": "client, server",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "currentDateTime",
+            "type": "long"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Core.Ping",
+    "depends": []
+}"#;

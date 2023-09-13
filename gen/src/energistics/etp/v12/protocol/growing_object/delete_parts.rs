@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct DeleteParts {
@@ -20,9 +23,7 @@ pub struct DeleteParts {
     pub uids: HashMap<String, String>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.GrowingObject", "name": "DeleteParts", "protocol": "6", "messageType": "1", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "uri", "type": "string"}, {"name": "uids", "type": {"type": "map", "values": "string"}}], "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.DeleteParts", "depends": []}"#;
-
-impl ETPMetadata for DeleteParts {
+impl Schemable for DeleteParts {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -31,6 +32,12 @@ impl ETPMetadata for DeleteParts {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for DeleteParts {
     fn protocol(&self) -> i32 {
         6
     }
@@ -46,6 +53,11 @@ impl ETPMetadata for DeleteParts {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DeleteParts> {
+        let record = from_avro_datum(&DeleteParts::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<DeleteParts>(&record)
+    }
 }
 
 impl Default for DeleteParts {
@@ -57,3 +69,29 @@ impl Default for DeleteParts {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.GrowingObject",
+    "name": "DeleteParts",
+    "protocol": "6",
+    "messageType": "1",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "uri",
+            "type": "string"
+        },
+        {
+            "name": "uids",
+            "type": {
+                "type": "map",
+                "values": "string"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.DeleteParts",
+    "depends": []
+}"#;

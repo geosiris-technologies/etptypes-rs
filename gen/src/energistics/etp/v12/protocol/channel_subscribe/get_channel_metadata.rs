@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct GetChannelMetadata {
@@ -17,9 +20,7 @@ pub struct GetChannelMetadata {
     pub uris: HashMap<String, String>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelSubscribe", "name": "GetChannelMetadata", "protocol": "21", "messageType": "1", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "uris", "type": {"type": "map", "values": "string"}}], "fullName": "Energistics.Etp.v12.Protocol.ChannelSubscribe.GetChannelMetadata", "depends": []}"#;
-
-impl ETPMetadata for GetChannelMetadata {
+impl Schemable for GetChannelMetadata {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for GetChannelMetadata {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for GetChannelMetadata {
     fn protocol(&self) -> i32 {
         21
     }
@@ -43,6 +50,12 @@ impl ETPMetadata for GetChannelMetadata {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetChannelMetadata> {
+        let record =
+            from_avro_datum(&GetChannelMetadata::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<GetChannelMetadata>(&record)
+    }
 }
 
 impl Default for GetChannelMetadata {
@@ -53,3 +66,25 @@ impl Default for GetChannelMetadata {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelSubscribe",
+    "name": "GetChannelMetadata",
+    "protocol": "21",
+    "messageType": "1",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "uris",
+            "type": {
+                "type": "map",
+                "values": "string"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelSubscribe.GetChannelMetadata",
+    "depends": []
+}"#;

@@ -3,7 +3,9 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::energistics::etp::v12::datatypes::channel_data::pass_direction::PassDirection;
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
@@ -22,4 +24,51 @@ pub struct PassIndexedDepth {
     pub depth: f64,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.ChannelData", "name": "PassIndexedDepth", "fields": [{"name": "pass", "type": "long"}, {"name": "direction", "type": {"type": "enum", "namespace": "Energistics.Etp.v12.Datatypes.ChannelData", "name": "PassDirection", "symbols": ["Up", "HoldingSteady", "Down"], "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.PassDirection", "depends": []}}, {"name": "depth", "type": "double"}], "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.PassIndexedDepth", "depends": ["Energistics.Etp.v12.Datatypes.ChannelData.PassDirection"]}"#;
+impl Schemable for PassIndexedDepth {
+    fn avro_schema() -> Option<Schema> {
+        match Schema::parse_str(AVRO_SCHEMA) {
+            Ok(result) => Some(result),
+            Err(e) => {
+                panic!("{:?}", e);
+            }
+        }
+    }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Datatypes.ChannelData",
+    "name": "PassIndexedDepth",
+    "fields": [
+        {
+            "name": "pass",
+            "type": "long"
+        },
+        {
+            "name": "direction",
+            "type": {
+                "type": "enum",
+                "namespace": "Energistics.Etp.v12.Datatypes.ChannelData",
+                "name": "PassDirection",
+                "symbols": [
+                    "Up",
+                    "HoldingSteady",
+                    "Down"
+                ],
+                "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.PassDirection",
+                "depends": []
+            }
+        },
+        {
+            "name": "depth",
+            "type": "double"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Datatypes.ChannelData.PassIndexedDepth",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.ChannelData.PassDirection"
+    ]
+}"#;
