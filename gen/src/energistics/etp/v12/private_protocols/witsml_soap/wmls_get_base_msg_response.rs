@@ -2,24 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct WMLS_GetBaseMsgResponse {
     #[serde(rename = "Result")]
     pub result: String,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.PrivateProtocols.WitsmlSoap", "name": "WMLS_GetBaseMsgResponse", "protocol": "2100", "messageType": "6", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "Result", "type": "string"}], "fullName": "Energistics.Etp.v12.PrivateProtocols.WitsmlSoap.WMLS_GetBaseMsgResponse", "depends": []}"#;
-
-impl ETPMetadata for WMLS_GetBaseMsgResponse {
+impl Schemable for WMLS_GetBaseMsgResponse {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for WMLS_GetBaseMsgResponse {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for WMLS_GetBaseMsgResponse {
     fn protocol(&self) -> i32 {
         2100
     }
@@ -43,6 +50,16 @@ impl ETPMetadata for WMLS_GetBaseMsgResponse {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<WMLS_GetBaseMsgResponse> {
+        let record = from_avro_datum(
+            &WMLS_GetBaseMsgResponse::avro_schema().unwrap(),
+            input,
+            None,
+        )
+        .unwrap();
+        from_value::<WMLS_GetBaseMsgResponse>(&record)
+    }
 }
 
 impl Default for WMLS_GetBaseMsgResponse {
@@ -53,3 +70,22 @@ impl Default for WMLS_GetBaseMsgResponse {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.PrivateProtocols.WitsmlSoap",
+    "name": "WMLS_GetBaseMsgResponse",
+    "protocol": "2100",
+    "messageType": "6",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "Result",
+            "type": "string"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.PrivateProtocols.WitsmlSoap.WMLS_GetBaseMsgResponse",
+    "depends": []
+}"#;

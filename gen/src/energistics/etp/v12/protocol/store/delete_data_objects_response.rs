@@ -2,26 +2,27 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::array_of_string::ArrayOfString;
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct DeleteDataObjectsResponse {
     #[serde(rename = "deletedUris")]
     pub deleted_uris: HashMap<String, ArrayOfString>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Store", "name": "DeleteDataObjectsResponse", "protocol": "4", "messageType": "10", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": true, "fields": [{"name": "deletedUris", "type": {"type": "map", "values": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes", "name": "ArrayOfString", "fields": [{"name": "values", "type": {"type": "array", "items": "string"}}], "fullName": "Energistics.Etp.v12.Datatypes.ArrayOfString", "depends": []}}}], "fullName": "Energistics.Etp.v12.Protocol.Store.DeleteDataObjectsResponse", "depends": ["Energistics.Etp.v12.Datatypes.ArrayOfString"]}"#;
-
-impl ETPMetadata for DeleteDataObjectsResponse {
+impl Schemable for DeleteDataObjectsResponse {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -30,6 +31,12 @@ impl ETPMetadata for DeleteDataObjectsResponse {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for DeleteDataObjectsResponse {
     fn protocol(&self) -> i32 {
         4
     }
@@ -45,6 +52,16 @@ impl ETPMetadata for DeleteDataObjectsResponse {
     fn multipart_flag(&self) -> bool {
         true
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DeleteDataObjectsResponse> {
+        let record = from_avro_datum(
+            &DeleteDataObjectsResponse::avro_schema().unwrap(),
+            input,
+            None,
+        )
+        .unwrap();
+        from_value::<DeleteDataObjectsResponse>(&record)
+    }
 }
 
 impl Default for DeleteDataObjectsResponse {
@@ -55,3 +72,42 @@ impl Default for DeleteDataObjectsResponse {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Store",
+    "name": "DeleteDataObjectsResponse",
+    "protocol": "4",
+    "messageType": "10",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": true,
+    "fields": [
+        {
+            "name": "deletedUris",
+            "type": {
+                "type": "map",
+                "values": {
+                    "type": "record",
+                    "namespace": "Energistics.Etp.v12.Datatypes",
+                    "name": "ArrayOfString",
+                    "fields": [
+                        {
+                            "name": "values",
+                            "type": {
+                                "type": "array",
+                                "items": "string"
+                            }
+                        }
+                    ],
+                    "fullName": "Energistics.Etp.v12.Datatypes.ArrayOfString",
+                    "depends": []
+                }
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Store.DeleteDataObjectsResponse",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.ArrayOfString"
+    ]
+}"#;

@@ -2,29 +2,32 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ChannelDataKind {
-    date_time,
-    elapsed_time,
-    measured_depth,
-    pass_indexed_depth,
-    true_vertical_depth,
-    type_boolean,
-    type_int,
-    type_long,
-    type_float,
-    type_double,
-    type_string,
-    type_bytes,
+    /* None */
+    DateTime,
+    ElapsedTime,
+    MeasuredDepth,
+    PassIndexedDepth,
+    TrueVerticalDepth,
+    TypeBoolean,
+    TypeInt,
+    TypeLong,
+    TypeFloat,
+    TypeDouble,
+    TypeString,
+    TypeBytes,
 }
 
 impl fmt::Display for ChannelDataKind {
@@ -33,19 +36,39 @@ impl fmt::Display for ChannelDataKind {
             f,
             "{}",
             match self {
-                ChannelDataKind::date_time => "DateTime",
-                ChannelDataKind::elapsed_time => "ElapsedTime",
-                ChannelDataKind::measured_depth => "MeasuredDepth",
-                ChannelDataKind::pass_indexed_depth => "PassIndexedDepth",
-                ChannelDataKind::true_vertical_depth => "TrueVerticalDepth",
-                ChannelDataKind::type_boolean => "typeBoolean",
-                ChannelDataKind::type_int => "typeInt",
-                ChannelDataKind::type_long => "typeLong",
-                ChannelDataKind::type_float => "typeFloat",
-                ChannelDataKind::type_double => "typeDouble",
-                ChannelDataKind::type_string => "typeString",
-                ChannelDataKind::type_bytes => "typeBytes",
+                ChannelDataKind::DateTime => "DateTime",
+                ChannelDataKind::ElapsedTime => "ElapsedTime",
+                ChannelDataKind::MeasuredDepth => "MeasuredDepth",
+                ChannelDataKind::PassIndexedDepth => "PassIndexedDepth",
+                ChannelDataKind::TrueVerticalDepth => "TrueVerticalDepth",
+                ChannelDataKind::TypeBoolean => "typeBoolean",
+                ChannelDataKind::TypeInt => "typeInt",
+                ChannelDataKind::TypeLong => "typeLong",
+                ChannelDataKind::TypeFloat => "typeFloat",
+                ChannelDataKind::TypeDouble => "typeDouble",
+                ChannelDataKind::TypeString => "typeString",
+                ChannelDataKind::TypeBytes => "typeBytes",
             }
         )
+    }
+}
+
+impl ChannelDataKind {
+    pub fn iter() -> Iter<'static, ChannelDataKind> {
+        static VEC_ENUM: [ChannelDataKind; 12] = [
+            ChannelDataKind::DateTime,
+            ChannelDataKind::ElapsedTime,
+            ChannelDataKind::MeasuredDepth,
+            ChannelDataKind::PassIndexedDepth,
+            ChannelDataKind::TrueVerticalDepth,
+            ChannelDataKind::TypeBoolean,
+            ChannelDataKind::TypeInt,
+            ChannelDataKind::TypeLong,
+            ChannelDataKind::TypeFloat,
+            ChannelDataKind::TypeDouble,
+            ChannelDataKind::TypeString,
+            ChannelDataKind::TypeBytes,
+        ];
+        VEC_ENUM.iter()
     }
 }

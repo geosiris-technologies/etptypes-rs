@@ -2,24 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct TruncateChannelsResponse {
     #[serde(rename = "channelsTruncatedTime")]
     pub channels_truncated_time: HashMap<String, i64>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad", "name": "TruncateChannelsResponse", "protocol": "22", "messageType": "10", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": true, "fields": [{"name": "channelsTruncatedTime", "type": {"type": "map", "values": "long"}}], "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.TruncateChannelsResponse", "depends": []}"#;
-
-impl ETPMetadata for TruncateChannelsResponse {
+impl Schemable for TruncateChannelsResponse {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for TruncateChannelsResponse {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for TruncateChannelsResponse {
     fn protocol(&self) -> i32 {
         22
     }
@@ -43,6 +50,16 @@ impl ETPMetadata for TruncateChannelsResponse {
     fn multipart_flag(&self) -> bool {
         true
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<TruncateChannelsResponse> {
+        let record = from_avro_datum(
+            &TruncateChannelsResponse::avro_schema().unwrap(),
+            input,
+            None,
+        )
+        .unwrap();
+        from_value::<TruncateChannelsResponse>(&record)
+    }
 }
 
 impl Default for TruncateChannelsResponse {
@@ -53,3 +70,25 @@ impl Default for TruncateChannelsResponse {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad",
+    "name": "TruncateChannelsResponse",
+    "protocol": "22",
+    "messageType": "10",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": true,
+    "fields": [
+        {
+            "name": "channelsTruncatedTime",
+            "type": {
+                "type": "map",
+                "values": "long"
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.TruncateChannelsResponse",
+    "depends": []
+}"#;

@@ -2,24 +2,27 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ObjectChangeKind {
-    insert,
-    update,
-    authorized,
-    joined,
-    unjoined,
-    joined_subscription,
-    unjoined_subscription,
+    /* None */
+    Insert,
+    Update,
+    Authorized,
+    Joined,
+    Unjoined,
+    JoinedSubscription,
+    UnjoinedSubscription,
 }
 
 impl fmt::Display for ObjectChangeKind {
@@ -28,14 +31,29 @@ impl fmt::Display for ObjectChangeKind {
             f,
             "{}",
             match self {
-                ObjectChangeKind::insert => "insert",
-                ObjectChangeKind::update => "update",
-                ObjectChangeKind::authorized => "authorized",
-                ObjectChangeKind::joined => "joined",
-                ObjectChangeKind::unjoined => "unjoined",
-                ObjectChangeKind::joined_subscription => "joinedSubscription",
-                ObjectChangeKind::unjoined_subscription => "unjoinedSubscription",
+                ObjectChangeKind::Insert => "insert",
+                ObjectChangeKind::Update => "update",
+                ObjectChangeKind::Authorized => "authorized",
+                ObjectChangeKind::Joined => "joined",
+                ObjectChangeKind::Unjoined => "unjoined",
+                ObjectChangeKind::JoinedSubscription => "joinedSubscription",
+                ObjectChangeKind::UnjoinedSubscription => "unjoinedSubscription",
             }
         )
+    }
+}
+
+impl ObjectChangeKind {
+    pub fn iter() -> Iter<'static, ObjectChangeKind> {
+        static VEC_ENUM: [ObjectChangeKind; 7] = [
+            ObjectChangeKind::Insert,
+            ObjectChangeKind::Update,
+            ObjectChangeKind::Authorized,
+            ObjectChangeKind::Joined,
+            ObjectChangeKind::Unjoined,
+            ObjectChangeKind::JoinedSubscription,
+            ObjectChangeKind::UnjoinedSubscription,
+        ];
+        VEC_ENUM.iter()
     }
 }

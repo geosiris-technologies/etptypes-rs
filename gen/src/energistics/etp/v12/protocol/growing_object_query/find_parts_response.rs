@@ -2,18 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct FindPartsResponse {
     #[serde(rename = "uri")]
     pub uri: String,
@@ -30,9 +33,7 @@ pub struct FindPartsResponse {
     pub parts: Vec<ObjectPart>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.GrowingObjectQuery", "name": "FindPartsResponse", "protocol": "16", "messageType": "2", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": true, "fields": [{"name": "uri", "type": "string"}, {"name": "serverSortOrder", "type": "string"}, {"name": "format", "type": "string", "default": "xml"}, {"name": "parts", "type": {"type": "array", "items": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "ObjectPart", "fields": [{"name": "uid", "type": "string"}, {"name": "data", "type": "bytes"}], "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart", "depends": []}}, "default": []}], "fullName": "Energistics.Etp.v12.Protocol.GrowingObjectQuery.FindPartsResponse", "depends": ["Energistics.Etp.v12.Datatypes.Object.ObjectPart"]}"#;
-
-impl ETPMetadata for FindPartsResponse {
+impl Schemable for FindPartsResponse {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -41,6 +42,12 @@ impl ETPMetadata for FindPartsResponse {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for FindPartsResponse {
     fn protocol(&self) -> i32 {
         16
     }
@@ -56,6 +63,12 @@ impl ETPMetadata for FindPartsResponse {
     fn multipart_flag(&self) -> bool {
         true
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<FindPartsResponse> {
+        let record =
+            from_avro_datum(&FindPartsResponse::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<FindPartsResponse>(&record)
+    }
 }
 
 impl Default for FindPartsResponse {
@@ -69,3 +82,57 @@ impl Default for FindPartsResponse {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.GrowingObjectQuery",
+    "name": "FindPartsResponse",
+    "protocol": "16",
+    "messageType": "2",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": true,
+    "fields": [
+        {
+            "name": "uri",
+            "type": "string"
+        },
+        {
+            "name": "serverSortOrder",
+            "type": "string"
+        },
+        {
+            "name": "format",
+            "type": "string",
+            "default": "xml"
+        },
+        {
+            "name": "parts",
+            "type": {
+                "type": "array",
+                "items": {
+                    "type": "record",
+                    "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                    "name": "ObjectPart",
+                    "fields": [
+                        {
+                            "name": "uid",
+                            "type": "string"
+                        },
+                        {
+                            "name": "data",
+                            "type": "bytes"
+                        }
+                    ],
+                    "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart",
+                    "depends": []
+                }
+            },
+            "default": []
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.GrowingObjectQuery.FindPartsResponse",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.Object.ObjectPart"
+    ]
+}"#;

@@ -2,18 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct PutParts {
     #[serde(rename = "uri")]
     pub uri: String,
@@ -26,9 +29,7 @@ pub struct PutParts {
     pub parts: HashMap<String, ObjectPart>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.GrowingObject", "name": "PutParts", "protocol": "6", "messageType": "5", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "uri", "type": "string"}, {"name": "format", "type": "string", "default": "xml"}, {"name": "parts", "type": {"type": "map", "values": {"type": "record", "namespace": "Energistics.Etp.v12.Datatypes.Object", "name": "ObjectPart", "fields": [{"name": "uid", "type": "string"}, {"name": "data", "type": "bytes"}], "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart", "depends": []}}}], "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.PutParts", "depends": ["Energistics.Etp.v12.Datatypes.Object.ObjectPart"]}"#;
-
-impl ETPMetadata for PutParts {
+impl Schemable for PutParts {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -37,6 +38,12 @@ impl ETPMetadata for PutParts {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for PutParts {
     fn protocol(&self) -> i32 {
         6
     }
@@ -52,6 +59,11 @@ impl ETPMetadata for PutParts {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutParts> {
+        let record = from_avro_datum(&PutParts::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<PutParts>(&record)
+    }
 }
 
 impl Default for PutParts {
@@ -64,3 +76,52 @@ impl Default for PutParts {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.GrowingObject",
+    "name": "PutParts",
+    "protocol": "6",
+    "messageType": "5",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "uri",
+            "type": "string"
+        },
+        {
+            "name": "format",
+            "type": "string",
+            "default": "xml"
+        },
+        {
+            "name": "parts",
+            "type": {
+                "type": "map",
+                "values": {
+                    "type": "record",
+                    "namespace": "Energistics.Etp.v12.Datatypes.Object",
+                    "name": "ObjectPart",
+                    "fields": [
+                        {
+                            "name": "uid",
+                            "type": "string"
+                        },
+                        {
+                            "name": "data",
+                            "type": "bytes"
+                        }
+                    ],
+                    "fullName": "Energistics.Etp.v12.Datatypes.Object.ObjectPart",
+                    "depends": []
+                }
+            }
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.GrowingObject.PutParts",
+    "depends": [
+        "Energistics.Etp.v12.Datatypes.Object.ObjectPart"
+    ]
+}"#;

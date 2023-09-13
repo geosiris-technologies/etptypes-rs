@@ -2,24 +2,27 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum AnyArrayType {
-    array_of_boolean,
-    array_of_int,
-    array_of_long,
-    array_of_float,
-    array_of_double,
-    array_of_string,
-    bytes,
+    /* None */
+    ArrayOfBoolean,
+    ArrayOfInt,
+    ArrayOfLong,
+    ArrayOfFloat,
+    ArrayOfDouble,
+    ArrayOfString,
+    Bytes,
 }
 
 impl fmt::Display for AnyArrayType {
@@ -28,14 +31,29 @@ impl fmt::Display for AnyArrayType {
             f,
             "{}",
             match self {
-                AnyArrayType::array_of_boolean => "arrayOfBoolean",
-                AnyArrayType::array_of_int => "arrayOfInt",
-                AnyArrayType::array_of_long => "arrayOfLong",
-                AnyArrayType::array_of_float => "arrayOfFloat",
-                AnyArrayType::array_of_double => "arrayOfDouble",
-                AnyArrayType::array_of_string => "arrayOfString",
-                AnyArrayType::bytes => "bytes",
+                AnyArrayType::ArrayOfBoolean => "arrayOfBoolean",
+                AnyArrayType::ArrayOfInt => "arrayOfInt",
+                AnyArrayType::ArrayOfLong => "arrayOfLong",
+                AnyArrayType::ArrayOfFloat => "arrayOfFloat",
+                AnyArrayType::ArrayOfDouble => "arrayOfDouble",
+                AnyArrayType::ArrayOfString => "arrayOfString",
+                AnyArrayType::Bytes => "bytes",
             }
         )
+    }
+}
+
+impl AnyArrayType {
+    pub fn iter() -> Iter<'static, AnyArrayType> {
+        static VEC_ENUM: [AnyArrayType; 7] = [
+            AnyArrayType::ArrayOfBoolean,
+            AnyArrayType::ArrayOfInt,
+            AnyArrayType::ArrayOfLong,
+            AnyArrayType::ArrayOfFloat,
+            AnyArrayType::ArrayOfDouble,
+            AnyArrayType::ArrayOfString,
+            AnyArrayType::Bytes,
+        ];
+        VEC_ENUM.iter()
     }
 }

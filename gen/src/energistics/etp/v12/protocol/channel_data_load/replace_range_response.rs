@@ -2,24 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ReplaceRangeResponse {
     #[serde(rename = "channelChangeTime")]
     pub channel_change_time: i64,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad", "name": "ReplaceRangeResponse", "protocol": "22", "messageType": "8", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "channelChangeTime", "type": "long"}], "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.ReplaceRangeResponse", "depends": []}"#;
-
-impl ETPMetadata for ReplaceRangeResponse {
+impl Schemable for ReplaceRangeResponse {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -28,6 +29,12 @@ impl ETPMetadata for ReplaceRangeResponse {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for ReplaceRangeResponse {
     fn protocol(&self) -> i32 {
         22
     }
@@ -43,6 +50,12 @@ impl ETPMetadata for ReplaceRangeResponse {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ReplaceRangeResponse> {
+        let record =
+            from_avro_datum(&ReplaceRangeResponse::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<ReplaceRangeResponse>(&record)
+    }
 }
 
 impl Default for ReplaceRangeResponse {
@@ -53,3 +66,22 @@ impl Default for ReplaceRangeResponse {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelDataLoad",
+    "name": "ReplaceRangeResponse",
+    "protocol": "22",
+    "messageType": "8",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "channelChangeTime",
+            "type": "long"
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelDataLoad.ReplaceRangeResponse",
+    "depends": []
+}"#;

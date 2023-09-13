@@ -2,20 +2,23 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum PassDirection {
-    up,
-    holding_steady,
-    down,
+    /* None */
+    Up,
+    HoldingSteady,
+    Down,
 }
 
 impl fmt::Display for PassDirection {
@@ -24,10 +27,21 @@ impl fmt::Display for PassDirection {
             f,
             "{}",
             match self {
-                PassDirection::up => "Up",
-                PassDirection::holding_steady => "HoldingSteady",
-                PassDirection::down => "Down",
+                PassDirection::Up => "Up",
+                PassDirection::HoldingSteady => "HoldingSteady",
+                PassDirection::Down => "Down",
             }
         )
+    }
+}
+
+impl PassDirection {
+    pub fn iter() -> Iter<'static, PassDirection> {
+        static VEC_ENUM: [PassDirection; 3] = [
+            PassDirection::Up,
+            PassDirection::HoldingSteady,
+            PassDirection::Down,
+        ];
+        VEC_ENUM.iter()
     }
 }

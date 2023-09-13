@@ -2,16 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct SubscriptionsStopped {
     #[serde(rename = "reason")]
     pub reason: String,
@@ -21,9 +24,7 @@ pub struct SubscriptionsStopped {
     pub channel_ids: HashMap<String, i64>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelSubscribe", "name": "SubscriptionsStopped", "protocol": "21", "messageType": "8", "senderRole": "store", "protocolRoles": "store,customer", "multipartFlag": true, "fields": [{"name": "reason", "type": "string"}, {"name": "channelIds", "type": {"type": "map", "values": "long"}, "default": {}}], "fullName": "Energistics.Etp.v12.Protocol.ChannelSubscribe.SubscriptionsStopped", "depends": []}"#;
-
-impl ETPMetadata for SubscriptionsStopped {
+impl Schemable for SubscriptionsStopped {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -32,6 +33,12 @@ impl ETPMetadata for SubscriptionsStopped {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for SubscriptionsStopped {
     fn protocol(&self) -> i32 {
         21
     }
@@ -47,6 +54,12 @@ impl ETPMetadata for SubscriptionsStopped {
     fn multipart_flag(&self) -> bool {
         true
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<SubscriptionsStopped> {
+        let record =
+            from_avro_datum(&SubscriptionsStopped::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<SubscriptionsStopped>(&record)
+    }
 }
 
 impl Default for SubscriptionsStopped {
@@ -58,3 +71,30 @@ impl Default for SubscriptionsStopped {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelSubscribe",
+    "name": "SubscriptionsStopped",
+    "protocol": "21",
+    "messageType": "8",
+    "senderRole": "store",
+    "protocolRoles": "store,customer",
+    "multipartFlag": true,
+    "fields": [
+        {
+            "name": "reason",
+            "type": "string"
+        },
+        {
+            "name": "channelIds",
+            "type": {
+                "type": "map",
+                "values": "long"
+            },
+            "default": {}
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelSubscribe.SubscriptionsStopped",
+    "depends": []
+}"#;

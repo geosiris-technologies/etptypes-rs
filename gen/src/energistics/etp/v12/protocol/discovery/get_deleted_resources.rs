@@ -2,16 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct GetDeletedResources {
     #[serde(rename = "dataspaceUri")]
     pub dataspace_uri: String,
@@ -24,9 +27,7 @@ pub struct GetDeletedResources {
     pub data_object_types: Vec<String>,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.Discovery", "name": "GetDeletedResources", "protocol": "3", "messageType": "5", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "dataspaceUri", "type": "string"}, {"name": "deleteTimeFilter", "type": ["null", "long"]}, {"name": "dataObjectTypes", "type": {"type": "array", "items": "string"}, "default": []}], "fullName": "Energistics.Etp.v12.Protocol.Discovery.GetDeletedResources", "depends": []}"#;
-
-impl ETPMetadata for GetDeletedResources {
+impl Schemable for GetDeletedResources {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -35,6 +36,12 @@ impl ETPMetadata for GetDeletedResources {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for GetDeletedResources {
     fn protocol(&self) -> i32 {
         3
     }
@@ -50,6 +57,12 @@ impl ETPMetadata for GetDeletedResources {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetDeletedResources> {
+        let record =
+            from_avro_datum(&GetDeletedResources::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<GetDeletedResources>(&record)
+    }
 }
 
 impl GetDeletedResources {
@@ -62,3 +75,37 @@ impl GetDeletedResources {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.Discovery",
+    "name": "GetDeletedResources",
+    "protocol": "3",
+    "messageType": "5",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "dataspaceUri",
+            "type": "string"
+        },
+        {
+            "name": "deleteTimeFilter",
+            "type": [
+                "null",
+                "long"
+            ]
+        },
+        {
+            "name": "dataObjectTypes",
+            "type": {
+                "type": "array",
+                "items": "string"
+            },
+            "default": []
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.Discovery.GetDeletedResources",
+    "depends": []
+}"#;

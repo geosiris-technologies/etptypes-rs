@@ -2,30 +2,33 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::Schemable;
 use crate::helpers::*;
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::fmt;
+use std::slice::Iter;
 use std::time::SystemTime;
 
-use std::fmt;
-
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub enum ProtocolCapabilityKind {
-    frame_change_detection_period,
-    max_data_array_size,
-    max_data_object_size,
-    max_frame_response_row_count,
-    max_index_count,
-    max_range_channel_count,
-    max_range_data_item_count,
-    max_response_count,
-    max_streaming_channels_session_count,
-    max_subscription_session_count,
-    max_transaction_count,
-    supports_secondary_index_filtering,
-    transaction_timeout_period,
+    /* None */
+    FrameChangeDetectionPeriod,
+    MaxDataArraySize,
+    MaxDataObjectSize,
+    MaxFrameResponseRowCount,
+    MaxIndexCount,
+    MaxRangeChannelCount,
+    MaxRangeDataItemCount,
+    MaxResponseCount,
+    MaxStreamingChannelsSessionCount,
+    MaxSubscriptionSessionCount,
+    MaxTransactionCount,
+    SupportsSecondaryIndexFiltering,
+    TransactionTimeoutPeriod,
 }
 
 impl fmt::Display for ProtocolCapabilityKind {
@@ -34,24 +37,44 @@ impl fmt::Display for ProtocolCapabilityKind {
             f,
             "{}",
             match self {
-                ProtocolCapabilityKind::frame_change_detection_period =>
-                    "FrameChangeDetectionPeriod",
-                ProtocolCapabilityKind::max_data_array_size => "MaxDataArraySize",
-                ProtocolCapabilityKind::max_data_object_size => "MaxDataObjectSize",
-                ProtocolCapabilityKind::max_frame_response_row_count => "MaxFrameResponseRowCount",
-                ProtocolCapabilityKind::max_index_count => "MaxIndexCount",
-                ProtocolCapabilityKind::max_range_channel_count => "MaxRangeChannelCount",
-                ProtocolCapabilityKind::max_range_data_item_count => "MaxRangeDataItemCount",
-                ProtocolCapabilityKind::max_response_count => "MaxResponseCount",
-                ProtocolCapabilityKind::max_streaming_channels_session_count =>
+                ProtocolCapabilityKind::FrameChangeDetectionPeriod => "FrameChangeDetectionPeriod",
+                ProtocolCapabilityKind::MaxDataArraySize => "MaxDataArraySize",
+                ProtocolCapabilityKind::MaxDataObjectSize => "MaxDataObjectSize",
+                ProtocolCapabilityKind::MaxFrameResponseRowCount => "MaxFrameResponseRowCount",
+                ProtocolCapabilityKind::MaxIndexCount => "MaxIndexCount",
+                ProtocolCapabilityKind::MaxRangeChannelCount => "MaxRangeChannelCount",
+                ProtocolCapabilityKind::MaxRangeDataItemCount => "MaxRangeDataItemCount",
+                ProtocolCapabilityKind::MaxResponseCount => "MaxResponseCount",
+                ProtocolCapabilityKind::MaxStreamingChannelsSessionCount =>
                     "MaxStreamingChannelsSessionCount",
-                ProtocolCapabilityKind::max_subscription_session_count =>
+                ProtocolCapabilityKind::MaxSubscriptionSessionCount =>
                     "MaxSubscriptionSessionCount",
-                ProtocolCapabilityKind::max_transaction_count => "MaxTransactionCount",
-                ProtocolCapabilityKind::supports_secondary_index_filtering =>
+                ProtocolCapabilityKind::MaxTransactionCount => "MaxTransactionCount",
+                ProtocolCapabilityKind::SupportsSecondaryIndexFiltering =>
                     "SupportsSecondaryIndexFiltering",
-                ProtocolCapabilityKind::transaction_timeout_period => "TransactionTimeoutPeriod",
+                ProtocolCapabilityKind::TransactionTimeoutPeriod => "TransactionTimeoutPeriod",
             }
         )
+    }
+}
+
+impl ProtocolCapabilityKind {
+    pub fn iter() -> Iter<'static, ProtocolCapabilityKind> {
+        static VEC_ENUM: [ProtocolCapabilityKind; 13] = [
+            ProtocolCapabilityKind::FrameChangeDetectionPeriod,
+            ProtocolCapabilityKind::MaxDataArraySize,
+            ProtocolCapabilityKind::MaxDataObjectSize,
+            ProtocolCapabilityKind::MaxFrameResponseRowCount,
+            ProtocolCapabilityKind::MaxIndexCount,
+            ProtocolCapabilityKind::MaxRangeChannelCount,
+            ProtocolCapabilityKind::MaxRangeDataItemCount,
+            ProtocolCapabilityKind::MaxResponseCount,
+            ProtocolCapabilityKind::MaxStreamingChannelsSessionCount,
+            ProtocolCapabilityKind::MaxSubscriptionSessionCount,
+            ProtocolCapabilityKind::MaxTransactionCount,
+            ProtocolCapabilityKind::SupportsSecondaryIndexFiltering,
+            ProtocolCapabilityKind::TransactionTimeoutPeriod,
+        ];
+        VEC_ENUM.iter()
     }
 }

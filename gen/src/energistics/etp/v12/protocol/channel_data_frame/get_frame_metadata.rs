@@ -2,16 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::helpers::ETPMetadata;
 use crate::helpers::*;
-use avro_rs::{Error, Schema};
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
+use std::io::Read;
 use std::time::SystemTime;
 
+use crate::helpers::ETPMetadata;
+use crate::helpers::Schemable;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct GetFrameMetadata {
     #[serde(rename = "uri")]
     pub uri: String,
@@ -21,9 +24,7 @@ pub struct GetFrameMetadata {
     pub include_all_channel_secondary_indexes: bool,
 }
 
-pub static AVRO_SCHEMA: &'static str = r#"{"type": "record", "namespace": "Energistics.Etp.v12.Protocol.ChannelDataFrame", "name": "GetFrameMetadata", "protocol": "2", "messageType": "1", "senderRole": "customer", "protocolRoles": "store,customer", "multipartFlag": false, "fields": [{"name": "uri", "type": "string"}, {"name": "includeAllChannelSecondaryIndexes", "type": "boolean", "default": false}], "fullName": "Energistics.Etp.v12.Protocol.ChannelDataFrame.GetFrameMetadata", "depends": []}"#;
-
-impl ETPMetadata for GetFrameMetadata {
+impl Schemable for GetFrameMetadata {
     fn avro_schema() -> Option<Schema> {
         match Schema::parse_str(AVRO_SCHEMA) {
             Ok(result) => Some(result),
@@ -32,6 +33,12 @@ impl ETPMetadata for GetFrameMetadata {
             }
         }
     }
+    fn avro_schema_str() -> &'static str {
+        AVRO_SCHEMA
+    }
+}
+
+impl ETPMetadata for GetFrameMetadata {
     fn protocol(&self) -> i32 {
         2
     }
@@ -47,6 +54,12 @@ impl ETPMetadata for GetFrameMetadata {
     fn multipart_flag(&self) -> bool {
         false
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetFrameMetadata> {
+        let record =
+            from_avro_datum(&GetFrameMetadata::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<GetFrameMetadata>(&record)
+    }
 }
 
 impl Default for GetFrameMetadata {
@@ -58,3 +71,27 @@ impl Default for GetFrameMetadata {
         }
     }
 }
+
+pub static AVRO_SCHEMA: &'static str = r#"{
+    "type": "record",
+    "namespace": "Energistics.Etp.v12.Protocol.ChannelDataFrame",
+    "name": "GetFrameMetadata",
+    "protocol": "2",
+    "messageType": "1",
+    "senderRole": "customer",
+    "protocolRoles": "store,customer",
+    "multipartFlag": false,
+    "fields": [
+        {
+            "name": "uri",
+            "type": "string"
+        },
+        {
+            "name": "includeAllChannelSecondaryIndexes",
+            "type": "boolean",
+            "default": false
+        }
+    ],
+    "fullName": "Energistics.Etp.v12.Protocol.ChannelDataFrame.GetFrameMetadata",
+    "depends": []
+}"#;
