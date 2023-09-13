@@ -61,16 +61,7 @@ pub const ETP11VERSION: Version = Version {
 pub trait Schemable {
     fn avro_schema() -> Option<Schema>;
     fn avro_schema_str() -> &'static str;
-}
 
-pub trait ETPMetadata: Schemable {
-    fn protocol(&self) -> i32;
-    fn message_type(&self) -> i32;
-    fn sender_role(&self) -> Vec<Role>;
-    fn protocol_roles(&self) -> Vec<Role>;
-    fn multipart_flag(&self) -> bool;
-
-    /* AVRO */
     fn avro_serialize(&self) -> AvroResult<Vec<u8>>
     where
         Self: serde::Serialize,
@@ -81,4 +72,12 @@ pub trait ETPMetadata: Schemable {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Self>
     where
         Self: Sized;
+}
+
+pub trait ETPMetadata: Schemable {
+    fn protocol(&self) -> i32;
+    fn message_type(&self) -> i32;
+    fn sender_role(&self) -> Vec<Role>;
+    fn protocol_roles(&self) -> Vec<Role>;
+    fn multipart_flag(&self) -> bool;
 }

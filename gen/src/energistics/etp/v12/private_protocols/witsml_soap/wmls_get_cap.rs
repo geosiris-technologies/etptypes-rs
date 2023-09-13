@@ -3,16 +3,16 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::helpers::*;
-use apache_avro::{from_avro_datum, from_value, AvroResult};
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::io::Read;
 use std::time::SystemTime;
 
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct WMLS_GetCap {
@@ -32,6 +32,11 @@ impl Schemable for WMLS_GetCap {
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<WMLS_GetCap> {
+        let record = from_avro_datum(&WMLS_GetCap::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<WMLS_GetCap>(&record)
+    }
 }
 
 impl ETPMetadata for WMLS_GetCap {
@@ -49,11 +54,6 @@ impl ETPMetadata for WMLS_GetCap {
     }
     fn multipart_flag(&self) -> bool {
         false
-    }
-
-    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<WMLS_GetCap> {
-        let record = from_avro_datum(&WMLS_GetCap::avro_schema().unwrap(), input, None).unwrap();
-        from_value::<WMLS_GetCap>(&record)
     }
 }
 

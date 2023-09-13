@@ -3,12 +3,10 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::helpers::*;
-use apache_avro::{from_avro_datum, from_value, AvroResult};
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::object::active_status_kind::ActiveStatusKind;
@@ -16,6 +14,8 @@ use crate::energistics::etp::v12::datatypes::object::context_info::ContextInfo;
 use crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -49,6 +49,12 @@ impl Schemable for FindDataObjects {
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<FindDataObjects> {
+        let record =
+            from_avro_datum(&FindDataObjects::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<FindDataObjects>(&record)
+    }
 }
 
 impl ETPMetadata for FindDataObjects {
@@ -66,12 +72,6 @@ impl ETPMetadata for FindDataObjects {
     }
     fn multipart_flag(&self) -> bool {
         false
-    }
-
-    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<FindDataObjects> {
-        let record =
-            from_avro_datum(&FindDataObjects::avro_schema().unwrap(), input, None).unwrap();
-        from_value::<FindDataObjects>(&record)
     }
 }
 

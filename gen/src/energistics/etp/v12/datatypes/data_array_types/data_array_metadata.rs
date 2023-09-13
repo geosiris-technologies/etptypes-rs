@@ -2,16 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::energistics::etp::v12::datatypes::any_array_type::AnyArrayType;
-use crate::energistics::etp::v12::datatypes::any_logical_array_type::AnyLogicalArrayType;
-use crate::energistics::etp::v12::datatypes::data_value::DataValue;
-use crate::helpers::Schemable;
 use crate::helpers::*;
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
+
+use crate::energistics::etp::v12::datatypes::any_array_type::AnyArrayType;
+use crate::energistics::etp::v12::datatypes::any_logical_array_type::AnyLogicalArrayType;
+use crate::energistics::etp::v12::datatypes::data_value::DataValue;
+use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -51,6 +54,12 @@ impl Schemable for DataArrayMetadata {
     }
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
+    }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DataArrayMetadata> {
+        let record =
+            from_avro_datum(&DataArrayMetadata::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<DataArrayMetadata>(&record)
     }
 }
 

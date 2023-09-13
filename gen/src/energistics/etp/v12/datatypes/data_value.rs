@@ -2,6 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
+use crate::helpers::*;
+use apache_avro::{Error, Schema};
+use bytes;
+use derivative::Derivative;
+use std::collections::HashMap;
+use std::time::SystemTime;
+
 use crate::energistics::etp::v12::datatypes::any_sparse_array::AnySparseArray;
 use crate::energistics::etp::v12::datatypes::array_of_boolean::ArrayOfBoolean;
 use crate::energistics::etp::v12::datatypes::array_of_bytes::ArrayOfBytes;
@@ -14,12 +21,8 @@ use crate::energistics::etp::v12::datatypes::array_of_nullable_int::ArrayOfNulla
 use crate::energistics::etp::v12::datatypes::array_of_nullable_long::ArrayOfNullableLong;
 use crate::energistics::etp::v12::datatypes::array_of_string::ArrayOfString;
 use crate::helpers::Schemable;
-use crate::helpers::*;
-use apache_avro::{Error, Schema};
-use bytes;
-use derivative::Derivative;
-use std::collections::HashMap;
-use std::time::SystemTime;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub enum UnionBooleanIntLongFloatDoubleStringArrayOfBooleanArrayOfNullableBooleanArrayOfIntArrayOfNullableIntArrayOfLongArrayOfNullableLongArrayOfFloatArrayOfDoubleArrayOfStringArrayOfBytesBytesAnySparseArray
@@ -64,6 +67,11 @@ impl Schemable for DataValue {
     }
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
+    }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DataValue> {
+        let record = from_avro_datum(&DataValue::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<DataValue>(&record)
     }
 }
 

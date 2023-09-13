@@ -3,16 +3,16 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::helpers::*;
-use apache_avro::{from_avro_datum, from_value, AvroResult};
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::io::Read;
 use std::time::SystemTime;
 
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct PutGrowingDataObjectsHeaderResponse {
@@ -32,6 +32,16 @@ impl Schemable for PutGrowingDataObjectsHeaderResponse {
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutGrowingDataObjectsHeaderResponse> {
+        let record = from_avro_datum(
+            &PutGrowingDataObjectsHeaderResponse::avro_schema().unwrap(),
+            input,
+            None,
+        )
+        .unwrap();
+        from_value::<PutGrowingDataObjectsHeaderResponse>(&record)
+    }
 }
 
 impl ETPMetadata for PutGrowingDataObjectsHeaderResponse {
@@ -49,16 +59,6 @@ impl ETPMetadata for PutGrowingDataObjectsHeaderResponse {
     }
     fn multipart_flag(&self) -> bool {
         true
-    }
-
-    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutGrowingDataObjectsHeaderResponse> {
-        let record = from_avro_datum(
-            &PutGrowingDataObjectsHeaderResponse::avro_schema().unwrap(),
-            input,
-            None,
-        )
-        .unwrap();
-        from_value::<PutGrowingDataObjectsHeaderResponse>(&record)
     }
 }
 

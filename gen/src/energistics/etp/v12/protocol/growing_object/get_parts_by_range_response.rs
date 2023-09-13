@@ -3,17 +3,17 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::helpers::*;
-use apache_avro::{from_avro_datum, from_value, AvroResult};
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -41,6 +41,16 @@ impl Schemable for GetPartsByRangeResponse {
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetPartsByRangeResponse> {
+        let record = from_avro_datum(
+            &GetPartsByRangeResponse::avro_schema().unwrap(),
+            input,
+            None,
+        )
+        .unwrap();
+        from_value::<GetPartsByRangeResponse>(&record)
+    }
 }
 
 impl ETPMetadata for GetPartsByRangeResponse {
@@ -58,16 +68,6 @@ impl ETPMetadata for GetPartsByRangeResponse {
     }
     fn multipart_flag(&self) -> bool {
         true
-    }
-
-    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetPartsByRangeResponse> {
-        let record = from_avro_datum(
-            &GetPartsByRangeResponse::avro_schema().unwrap(),
-            input,
-            None,
-        )
-        .unwrap();
-        from_value::<GetPartsByRangeResponse>(&record)
     }
 }
 

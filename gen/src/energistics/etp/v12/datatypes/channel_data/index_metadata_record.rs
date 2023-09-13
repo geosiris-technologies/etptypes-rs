@@ -2,16 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
-use crate::energistics::etp::v12::datatypes::channel_data::channel_index_kind::ChannelIndexKind;
-use crate::energistics::etp::v12::datatypes::channel_data::index_direction::IndexDirection;
-use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
-use crate::helpers::Schemable;
 use crate::helpers::*;
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
 use std::time::SystemTime;
+
+use crate::energistics::etp::v12::datatypes::channel_data::channel_index_kind::ChannelIndexKind;
+use crate::energistics::etp::v12::datatypes::channel_data::index_direction::IndexDirection;
+use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
+use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -55,6 +58,12 @@ impl Schemable for IndexMetadataRecord {
     }
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
+    }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<IndexMetadataRecord> {
+        let record =
+            from_avro_datum(&IndexMetadataRecord::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<IndexMetadataRecord>(&record)
     }
 }
 

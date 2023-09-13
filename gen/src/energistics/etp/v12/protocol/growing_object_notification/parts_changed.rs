@@ -3,12 +3,10 @@
 #![allow(unused_imports)]
 #![allow(non_camel_case_types)]
 use crate::helpers::*;
-use apache_avro::{from_avro_datum, from_value, AvroResult};
 use apache_avro::{Error, Schema};
 use bytes;
 use derivative::Derivative;
 use std::collections::HashMap;
-use std::io::Read;
 use std::time::SystemTime;
 
 use crate::energistics::etp::v12::datatypes::object::object_change_kind::ObjectChangeKind;
@@ -16,6 +14,8 @@ use crate::energistics::etp::v12::datatypes::object::object_part::ObjectPart;
 use crate::energistics::etp::v12::datatypes::uuid::{random_uuid, Uuid};
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use apache_avro::{from_avro_datum, from_value, AvroResult};
+use std::io::Read;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
@@ -53,6 +53,11 @@ impl Schemable for PartsChanged {
     fn avro_schema_str() -> &'static str {
         AVRO_SCHEMA
     }
+
+    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PartsChanged> {
+        let record = from_avro_datum(&PartsChanged::avro_schema().unwrap(), input, None).unwrap();
+        from_value::<PartsChanged>(&record)
+    }
 }
 
 impl ETPMetadata for PartsChanged {
@@ -70,11 +75,6 @@ impl ETPMetadata for PartsChanged {
     }
     fn multipart_flag(&self) -> bool {
         false
-    }
-
-    fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PartsChanged> {
-        let record = from_avro_datum(&PartsChanged::avro_schema().unwrap(), input, None).unwrap();
-        from_value::<PartsChanged>(&record)
     }
 }
 
