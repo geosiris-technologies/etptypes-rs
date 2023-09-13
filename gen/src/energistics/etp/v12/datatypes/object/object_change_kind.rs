@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -43,6 +44,22 @@ impl fmt::Display for ObjectChangeKind {
                 ObjectChangeKind::UnjoinedSubscription => "unjoinedSubscription",
             }
         )
+    }
+}
+
+impl FromStr for ObjectChangeKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<ObjectChangeKind, Self::Err> {
+        match input {
+            "insert" => Ok(ObjectChangeKind::Insert),
+            "update" => Ok(ObjectChangeKind::Update),
+            "authorized" => Ok(ObjectChangeKind::Authorized),
+            "joined" => Ok(ObjectChangeKind::Joined),
+            "unjoined" => Ok(ObjectChangeKind::Unjoined),
+            "joinedSubscription" => Ok(ObjectChangeKind::JoinedSubscription),
+            "unjoinedSubscription" => Ok(ObjectChangeKind::UnjoinedSubscription),
+            _ => Err(()),
+        }
     }
 }
 

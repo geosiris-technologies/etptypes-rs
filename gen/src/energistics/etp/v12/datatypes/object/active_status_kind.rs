@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -33,6 +34,17 @@ impl fmt::Display for ActiveStatusKind {
                 ActiveStatusKind::Inactive => "Inactive",
             }
         )
+    }
+}
+
+impl FromStr for ActiveStatusKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<ActiveStatusKind, Self::Err> {
+        match input {
+            "Active" => Ok(ActiveStatusKind::Active),
+            "Inactive" => Ok(ActiveStatusKind::Inactive),
+            _ => Err(()),
+        }
     }
 }
 

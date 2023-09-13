@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -39,6 +40,20 @@ impl fmt::Display for ContextScopeKind {
                 ContextScopeKind::TargetsOrSelf => "targetsOrSelf",
             }
         )
+    }
+}
+
+impl FromStr for ContextScopeKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<ContextScopeKind, Self::Err> {
+        match input {
+            "self" => Ok(ContextScopeKind::Self_),
+            "sources" => Ok(ContextScopeKind::Sources),
+            "targets" => Ok(ContextScopeKind::Targets),
+            "sourcesOrSelf" => Ok(ContextScopeKind::SourcesOrSelf),
+            "targetsOrSelf" => Ok(ContextScopeKind::TargetsOrSelf),
+            _ => Err(()),
+        }
     }
 }
 

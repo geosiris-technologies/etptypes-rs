@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -71,6 +72,36 @@ impl fmt::Display for AnyLogicalArrayType {
                 AnyLogicalArrayType::ArrayOfCustom => "arrayOfCustom",
             }
         )
+    }
+}
+
+impl FromStr for AnyLogicalArrayType {
+    type Err = ();
+    fn from_str(input: &str) -> Result<AnyLogicalArrayType, Self::Err> {
+        match input {
+            "arrayOfBoolean" => Ok(AnyLogicalArrayType::ArrayOfBoolean),
+            "arrayOfInt8" => Ok(AnyLogicalArrayType::ArrayOfInt8),
+            "arrayOfUInt8" => Ok(AnyLogicalArrayType::ArrayOfUInt8),
+            "arrayOfInt16LE" => Ok(AnyLogicalArrayType::ArrayOfInt16LE),
+            "arrayOfInt32LE" => Ok(AnyLogicalArrayType::ArrayOfInt32LE),
+            "arrayOfInt64LE" => Ok(AnyLogicalArrayType::ArrayOfInt64LE),
+            "arrayOfUInt16LE" => Ok(AnyLogicalArrayType::ArrayOfUInt16LE),
+            "arrayOfUInt32LE" => Ok(AnyLogicalArrayType::ArrayOfUInt32LE),
+            "arrayOfUInt64LE" => Ok(AnyLogicalArrayType::ArrayOfUInt64LE),
+            "arrayOfFloat32LE" => Ok(AnyLogicalArrayType::ArrayOfFloat32LE),
+            "arrayOfDouble64LE" => Ok(AnyLogicalArrayType::ArrayOfDouble64LE),
+            "arrayOfInt16BE" => Ok(AnyLogicalArrayType::ArrayOfInt16BE),
+            "arrayOfInt32BE" => Ok(AnyLogicalArrayType::ArrayOfInt32BE),
+            "arrayOfInt64BE" => Ok(AnyLogicalArrayType::ArrayOfInt64BE),
+            "arrayOfUInt16BE" => Ok(AnyLogicalArrayType::ArrayOfUInt16BE),
+            "arrayOfUInt32BE" => Ok(AnyLogicalArrayType::ArrayOfUInt32BE),
+            "arrayOfUInt64BE" => Ok(AnyLogicalArrayType::ArrayOfUInt64BE),
+            "arrayOfFloat32BE" => Ok(AnyLogicalArrayType::ArrayOfFloat32BE),
+            "arrayOfDouble64BE" => Ok(AnyLogicalArrayType::ArrayOfDouble64BE),
+            "arrayOfString" => Ok(AnyLogicalArrayType::ArrayOfString),
+            "arrayOfCustom" => Ok(AnyLogicalArrayType::ArrayOfCustom),
+            _ => Err(()),
+        }
     }
 }
 

@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -35,6 +36,18 @@ impl fmt::Display for PassDirection {
                 PassDirection::Down => "Down",
             }
         )
+    }
+}
+
+impl FromStr for PassDirection {
+    type Err = ();
+    fn from_str(input: &str) -> Result<PassDirection, Self::Err> {
+        match input {
+            "Up" => Ok(PassDirection::Up),
+            "HoldingSteady" => Ok(PassDirection::HoldingSteady),
+            "Down" => Ok(PassDirection::Down),
+            _ => Err(()),
+        }
     }
 }
 

@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -47,6 +48,27 @@ impl fmt::Display for DataObjectCapabilityKind {
                 DataObjectCapabilityKind::MaxSecondaryIndexCount => "MaxSecondaryIndexCount",
             }
         )
+    }
+}
+
+impl FromStr for DataObjectCapabilityKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<DataObjectCapabilityKind, Self::Err> {
+        match input {
+            "ActiveTimeoutPeriod" => Ok(DataObjectCapabilityKind::ActiveTimeoutPeriod),
+            "MaxContainedDataObjectCount" => {
+                Ok(DataObjectCapabilityKind::MaxContainedDataObjectCount)
+            }
+            "MaxDataObjectSize" => Ok(DataObjectCapabilityKind::MaxDataObjectSize),
+            "OrphanedChildrenPrunedOnDelete" => {
+                Ok(DataObjectCapabilityKind::OrphanedChildrenPrunedOnDelete)
+            }
+            "SupportsGet" => Ok(DataObjectCapabilityKind::SupportsGet),
+            "SupportsPut" => Ok(DataObjectCapabilityKind::SupportsPut),
+            "SupportsDelete" => Ok(DataObjectCapabilityKind::SupportsDelete),
+            "MaxSecondaryIndexCount" => Ok(DataObjectCapabilityKind::MaxSecondaryIndexCount),
+            _ => Err(()),
+        }
     }
 }
 

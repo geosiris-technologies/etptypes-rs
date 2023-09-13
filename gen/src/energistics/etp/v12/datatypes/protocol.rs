@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -81,6 +82,41 @@ impl fmt::Display for Protocol {
                 Protocol::SupportedTypes => "SupportedTypes",
             }
         )
+    }
+}
+
+impl FromStr for Protocol {
+    type Err = ();
+    fn from_str(input: &str) -> Result<Protocol, Self::Err> {
+        match input {
+            "Core" => Ok(Protocol::Core),
+            "ChannelStreaming" => Ok(Protocol::ChannelStreaming),
+            "ChannelDataFrame" => Ok(Protocol::ChannelDataFrame),
+            "Discovery" => Ok(Protocol::Discovery),
+            "Store" => Ok(Protocol::Store),
+            "StoreNotification" => Ok(Protocol::StoreNotification),
+            "GrowingObject" => Ok(Protocol::GrowingObject),
+            "GrowingObjectNotification" => Ok(Protocol::GrowingObjectNotification),
+            "DEPRECATED_8" => Ok(Protocol::DEPRECATED8),
+            "DataArray" => Ok(Protocol::DataArray),
+            "RESERVED_10" => Ok(Protocol::RESERVED10),
+            "RESERVED_11" => Ok(Protocol::RESERVED11),
+            "RESERVED_12" => Ok(Protocol::RESERVED12),
+            "DiscoveryQuery" => Ok(Protocol::DiscoveryQuery),
+            "StoreQuery" => Ok(Protocol::StoreQuery),
+            "RESERVED_15" => Ok(Protocol::RESERVED15),
+            "GrowingObjectQuery" => Ok(Protocol::GrowingObjectQuery),
+            "RESERVED_17" => Ok(Protocol::RESERVED17),
+            "Transaction" => Ok(Protocol::Transaction),
+            "RESERVED_19" => Ok(Protocol::RESERVED19),
+            "RESERVED_20" => Ok(Protocol::RESERVED20),
+            "ChannelSubscribe" => Ok(Protocol::ChannelSubscribe),
+            "ChannelDataLoad" => Ok(Protocol::ChannelDataLoad),
+            "RESERVED_23" => Ok(Protocol::RESERVED23),
+            "Dataspace" => Ok(Protocol::Dataspace),
+            "SupportedTypes" => Ok(Protocol::SupportedTypes),
+            _ => Err(()),
+        }
     }
 }
 

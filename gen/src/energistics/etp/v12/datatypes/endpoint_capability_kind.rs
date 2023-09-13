@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -70,6 +71,46 @@ impl fmt::Display for EndpointCapabilityKind {
                     "SupportsMessageHeaderExtensions",
             }
         )
+    }
+}
+
+impl FromStr for EndpointCapabilityKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<EndpointCapabilityKind, Self::Err> {
+        match input {
+            "ActiveTimeoutPeriod" => Ok(EndpointCapabilityKind::ActiveTimeoutPeriod),
+            "AuthorizationDetails" => Ok(EndpointCapabilityKind::AuthorizationDetails),
+            "ChangePropagationPeriod" => Ok(EndpointCapabilityKind::ChangePropagationPeriod),
+            "ChangeRetentionPeriod" => Ok(EndpointCapabilityKind::ChangeRetentionPeriod),
+            "MaxConcurrentMultipart" => Ok(EndpointCapabilityKind::MaxConcurrentMultipart),
+            "MaxDataObjectSize" => Ok(EndpointCapabilityKind::MaxDataObjectSize),
+            "MaxPartSize" => Ok(EndpointCapabilityKind::MaxPartSize),
+            "MaxSessionClientCount" => Ok(EndpointCapabilityKind::MaxSessionClientCount),
+            "MaxSessionGlobalCount" => Ok(EndpointCapabilityKind::MaxSessionGlobalCount),
+            "MaxWebSocketFramePayloadSize" => {
+                Ok(EndpointCapabilityKind::MaxWebSocketFramePayloadSize)
+            }
+            "MaxWebSocketMessagePayloadSize" => {
+                Ok(EndpointCapabilityKind::MaxWebSocketMessagePayloadSize)
+            }
+            "MultipartMessageTimeoutPeriod" => {
+                Ok(EndpointCapabilityKind::MultipartMessageTimeoutPeriod)
+            }
+            "ResponseTimeoutPeriod" => Ok(EndpointCapabilityKind::ResponseTimeoutPeriod),
+            "RequestSessionTimeoutPeriod" => {
+                Ok(EndpointCapabilityKind::RequestSessionTimeoutPeriod)
+            }
+            "SessionEstablishmentTimeoutPeriod" => {
+                Ok(EndpointCapabilityKind::SessionEstablishmentTimeoutPeriod)
+            }
+            "SupportsAlternateRequestUris" => {
+                Ok(EndpointCapabilityKind::SupportsAlternateRequestUris)
+            }
+            "SupportsMessageHeaderExtensions" => {
+                Ok(EndpointCapabilityKind::SupportsMessageHeaderExtensions)
+            }
+            _ => Err(()),
+        }
     }
 }
 

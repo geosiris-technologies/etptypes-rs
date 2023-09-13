@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -35,6 +36,18 @@ impl fmt::Display for RelationshipKind {
                 RelationshipKind::Both => "Both",
             }
         )
+    }
+}
+
+impl FromStr for RelationshipKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<RelationshipKind, Self::Err> {
+        match input {
+            "Primary" => Ok(RelationshipKind::Primary),
+            "Secondary" => Ok(RelationshipKind::Secondary),
+            "Both" => Ok(RelationshipKind::Both),
+            _ => Err(()),
+        }
     }
 }
 

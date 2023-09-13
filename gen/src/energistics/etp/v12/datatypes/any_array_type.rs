@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -43,6 +44,22 @@ impl fmt::Display for AnyArrayType {
                 AnyArrayType::Bytes => "bytes",
             }
         )
+    }
+}
+
+impl FromStr for AnyArrayType {
+    type Err = ();
+    fn from_str(input: &str) -> Result<AnyArrayType, Self::Err> {
+        match input {
+            "arrayOfBoolean" => Ok(AnyArrayType::ArrayOfBoolean),
+            "arrayOfInt" => Ok(AnyArrayType::ArrayOfInt),
+            "arrayOfLong" => Ok(AnyArrayType::ArrayOfLong),
+            "arrayOfFloat" => Ok(AnyArrayType::ArrayOfFloat),
+            "arrayOfDouble" => Ok(AnyArrayType::ArrayOfDouble),
+            "arrayOfString" => Ok(AnyArrayType::ArrayOfString),
+            "bytes" => Ok(AnyArrayType::Bytes),
+            _ => Err(()),
+        }
     }
 }
 

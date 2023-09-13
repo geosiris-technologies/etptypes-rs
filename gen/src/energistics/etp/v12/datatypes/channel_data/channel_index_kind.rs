@@ -14,6 +14,7 @@ use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::fmt;
 use std::io::Read;
 use std::slice::Iter;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -45,6 +46,23 @@ impl fmt::Display for ChannelIndexKind {
                 ChannelIndexKind::Scalar => "Scalar",
             }
         )
+    }
+}
+
+impl FromStr for ChannelIndexKind {
+    type Err = ();
+    fn from_str(input: &str) -> Result<ChannelIndexKind, Self::Err> {
+        match input {
+            "DateTime" => Ok(ChannelIndexKind::DateTime),
+            "ElapsedTime" => Ok(ChannelIndexKind::ElapsedTime),
+            "MeasuredDepth" => Ok(ChannelIndexKind::MeasuredDepth),
+            "TrueVerticalDepth" => Ok(ChannelIndexKind::TrueVerticalDepth),
+            "PassIndexedDepth" => Ok(ChannelIndexKind::PassIndexedDepth),
+            "Pressure" => Ok(ChannelIndexKind::Pressure),
+            "Temperature" => Ok(ChannelIndexKind::Temperature),
+            "Scalar" => Ok(ChannelIndexKind::Scalar),
+            _ => Err(()),
+        }
     }
 }
 
