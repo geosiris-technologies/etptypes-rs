@@ -13,6 +13,7 @@ use crate::energistics::etp::v12::datatypes::channel_data::channel_range_info::C
 use crate::energistics::etp::v12::datatypes::uuid::{random_uuid, Uuid};
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -61,6 +62,12 @@ impl ETPMetadata for GetRanges {
     }
     fn multipart_flag(&self) -> bool {
         false
+    }
+}
+
+impl GetRanges {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::ChannelSubscribe_GetRanges(self.clone())
     }
 }
 

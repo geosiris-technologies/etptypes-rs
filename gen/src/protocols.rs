@@ -296,3 +296,7 @@ pub fn avro_decode<R: Read>(mh: &MessageHeader, encoded_msg: &mut R) -> Option<P
         _ => None
     };
 }
+
+trait ProtocolMessageConverter {
+    fn as_protocol_message<T>(_value: T) -> ProtocolMessage;
+}

@@ -11,6 +11,7 @@ use std::time::SystemTime;
 
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
@@ -62,6 +63,12 @@ impl ETPMetadata for WMLS_DeleteFromStoreResponse {
     }
     fn multipart_flag(&self) -> bool {
         false
+    }
+}
+
+impl WMLS_DeleteFromStoreResponse {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::WitsmlSoap_WMLS_DeleteFromStoreResponse(self.clone())
     }
 }
 

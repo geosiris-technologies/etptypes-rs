@@ -12,6 +12,7 @@ use std::time::SystemTime;
 use crate::energistics::etp::v12::datatypes::object::context_scope_kind::ContextScopeKind;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -68,6 +69,12 @@ impl ETPMetadata for GetSupportedTypes {
     }
     fn multipart_flag(&self) -> bool {
         false
+    }
+}
+
+impl GetSupportedTypes {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::SupportedTypes_GetSupportedTypes(self.clone())
     }
 }
 

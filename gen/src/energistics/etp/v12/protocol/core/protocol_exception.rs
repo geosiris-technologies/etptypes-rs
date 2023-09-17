@@ -12,6 +12,7 @@ use std::time::SystemTime;
 use crate::energistics::etp::v12::datatypes::error_info::ErrorInfo;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -61,6 +62,12 @@ impl ETPMetadata for ProtocolException {
     }
     fn multipart_flag(&self) -> bool {
         true
+    }
+}
+
+impl ProtocolException {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::Core_ProtocolException(self.clone())
     }
 }
 

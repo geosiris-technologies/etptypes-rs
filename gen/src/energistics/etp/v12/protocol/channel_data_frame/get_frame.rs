@@ -13,6 +13,7 @@ use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterv
 use crate::energistics::etp::v12::datatypes::uuid::{random_uuid, Uuid};
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -72,6 +73,12 @@ impl ETPMetadata for GetFrame {
     }
     fn multipart_flag(&self) -> bool {
         false
+    }
+}
+
+impl GetFrame {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::ChannelDataFrame_GetFrame(self.clone())
     }
 }
 

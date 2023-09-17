@@ -12,6 +12,7 @@ use std::time::SystemTime;
 use crate::energistics::etp::v12::datatypes::object::deleted_resource::DeletedResource;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -62,6 +63,12 @@ impl ETPMetadata for GetDeletedResourcesResponse {
     }
     fn multipart_flag(&self) -> bool {
         true
+    }
+}
+
+impl GetDeletedResourcesResponse {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::Discovery_GetDeletedResourcesResponse(self.clone())
     }
 }
 

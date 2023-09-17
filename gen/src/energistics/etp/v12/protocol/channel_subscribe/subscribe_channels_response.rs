@@ -11,6 +11,7 @@ use std::time::SystemTime;
 
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
@@ -59,6 +60,12 @@ impl ETPMetadata for SubscribeChannelsResponse {
     }
     fn multipart_flag(&self) -> bool {
         true
+    }
+}
+
+impl SubscribeChannelsResponse {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::ChannelSubscribe_SubscribeChannelsResponse(self.clone())
     }
 }
 

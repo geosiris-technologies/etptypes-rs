@@ -13,6 +13,7 @@ use crate::energistics::etp::v12::datatypes::channel_data::frame_channel_metadat
 use crate::energistics::etp::v12::datatypes::channel_data::index_metadata_record::IndexMetadataRecord;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -68,6 +69,12 @@ impl ETPMetadata for GetFrameMetadataResponse {
     }
     fn multipart_flag(&self) -> bool {
         true
+    }
+}
+
+impl GetFrameMetadataResponse {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::ChannelDataFrame_GetFrameMetadataResponse(self.clone())
     }
 }
 

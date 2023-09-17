@@ -12,6 +12,7 @@ use std::time::SystemTime;
 use crate::energistics::etp::v12::datatypes::data_array_types::put_data_subarrays_type::PutDataSubarraysType;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -57,6 +58,12 @@ impl ETPMetadata for PutDataSubarrays {
     }
     fn multipart_flag(&self) -> bool {
         false
+    }
+}
+
+impl PutDataSubarrays {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::DataArray_PutDataSubarrays(self.clone())
     }
 }
 

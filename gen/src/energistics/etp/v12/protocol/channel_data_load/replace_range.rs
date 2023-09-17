@@ -13,6 +13,7 @@ use crate::energistics::etp::v12::datatypes::channel_data::data_item::DataItem;
 use crate::energistics::etp::v12::datatypes::object::index_interval::IndexInterval;
 use crate::helpers::ETPMetadata;
 use crate::helpers::Schemable;
+use crate::protocols::ProtocolMessage;
 use apache_avro::{from_avro_datum, from_value, AvroResult};
 use std::io::Read;
 
@@ -63,6 +64,12 @@ impl ETPMetadata for ReplaceRange {
     }
     fn multipart_flag(&self) -> bool {
         true
+    }
+}
+
+impl ReplaceRange {
+    pub fn as_protocol_message(&self) -> ProtocolMessage {
+        ProtocolMessage::ChannelDataLoad_ReplaceRange(self.clone())
     }
 }
 
