@@ -25,22 +25,30 @@ pub struct SupportedDataObject {
     pub data_object_capabilities: HashMap<String, DataValue>,
 }
 
-impl Schemable for SupportedDataObject {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn supporteddataobject_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for SupportedDataObject {
+    fn avro_schema(&self) -> Option<Schema> {
+        supporteddataobject_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for SupportedDataObject {}
+
+impl AvroDeserializable for SupportedDataObject {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<SupportedDataObject> {
         let record =
-            from_avro_datum(&SupportedDataObject::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&supporteddataobject_avro_schema().unwrap(), input, None).unwrap();
         from_value::<SupportedDataObject>(&record)
     }
 }

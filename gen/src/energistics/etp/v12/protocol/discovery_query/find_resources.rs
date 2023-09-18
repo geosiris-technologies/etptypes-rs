@@ -34,21 +34,29 @@ pub struct FindResources {
     pub active_status_filter: Option<ActiveStatusKind>,
 }
 
-impl Schemable for FindResources {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn findresources_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for FindResources {
+    fn avro_schema(&self) -> Option<Schema> {
+        findresources_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for FindResources {}
+
+impl AvroDeserializable for FindResources {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<FindResources> {
-        let record = from_avro_datum(&FindResources::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&findresources_avro_schema().unwrap(), input, None).unwrap();
         from_value::<FindResources>(&record)
     }
 }

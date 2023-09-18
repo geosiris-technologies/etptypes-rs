@@ -24,22 +24,30 @@ pub struct CommitTransaction {
     pub transaction_uuid: Uuid,
 }
 
-impl Schemable for CommitTransaction {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn committransaction_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for CommitTransaction {
+    fn avro_schema(&self) -> Option<Schema> {
+        committransaction_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for CommitTransaction {}
+
+impl AvroDeserializable for CommitTransaction {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<CommitTransaction> {
         let record =
-            from_avro_datum(&CommitTransaction::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&committransaction_avro_schema().unwrap(), input, None).unwrap();
         from_value::<CommitTransaction>(&record)
     }
 }

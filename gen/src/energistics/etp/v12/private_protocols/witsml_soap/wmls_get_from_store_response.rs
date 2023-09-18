@@ -27,22 +27,30 @@ pub struct WMLS_GetFromStoreResponse {
     pub supp_msg_out: String,
 }
 
-impl Schemable for WMLS_GetFromStoreResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn wmls_getfromstoreresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for WMLS_GetFromStoreResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        wmls_getfromstoreresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for WMLS_GetFromStoreResponse {}
+
+impl AvroDeserializable for WMLS_GetFromStoreResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<WMLS_GetFromStoreResponse> {
         let record = from_avro_datum(
-            &WMLS_GetFromStoreResponse::avro_schema().unwrap(),
+            &wmls_getfromstoreresponse_avro_schema().unwrap(),
             input,
             None,
         )

@@ -32,21 +32,29 @@ pub struct Edge {
     pub custom_data: HashMap<String, DataValue>,
 }
 
-impl Schemable for Edge {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn edge_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for Edge {
+    fn avro_schema(&self) -> Option<Schema> {
+        edge_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for Edge {}
+
+impl AvroDeserializable for Edge {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Edge> {
-        let record = from_avro_datum(&Edge::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&edge_avro_schema().unwrap(), input, None).unwrap();
         from_value::<Edge>(&record)
     }
 }

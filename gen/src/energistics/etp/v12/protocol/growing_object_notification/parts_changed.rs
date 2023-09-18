@@ -42,21 +42,29 @@ pub struct PartsChanged {
     pub parts: Vec<ObjectPart>,
 }
 
-impl Schemable for PartsChanged {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn partschanged_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for PartsChanged {
+    fn avro_schema(&self) -> Option<Schema> {
+        partschanged_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for PartsChanged {}
+
+impl AvroDeserializable for PartsChanged {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PartsChanged> {
-        let record = from_avro_datum(&PartsChanged::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&partschanged_avro_schema().unwrap(), input, None).unwrap();
         from_value::<PartsChanged>(&record)
     }
 }

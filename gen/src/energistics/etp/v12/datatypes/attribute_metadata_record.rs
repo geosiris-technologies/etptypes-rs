@@ -39,26 +39,30 @@ pub struct AttributeMetadataRecord {
     pub axis_vector_lengths: Vec<i32>,
 }
 
-impl Schemable for AttributeMetadataRecord {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn attributemetadatarecord_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for AttributeMetadataRecord {
+    fn avro_schema(&self) -> Option<Schema> {
+        attributemetadatarecord_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for AttributeMetadataRecord {}
+
+impl AvroDeserializable for AttributeMetadataRecord {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<AttributeMetadataRecord> {
-        let record = from_avro_datum(
-            &AttributeMetadataRecord::avro_schema().unwrap(),
-            input,
-            None,
-        )
-        .unwrap();
+        let record =
+            from_avro_datum(&attributemetadatarecord_avro_schema().unwrap(), input, None).unwrap();
         from_value::<AttributeMetadataRecord>(&record)
     }
 }

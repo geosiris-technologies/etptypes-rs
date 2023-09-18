@@ -23,22 +23,30 @@ pub struct PutDataObjectsResponse {
     pub success: HashMap<String, PutResponse>,
 }
 
-impl Schemable for PutDataObjectsResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn putdataobjectsresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for PutDataObjectsResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        putdataobjectsresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for PutDataObjectsResponse {}
+
+impl AvroDeserializable for PutDataObjectsResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutDataObjectsResponse> {
         let record =
-            from_avro_datum(&PutDataObjectsResponse::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&putdataobjectsresponse_avro_schema().unwrap(), input, None).unwrap();
         from_value::<PutDataObjectsResponse>(&record)
     }
 }

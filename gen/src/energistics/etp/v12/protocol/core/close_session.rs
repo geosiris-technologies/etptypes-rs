@@ -22,21 +22,29 @@ pub struct CloseSession {
     pub reason: String,
 }
 
-impl Schemable for CloseSession {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn closesession_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for CloseSession {
+    fn avro_schema(&self) -> Option<Schema> {
+        closesession_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for CloseSession {}
+
+impl AvroDeserializable for CloseSession {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<CloseSession> {
-        let record = from_avro_datum(&CloseSession::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&closesession_avro_schema().unwrap(), input, None).unwrap();
         from_value::<CloseSession>(&record)
     }
 }

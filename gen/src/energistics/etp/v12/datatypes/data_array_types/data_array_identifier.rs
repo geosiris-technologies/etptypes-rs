@@ -22,22 +22,30 @@ pub struct DataArrayIdentifier {
     pub path_in_resource: String,
 }
 
-impl Schemable for DataArrayIdentifier {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn dataarrayidentifier_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for DataArrayIdentifier {
+    fn avro_schema(&self) -> Option<Schema> {
+        dataarrayidentifier_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for DataArrayIdentifier {}
+
+impl AvroDeserializable for DataArrayIdentifier {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DataArrayIdentifier> {
         let record =
-            from_avro_datum(&DataArrayIdentifier::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&dataarrayidentifier_avro_schema().unwrap(), input, None).unwrap();
         from_value::<DataArrayIdentifier>(&record)
     }
 }

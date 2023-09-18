@@ -47,22 +47,30 @@ pub struct IndexMetadataRecord {
     pub filterable: bool,
 }
 
-impl Schemable for IndexMetadataRecord {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn indexmetadatarecord_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for IndexMetadataRecord {
+    fn avro_schema(&self) -> Option<Schema> {
+        indexmetadatarecord_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for IndexMetadataRecord {}
+
+impl AvroDeserializable for IndexMetadataRecord {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<IndexMetadataRecord> {
         let record =
-            from_avro_datum(&IndexMetadataRecord::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&indexmetadatarecord_avro_schema().unwrap(), input, None).unwrap();
         from_value::<IndexMetadataRecord>(&record)
     }
 }

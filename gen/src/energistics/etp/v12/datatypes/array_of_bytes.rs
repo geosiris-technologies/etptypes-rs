@@ -19,21 +19,29 @@ pub struct ArrayOfBytes {
     pub values: Vec<Vec<u8>>,
 }
 
-impl Schemable for ArrayOfBytes {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn arrayofbytes_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for ArrayOfBytes {
+    fn avro_schema(&self) -> Option<Schema> {
+        arrayofbytes_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for ArrayOfBytes {}
+
+impl AvroDeserializable for ArrayOfBytes {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ArrayOfBytes> {
-        let record = from_avro_datum(&ArrayOfBytes::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&arrayofbytes_avro_schema().unwrap(), input, None).unwrap();
         from_value::<ArrayOfBytes>(&record)
     }
 }

@@ -22,22 +22,30 @@ pub struct MessageHeaderExtension {
     pub extension: HashMap<String, DataValue>,
 }
 
-impl Schemable for MessageHeaderExtension {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn messageheaderextension_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for MessageHeaderExtension {
+    fn avro_schema(&self) -> Option<Schema> {
+        messageheaderextension_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for MessageHeaderExtension {}
+
+impl AvroDeserializable for MessageHeaderExtension {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<MessageHeaderExtension> {
         let record =
-            from_avro_datum(&MessageHeaderExtension::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&messageheaderextension_avro_schema().unwrap(), input, None).unwrap();
         from_value::<MessageHeaderExtension>(&record)
     }
 }

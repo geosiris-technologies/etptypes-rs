@@ -28,21 +28,29 @@ pub struct ObjectChange {
     pub data_object: DataObject,
 }
 
-impl Schemable for ObjectChange {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn objectchange_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for ObjectChange {
+    fn avro_schema(&self) -> Option<Schema> {
+        objectchange_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for ObjectChange {}
+
+impl AvroDeserializable for ObjectChange {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ObjectChange> {
-        let record = from_avro_datum(&ObjectChange::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&objectchange_avro_schema().unwrap(), input, None).unwrap();
         from_value::<ObjectChange>(&record)
     }
 }

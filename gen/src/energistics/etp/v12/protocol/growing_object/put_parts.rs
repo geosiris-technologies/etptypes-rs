@@ -30,21 +30,29 @@ pub struct PutParts {
     pub parts: HashMap<String, ObjectPart>,
 }
 
-impl Schemable for PutParts {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn putparts_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for PutParts {
+    fn avro_schema(&self) -> Option<Schema> {
+        putparts_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for PutParts {}
+
+impl AvroDeserializable for PutParts {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutParts> {
-        let record = from_avro_datum(&PutParts::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&putparts_avro_schema().unwrap(), input, None).unwrap();
         from_value::<PutParts>(&record)
     }
 }

@@ -24,22 +24,30 @@ pub struct GetSupportedTypesResponse {
     pub supported_types: Vec<SupportedType>,
 }
 
-impl Schemable for GetSupportedTypesResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn getsupportedtypesresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for GetSupportedTypesResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        getsupportedtypesresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for GetSupportedTypesResponse {}
+
+impl AvroDeserializable for GetSupportedTypesResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetSupportedTypesResponse> {
         let record = from_avro_datum(
-            &GetSupportedTypesResponse::avro_schema().unwrap(),
+            &getsupportedtypesresponse_avro_schema().unwrap(),
             input,
             None,
         )

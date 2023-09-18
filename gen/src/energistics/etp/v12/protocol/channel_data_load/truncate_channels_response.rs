@@ -21,22 +21,30 @@ pub struct TruncateChannelsResponse {
     pub channels_truncated_time: HashMap<String, i64>,
 }
 
-impl Schemable for TruncateChannelsResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn truncatechannelsresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for TruncateChannelsResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        truncatechannelsresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for TruncateChannelsResponse {}
+
+impl AvroDeserializable for TruncateChannelsResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<TruncateChannelsResponse> {
         let record = from_avro_datum(
-            &TruncateChannelsResponse::avro_schema().unwrap(),
+            &truncatechannelsresponse_avro_schema().unwrap(),
             input,
             None,
         )

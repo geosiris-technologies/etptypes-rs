@@ -23,22 +23,30 @@ pub struct GetPartsMetadataResponse {
     pub metadata: HashMap<String, PartsMetadataInfo>,
 }
 
-impl Schemable for GetPartsMetadataResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn getpartsmetadataresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for GetPartsMetadataResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        getpartsmetadataresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for GetPartsMetadataResponse {}
+
+impl AvroDeserializable for GetPartsMetadataResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetPartsMetadataResponse> {
         let record = from_avro_datum(
-            &GetPartsMetadataResponse::avro_schema().unwrap(),
+            &getpartsmetadataresponse_avro_schema().unwrap(),
             input,
             None,
         )

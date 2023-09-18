@@ -24,21 +24,29 @@ pub struct Authorize {
     pub supplemental_authorization: HashMap<String, String>,
 }
 
-impl Schemable for Authorize {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn authorize_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for Authorize {
+    fn avro_schema(&self) -> Option<Schema> {
+        authorize_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for Authorize {}
+
+impl AvroDeserializable for Authorize {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Authorize> {
-        let record = from_avro_datum(&Authorize::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&authorize_avro_schema().unwrap(), input, None).unwrap();
         from_value::<Authorize>(&record)
     }
 }

@@ -23,22 +23,30 @@ pub struct PutGrowingDataObjectsHeader {
     pub data_objects: HashMap<String, DataObject>,
 }
 
-impl Schemable for PutGrowingDataObjectsHeader {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn putgrowingdataobjectsheader_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for PutGrowingDataObjectsHeader {
+    fn avro_schema(&self) -> Option<Schema> {
+        putgrowingdataobjectsheader_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for PutGrowingDataObjectsHeader {}
+
+impl AvroDeserializable for PutGrowingDataObjectsHeader {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutGrowingDataObjectsHeader> {
         let record = from_avro_datum(
-            &PutGrowingDataObjectsHeader::avro_schema().unwrap(),
+            &putgrowingdataobjectsheader_avro_schema().unwrap(),
             input,
             None,
         )

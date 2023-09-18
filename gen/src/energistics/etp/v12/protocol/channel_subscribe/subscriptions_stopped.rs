@@ -25,22 +25,30 @@ pub struct SubscriptionsStopped {
     pub channel_ids: HashMap<String, i64>,
 }
 
-impl Schemable for SubscriptionsStopped {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn subscriptionsstopped_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for SubscriptionsStopped {
+    fn avro_schema(&self) -> Option<Schema> {
+        subscriptionsstopped_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for SubscriptionsStopped {}
+
+impl AvroDeserializable for SubscriptionsStopped {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<SubscriptionsStopped> {
         let record =
-            from_avro_datum(&SubscriptionsStopped::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&subscriptionsstopped_avro_schema().unwrap(), input, None).unwrap();
         from_value::<SubscriptionsStopped>(&record)
     }
 }

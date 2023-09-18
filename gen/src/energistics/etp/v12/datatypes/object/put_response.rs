@@ -32,21 +32,29 @@ pub struct PutResponse {
     pub unjoined_contained_object_uris: Vec<String>,
 }
 
-impl Schemable for PutResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn putresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for PutResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        putresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for PutResponse {}
+
+impl AvroDeserializable for PutResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<PutResponse> {
-        let record = from_avro_datum(&PutResponse::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&putresponse_avro_schema().unwrap(), input, None).unwrap();
         from_value::<PutResponse>(&record)
     }
 }

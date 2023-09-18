@@ -21,22 +21,30 @@ pub struct DeleteDataspacesResponse {
     pub success: HashMap<String, String>,
 }
 
-impl Schemable for DeleteDataspacesResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn deletedataspacesresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for DeleteDataspacesResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        deletedataspacesresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for DeleteDataspacesResponse {}
+
+impl AvroDeserializable for DeleteDataspacesResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DeleteDataspacesResponse> {
         let record = from_avro_datum(
-            &DeleteDataspacesResponse::avro_schema().unwrap(),
+            &deletedataspacesresponse_avro_schema().unwrap(),
             input,
             None,
         )

@@ -33,21 +33,29 @@ pub struct DataObject {
     pub data: Vec<u8>,
 }
 
-impl Schemable for DataObject {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn dataobject_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for DataObject {
+    fn avro_schema(&self) -> Option<Schema> {
+        dataobject_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for DataObject {}
+
+impl AvroDeserializable for DataObject {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DataObject> {
-        let record = from_avro_datum(&DataObject::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&dataobject_avro_schema().unwrap(), input, None).unwrap();
         from_value::<DataObject>(&record)
     }
 }

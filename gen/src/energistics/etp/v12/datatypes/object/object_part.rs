@@ -22,21 +22,29 @@ pub struct ObjectPart {
     pub data: Vec<u8>,
 }
 
-impl Schemable for ObjectPart {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn objectpart_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for ObjectPart {
+    fn avro_schema(&self) -> Option<Schema> {
+        objectpart_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for ObjectPart {}
+
+impl AvroDeserializable for ObjectPart {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ObjectPart> {
-        let record = from_avro_datum(&ObjectPart::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&objectpart_avro_schema().unwrap(), input, None).unwrap();
         from_value::<ObjectPart>(&record)
     }
 }

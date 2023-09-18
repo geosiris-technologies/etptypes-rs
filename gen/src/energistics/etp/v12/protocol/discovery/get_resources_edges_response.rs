@@ -23,22 +23,30 @@ pub struct GetResourcesEdgesResponse {
     pub edges: Vec<Edge>,
 }
 
-impl Schemable for GetResourcesEdgesResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn getresourcesedgesresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for GetResourcesEdgesResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        getresourcesedgesresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for GetResourcesEdgesResponse {}
+
+impl AvroDeserializable for GetResourcesEdgesResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetResourcesEdgesResponse> {
         let record = from_avro_datum(
-            &GetResourcesEdgesResponse::avro_schema().unwrap(),
+            &getresourcesedgesresponse_avro_schema().unwrap(),
             input,
             None,
         )

@@ -21,21 +21,29 @@ pub struct OpenChannels {
     pub uris: HashMap<String, String>,
 }
 
-impl Schemable for OpenChannels {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn openchannels_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for OpenChannels {
+    fn avro_schema(&self) -> Option<Schema> {
+        openchannels_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for OpenChannels {}
+
+impl AvroDeserializable for OpenChannels {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<OpenChannels> {
-        let record = from_avro_datum(&OpenChannels::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&openchannels_avro_schema().unwrap(), input, None).unwrap();
         from_value::<OpenChannels>(&record)
     }
 }

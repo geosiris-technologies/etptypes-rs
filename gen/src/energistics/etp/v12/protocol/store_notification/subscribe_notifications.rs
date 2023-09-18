@@ -23,22 +23,30 @@ pub struct SubscribeNotifications {
     pub request: HashMap<String, SubscriptionInfo>,
 }
 
-impl Schemable for SubscribeNotifications {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn subscribenotifications_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for SubscribeNotifications {
+    fn avro_schema(&self) -> Option<Schema> {
+        subscribenotifications_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for SubscribeNotifications {}
+
+impl AvroDeserializable for SubscribeNotifications {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<SubscribeNotifications> {
         let record =
-            from_avro_datum(&SubscribeNotifications::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&subscribenotifications_avro_schema().unwrap(), input, None).unwrap();
         from_value::<SubscribeNotifications>(&record)
     }
 }

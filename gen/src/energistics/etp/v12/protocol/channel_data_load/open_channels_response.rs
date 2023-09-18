@@ -24,22 +24,30 @@ pub struct OpenChannelsResponse {
     pub channels: HashMap<String, OpenChannelInfo>,
 }
 
-impl Schemable for OpenChannelsResponse {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn openchannelsresponse_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for OpenChannelsResponse {
+    fn avro_schema(&self) -> Option<Schema> {
+        openchannelsresponse_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for OpenChannelsResponse {}
+
+impl AvroDeserializable for OpenChannelsResponse {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<OpenChannelsResponse> {
         let record =
-            from_avro_datum(&OpenChannelsResponse::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&openchannelsresponse_avro_schema().unwrap(), input, None).unwrap();
         from_value::<OpenChannelsResponse>(&record)
     }
 }

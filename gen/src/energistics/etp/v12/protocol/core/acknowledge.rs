@@ -18,21 +18,29 @@ use std::io::Read;
 #[serde(rename_all = "PascalCase")]
 pub struct Acknowledge {}
 
-impl Schemable for Acknowledge {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn acknowledge_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for Acknowledge {
+    fn avro_schema(&self) -> Option<Schema> {
+        acknowledge_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for Acknowledge {}
+
+impl AvroDeserializable for Acknowledge {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Acknowledge> {
-        let record = from_avro_datum(&Acknowledge::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&acknowledge_avro_schema().unwrap(), input, None).unwrap();
         from_value::<Acknowledge>(&record)
     }
 }

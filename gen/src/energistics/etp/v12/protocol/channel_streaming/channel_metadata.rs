@@ -23,22 +23,29 @@ pub struct ChannelMetadata {
     pub channels: Vec<ChannelMetadataRecord>,
 }
 
-impl Schemable for ChannelMetadata {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn channelmetadata_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for ChannelMetadata {
+    fn avro_schema(&self) -> Option<Schema> {
+        channelmetadata_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for ChannelMetadata {}
+
+impl AvroDeserializable for ChannelMetadata {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<ChannelMetadata> {
-        let record =
-            from_avro_datum(&ChannelMetadata::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&channelmetadata_avro_schema().unwrap(), input, None).unwrap();
         from_value::<ChannelMetadata>(&record)
     }
 }

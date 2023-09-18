@@ -25,22 +25,30 @@ pub struct GetGrowingDataObjectsHeader {
     pub format: String,
 }
 
-impl Schemable for GetGrowingDataObjectsHeader {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn getgrowingdataobjectsheader_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for GetGrowingDataObjectsHeader {
+    fn avro_schema(&self) -> Option<Schema> {
+        getgrowingdataobjectsheader_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for GetGrowingDataObjectsHeader {}
+
+impl AvroDeserializable for GetGrowingDataObjectsHeader {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetGrowingDataObjectsHeader> {
         let record = from_avro_datum(
-            &GetGrowingDataObjectsHeader::avro_schema().unwrap(),
+            &getgrowingdataobjectsheader_avro_schema().unwrap(),
             input,
             None,
         )

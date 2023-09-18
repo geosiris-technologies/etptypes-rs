@@ -24,21 +24,29 @@ pub struct DeleteParts {
     pub uids: HashMap<String, String>,
 }
 
-impl Schemable for DeleteParts {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn deleteparts_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for DeleteParts {
+    fn avro_schema(&self) -> Option<Schema> {
+        deleteparts_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for DeleteParts {}
+
+impl AvroDeserializable for DeleteParts {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DeleteParts> {
-        let record = from_avro_datum(&DeleteParts::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&deleteparts_avro_schema().unwrap(), input, None).unwrap();
         from_value::<DeleteParts>(&record)
     }
 }

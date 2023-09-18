@@ -28,22 +28,30 @@ pub struct GetDeletedResources {
     pub data_object_types: Vec<String>,
 }
 
-impl Schemable for GetDeletedResources {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn getdeletedresources_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for GetDeletedResources {
+    fn avro_schema(&self) -> Option<Schema> {
+        getdeletedresources_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for GetDeletedResources {}
+
+impl AvroDeserializable for GetDeletedResources {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<GetDeletedResources> {
         let record =
-            from_avro_datum(&GetDeletedResources::avro_schema().unwrap(), input, None).unwrap();
+            from_avro_datum(&getdeletedresources_avro_schema().unwrap(), input, None).unwrap();
         from_value::<GetDeletedResources>(&record)
     }
 }

@@ -24,21 +24,29 @@ pub struct DataArray {
     pub data: AnyArray,
 }
 
-impl Schemable for DataArray {
-    fn avro_schema() -> Option<Schema> {
-        match Schema::parse_str(AVRO_SCHEMA) {
-            Ok(result) => Some(result),
-            Err(e) => {
-                panic!("{:?}", e);
-            }
+fn dataarray_avro_schema() -> Option<Schema> {
+    match Schema::parse_str(AVRO_SCHEMA) {
+        Ok(result) => Some(result),
+        Err(e) => {
+            panic!("{:?}", e);
         }
     }
-    fn avro_schema_str() -> &'static str {
+}
+
+impl Schemable for DataArray {
+    fn avro_schema(&self) -> Option<Schema> {
+        dataarray_avro_schema()
+    }
+    fn avro_schema_str(&self) -> &'static str {
         AVRO_SCHEMA
     }
+}
 
+impl AvroSerializable for DataArray {}
+
+impl AvroDeserializable for DataArray {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<DataArray> {
-        let record = from_avro_datum(&DataArray::avro_schema().unwrap(), input, None).unwrap();
+        let record = from_avro_datum(&dataarray_avro_schema().unwrap(), input, None).unwrap();
         from_value::<DataArray>(&record)
     }
 }

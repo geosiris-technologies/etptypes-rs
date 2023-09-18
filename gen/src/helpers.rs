@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2023 Geosiris
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 use apache_avro::{to_avro_datum, to_value, AvroResult, Schema};
+use enum_dispatch::enum_dispatch;
 use std::fmt;
 use std::io::Read;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -58,23 +59,31 @@ pub const ETP11VERSION: Version = Version {
     patch: 0,
 };
 
+#[enum_dispatch(ProtocolMessage)]
 pub trait Schemable {
-    fn avro_schema() -> Option<Schema>;
-    fn avro_schema_str() -> &'static str;
+    fn avro_schema(&self) -> Option<Schema>;
+    fn avro_schema_str(&self) -> &'static str;
+}
 
+#[enum_dispatch(ProtocolMessage)]
+pub trait AvroSerializable: Schemable {
     fn avro_serialize(&self) -> AvroResult<Vec<u8>>
     where
-        Self: serde::Serialize,
+        Self: serde::Serialize + Schemable,
     {
         let hdr_value = to_value(self).unwrap();
-        return to_avro_datum(&Self::avro_schema().unwrap(), hdr_value);
+        return to_avro_datum(&self.avro_schema().unwrap(), hdr_value);
     }
+}
+
+pub trait AvroDeserializable {
     fn avro_deserialize<R: Read>(input: &mut R) -> AvroResult<Self>
     where
         Self: Sized;
 }
 
-pub trait ETPMetadata: Schemable {
+#[enum_dispatch(ProtocolMessage)]
+pub trait ETPMetadata: Schemable + AvroSerializable {
     fn protocol(&self) -> i32;
     fn message_type(&self) -> i32;
     fn sender_role(&self) -> Vec<Role>;

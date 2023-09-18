@@ -5,12 +5,15 @@
 #![allow(non_camel_case_types)]
 use crate::energistics::etp::v12::datatypes::message_header::MessageHeader;
 use crate::helpers::*;
+use apache_avro::{AvroResult, Schema};
 use bytes;
 use derivative::Derivative;
+use enum_dispatch::enum_dispatch;
 use std::collections::HashMap;
 use std::io::Read;
 use std::time::SystemTime;
 
+#[enum_dispatch]
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub enum ProtocolMessage {
