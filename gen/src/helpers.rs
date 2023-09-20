@@ -4,6 +4,7 @@ use apache_avro::{to_avro_datum, to_value, AvroResult, Schema};
 use enum_dispatch::enum_dispatch;
 use std::fmt;
 use std::io::Read;
+use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::energistics::etp::v12::datatypes::version::Version;
@@ -42,6 +43,22 @@ impl fmt::Display for Role {
                 Self::Consumer => "consumer".to_string(),
             }
         )
+    }
+}
+
+impl FromStr for Role {
+    type Err = ();
+    fn from_str(input: &str) -> Result<Role, Self::Err> {
+        match input {
+            "*" => Ok(Self::All),
+            "client" => Ok(Self::Client),
+            "server" => Ok(Self::Server),
+            "customer" => Ok(Self::Customer),
+            "store" => Ok(Self::Store),
+            "producer" => Ok(Self::Producer),
+            "consumer" => Ok(Self::Consumer),
+            _ => Err(()),
+        }
     }
 }
 
