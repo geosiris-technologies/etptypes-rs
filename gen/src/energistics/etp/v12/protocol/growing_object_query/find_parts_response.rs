@@ -86,11 +86,11 @@ impl FindPartsResponse {
     }
 }
 
-impl Default for FindPartsResponse {
+impl FindPartsResponse {
     /* Protocol 16, MessageType : 2 */
-    fn default() -> FindPartsResponse {
+    pub fn default_with_params(uri: String) -> FindPartsResponse {
         FindPartsResponse {
-            uri: "".to_string(),
+            uri,
             server_sort_order: "".to_string(),
             format: "xml".to_string(),
             parts: vec![],

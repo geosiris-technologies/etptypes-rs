@@ -95,18 +95,13 @@ impl GetResources {
 
 impl GetResources {
     /* Protocol 3, MessageType : 1 */
-    pub fn default_with_params(
-        context: ContextInfo,
-        scope: ContextScopeKind,
-        store_last_write_filter: Option<i64>,
-        active_status_filter: Option<ActiveStatusKind>,
-    ) -> GetResources {
+    pub fn default_with_params(context: ContextInfo, scope: ContextScopeKind) -> GetResources {
         GetResources {
             context,
             scope,
             count_objects: false,
-            store_last_write_filter,
-            active_status_filter,
+            store_last_write_filter: None,
+            active_status_filter: None,
             include_edges: false,
         }
     }

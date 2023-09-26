@@ -20,17 +20,29 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ChannelDataKind {
     /* None */
+    #[serde(rename(serialize = "DateTime", deserialize = "DateTime"))]
     DateTime,
+    #[serde(rename(serialize = "ElapsedTime", deserialize = "ElapsedTime"))]
     ElapsedTime,
+    #[serde(rename(serialize = "MeasuredDepth", deserialize = "MeasuredDepth"))]
     MeasuredDepth,
+    #[serde(rename(serialize = "PassIndexedDepth", deserialize = "PassIndexedDepth"))]
     PassIndexedDepth,
+    #[serde(rename(serialize = "TrueVerticalDepth", deserialize = "TrueVerticalDepth"))]
     TrueVerticalDepth,
+    #[serde(rename(serialize = "typeBoolean", deserialize = "typeBoolean"))]
     TypeBoolean,
+    #[serde(rename(serialize = "typeInt", deserialize = "typeInt"))]
     TypeInt,
+    #[serde(rename(serialize = "typeLong", deserialize = "typeLong"))]
     TypeLong,
+    #[serde(rename(serialize = "typeFloat", deserialize = "typeFloat"))]
     TypeFloat,
+    #[serde(rename(serialize = "typeDouble", deserialize = "typeDouble"))]
     TypeDouble,
+    #[serde(rename(serialize = "typeString", deserialize = "typeString"))]
     TypeString,
+    #[serde(rename(serialize = "typeBytes", deserialize = "typeBytes"))]
     TypeBytes,
 }
 

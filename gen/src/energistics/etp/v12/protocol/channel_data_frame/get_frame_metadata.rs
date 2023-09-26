@@ -77,11 +77,11 @@ impl GetFrameMetadata {
     }
 }
 
-impl Default for GetFrameMetadata {
+impl GetFrameMetadata {
     /* Protocol 2, MessageType : 1 */
-    fn default() -> GetFrameMetadata {
+    pub fn default_with_params(uri: String) -> GetFrameMetadata {
         GetFrameMetadata {
-            uri: "".to_string(),
+            uri,
             include_all_channel_secondary_indexes: false,
         }
     }

@@ -4,7 +4,6 @@ use apache_avro::{to_avro_datum, to_value, AvroResult, Schema};
 use enum_dispatch::enum_dispatch;
 use std::fmt;
 use std::io::Read;
-use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::energistics::etp::v12::datatypes::version::Version;
@@ -46,22 +45,6 @@ impl fmt::Display for Role {
     }
 }
 
-impl FromStr for Role {
-    type Err = ();
-    fn from_str(input: &str) -> Result<Role, Self::Err> {
-        match input {
-            "*" => Ok(Self::All),
-            "client" => Ok(Self::Client),
-            "server" => Ok(Self::Server),
-            "customer" => Ok(Self::Customer),
-            "store" => Ok(Self::Store),
-            "producer" => Ok(Self::Producer),
-            "consumer" => Ok(Self::Consumer),
-            _ => Err(()),
-        }
-    }
-}
-
 pub const ETP12VERSION: Version = Version {
     major: 1,
     minor: 2,
@@ -100,7 +83,7 @@ pub trait AvroDeserializable {
 }
 
 #[enum_dispatch(ProtocolMessage)]
-pub trait ETPMetadata: Schemable + AvroSerializable {
+pub trait ETPMetadata: AvroSerializable {
     fn protocol(&self) -> i32;
     fn message_type(&self) -> i32;
     fn sender_role(&self) -> Vec<Role>;

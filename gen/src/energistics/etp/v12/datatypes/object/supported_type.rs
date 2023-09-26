@@ -56,13 +56,10 @@ impl AvroDeserializable for SupportedType {
 
 impl SupportedType {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(
-        object_count: Option<i32>,
-        relationship_kind: RelationshipKind,
-    ) -> SupportedType {
+    pub fn default_with_params(relationship_kind: RelationshipKind) -> SupportedType {
         SupportedType {
             data_object_type: "".to_string(),
-            object_count,
+            object_count: None,
             relationship_kind,
         }
     }

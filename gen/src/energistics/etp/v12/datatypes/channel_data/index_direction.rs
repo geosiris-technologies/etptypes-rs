@@ -20,8 +20,11 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum IndexDirection {
     /* None */
+    #[serde(rename(serialize = "Increasing", deserialize = "Increasing"))]
     Increasing,
+    #[serde(rename(serialize = "Decreasing", deserialize = "Decreasing"))]
     Decreasing,
+    #[serde(rename(serialize = "Unordered", deserialize = "Unordered"))]
     Unordered,
 }
 

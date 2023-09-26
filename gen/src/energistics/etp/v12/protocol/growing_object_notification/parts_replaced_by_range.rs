@@ -99,9 +99,12 @@ impl PartsReplacedByRange {
 
 impl PartsReplacedByRange {
     /* Protocol 7, MessageType : 6 */
-    pub fn default_with_params(deleted_interval: IndexInterval) -> PartsReplacedByRange {
+    pub fn default_with_params(
+        uri: String,
+        deleted_interval: IndexInterval,
+    ) -> PartsReplacedByRange {
         PartsReplacedByRange {
-            uri: "".to_string(),
+            uri,
             request_uuid: random_uuid(),
             change_time: time_to_etp(SystemTime::now()),
             deleted_interval,

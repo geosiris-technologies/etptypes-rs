@@ -20,10 +20,15 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ContextScopeKind {
     /* None */
+    #[serde(rename(serialize = "self", deserialize = "self"))]
     Self_,
+    #[serde(rename(serialize = "sources", deserialize = "sources"))]
     Sources,
+    #[serde(rename(serialize = "targets", deserialize = "targets"))]
     Targets,
+    #[serde(rename(serialize = "sourcesOrSelf", deserialize = "sourcesOrSelf"))]
     SourcesOrSelf,
+    #[serde(rename(serialize = "targetsOrSelf", deserialize = "targetsOrSelf"))]
     TargetsOrSelf,
 }
 

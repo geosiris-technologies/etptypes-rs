@@ -61,16 +61,12 @@ impl AvroDeserializable for ChannelSubscribeInfo {
 
 impl ChannelSubscribeInfo {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(
-        channel_id: i64,
-        start_index: IndexValue,
-        request_latest_index_count: Option<i32>,
-    ) -> ChannelSubscribeInfo {
+    pub fn default_with_params(channel_id: i64, start_index: IndexValue) -> ChannelSubscribeInfo {
         ChannelSubscribeInfo {
             channel_id,
             start_index,
             data_changes: true,
-            request_latest_index_count,
+            request_latest_index_count: None,
         }
     }
 }

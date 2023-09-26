@@ -20,7 +20,9 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ActiveStatusKind {
     /* None */
+    #[serde(rename(serialize = "Active", deserialize = "Active"))]
     Active,
+    #[serde(rename(serialize = "Inactive", deserialize = "Inactive"))]
     Inactive,
 }
 

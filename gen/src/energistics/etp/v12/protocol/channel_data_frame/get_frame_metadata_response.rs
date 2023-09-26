@@ -86,11 +86,11 @@ impl GetFrameMetadataResponse {
     }
 }
 
-impl Default for GetFrameMetadataResponse {
+impl GetFrameMetadataResponse {
     /* Protocol 2, MessageType : 2 */
-    fn default() -> GetFrameMetadataResponse {
+    pub fn default_with_params(uri: String) -> GetFrameMetadataResponse {
         GetFrameMetadataResponse {
-            uri: "".to_string(),
+            uri,
             indexes: vec![],
             channels: vec![],
         }

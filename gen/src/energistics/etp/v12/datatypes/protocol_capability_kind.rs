@@ -20,18 +20,55 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ProtocolCapabilityKind {
     /* None */
+    #[serde(rename(
+        serialize = "FrameChangeDetectionPeriod",
+        deserialize = "FrameChangeDetectionPeriod"
+    ))]
     FrameChangeDetectionPeriod,
+    #[serde(rename(serialize = "MaxDataArraySize", deserialize = "MaxDataArraySize"))]
     MaxDataArraySize,
+    #[serde(rename(serialize = "MaxDataObjectSize", deserialize = "MaxDataObjectSize"))]
     MaxDataObjectSize,
+    #[serde(rename(
+        serialize = "MaxFrameResponseRowCount",
+        deserialize = "MaxFrameResponseRowCount"
+    ))]
     MaxFrameResponseRowCount,
+    #[serde(rename(serialize = "MaxIndexCount", deserialize = "MaxIndexCount"))]
     MaxIndexCount,
+    #[serde(rename(
+        serialize = "MaxRangeChannelCount",
+        deserialize = "MaxRangeChannelCount"
+    ))]
     MaxRangeChannelCount,
+    #[serde(rename(
+        serialize = "MaxRangeDataItemCount",
+        deserialize = "MaxRangeDataItemCount"
+    ))]
     MaxRangeDataItemCount,
+    #[serde(rename(serialize = "MaxResponseCount", deserialize = "MaxResponseCount"))]
     MaxResponseCount,
+    #[serde(rename(
+        serialize = "MaxStreamingChannelsSessionCount",
+        deserialize = "MaxStreamingChannelsSessionCount"
+    ))]
     MaxStreamingChannelsSessionCount,
+    #[serde(rename(
+        serialize = "MaxSubscriptionSessionCount",
+        deserialize = "MaxSubscriptionSessionCount"
+    ))]
     MaxSubscriptionSessionCount,
+    #[serde(rename(serialize = "MaxTransactionCount", deserialize = "MaxTransactionCount"))]
     MaxTransactionCount,
+    #[serde(rename(
+        serialize = "SupportsSecondaryIndexFiltering",
+        deserialize = "SupportsSecondaryIndexFiltering"
+    ))]
     SupportsSecondaryIndexFiltering,
+    #[serde(rename(
+        serialize = "TransactionTimeoutPeriod",
+        deserialize = "TransactionTimeoutPeriod"
+    ))]
     TransactionTimeoutPeriod,
 }
 

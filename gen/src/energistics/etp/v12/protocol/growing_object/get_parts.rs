@@ -79,11 +79,11 @@ impl GetParts {
     }
 }
 
-impl Default for GetParts {
+impl GetParts {
     /* Protocol 6, MessageType : 3 */
-    fn default() -> GetParts {
+    pub fn default_with_params(uri: String) -> GetParts {
         GetParts {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
             uids: HashMap::new(),
         }

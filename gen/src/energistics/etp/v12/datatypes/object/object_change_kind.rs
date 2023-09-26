@@ -20,12 +20,22 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ObjectChangeKind {
     /* None */
+    #[serde(rename(serialize = "insert", deserialize = "insert"))]
     Insert,
+    #[serde(rename(serialize = "update", deserialize = "update"))]
     Update,
+    #[serde(rename(serialize = "authorized", deserialize = "authorized"))]
     Authorized,
+    #[serde(rename(serialize = "joined", deserialize = "joined"))]
     Joined,
+    #[serde(rename(serialize = "unjoined", deserialize = "unjoined"))]
     Unjoined,
+    #[serde(rename(serialize = "joinedSubscription", deserialize = "joinedSubscription"))]
     JoinedSubscription,
+    #[serde(rename(
+        serialize = "unjoinedSubscription",
+        deserialize = "unjoinedSubscription"
+    ))]
     UnjoinedSubscription,
 }
 

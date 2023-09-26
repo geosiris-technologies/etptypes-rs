@@ -20,12 +20,19 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum AnyArrayType {
     /* None */
+    #[serde(rename(serialize = "arrayOfBoolean", deserialize = "arrayOfBoolean"))]
     ArrayOfBoolean,
+    #[serde(rename(serialize = "arrayOfInt", deserialize = "arrayOfInt"))]
     ArrayOfInt,
+    #[serde(rename(serialize = "arrayOfLong", deserialize = "arrayOfLong"))]
     ArrayOfLong,
+    #[serde(rename(serialize = "arrayOfFloat", deserialize = "arrayOfFloat"))]
     ArrayOfFloat,
+    #[serde(rename(serialize = "arrayOfDouble", deserialize = "arrayOfDouble"))]
     ArrayOfDouble,
+    #[serde(rename(serialize = "arrayOfString", deserialize = "arrayOfString"))]
     ArrayOfString,
+    #[serde(rename(serialize = "bytes", deserialize = "bytes"))]
     Bytes,
 }
 

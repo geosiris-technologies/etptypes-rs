@@ -83,6 +83,13 @@ impl AvroDeserializable for DataValue {
     }
 }
 
+impl Default for DataValue {
+    /* Protocol , MessageType :  */
+    fn default() -> DataValue {
+        DataValue { item: None }
+    }
+}
+
 pub static AVRO_SCHEMA: &'static str = r#"{
     "type": "record",
     "namespace": "Energistics.Etp.v12.Datatypes",

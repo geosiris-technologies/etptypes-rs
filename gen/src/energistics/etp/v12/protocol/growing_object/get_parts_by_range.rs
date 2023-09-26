@@ -86,9 +86,9 @@ impl GetPartsByRange {
 
 impl GetPartsByRange {
     /* Protocol 6, MessageType : 4 */
-    pub fn default_with_params(index_interval: IndexInterval) -> GetPartsByRange {
+    pub fn default_with_params(uri: String, index_interval: IndexInterval) -> GetPartsByRange {
         GetPartsByRange {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
             index_interval,
             include_overlapping_intervals: true,

@@ -94,12 +94,13 @@ impl AvroDeserializable for ChannelMetadataRecord {
 impl ChannelMetadataRecord {
     /* Protocol , MessageType :  */
     pub fn default_with_params(
+        uri: String,
         id: i64,
         data_kind: ChannelDataKind,
         status: ActiveStatusKind,
     ) -> ChannelMetadataRecord {
         ChannelMetadataRecord {
-            uri: "".to_string(),
+            uri,
             id,
             indexes: vec![],
             channel_name: "".to_string(),

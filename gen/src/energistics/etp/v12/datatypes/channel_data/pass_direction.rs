@@ -20,8 +20,11 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum PassDirection {
     /* None */
+    #[serde(rename(serialize = "Up", deserialize = "Up"))]
     Up,
+    #[serde(rename(serialize = "HoldingSteady", deserialize = "HoldingSteady"))]
     HoldingSteady,
+    #[serde(rename(serialize = "Down", deserialize = "Down"))]
     Down,
 }
 

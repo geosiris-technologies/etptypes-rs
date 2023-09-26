@@ -20,13 +20,21 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum ChannelIndexKind {
     /* None */
+    #[serde(rename(serialize = "DateTime", deserialize = "DateTime"))]
     DateTime,
+    #[serde(rename(serialize = "ElapsedTime", deserialize = "ElapsedTime"))]
     ElapsedTime,
+    #[serde(rename(serialize = "MeasuredDepth", deserialize = "MeasuredDepth"))]
     MeasuredDepth,
+    #[serde(rename(serialize = "TrueVerticalDepth", deserialize = "TrueVerticalDepth"))]
     TrueVerticalDepth,
+    #[serde(rename(serialize = "PassIndexedDepth", deserialize = "PassIndexedDepth"))]
     PassIndexedDepth,
+    #[serde(rename(serialize = "Pressure", deserialize = "Pressure"))]
     Pressure,
+    #[serde(rename(serialize = "Temperature", deserialize = "Temperature"))]
     Temperature,
+    #[serde(rename(serialize = "Scalar", deserialize = "Scalar"))]
     Scalar,
 }
 

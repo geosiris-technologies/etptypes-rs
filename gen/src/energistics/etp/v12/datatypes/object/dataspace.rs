@@ -64,9 +64,13 @@ impl AvroDeserializable for Dataspace {
 
 impl Dataspace {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(store_last_write: i64, store_created: i64) -> Dataspace {
+    pub fn default_with_params(
+        uri: String,
+        store_last_write: i64,
+        store_created: i64,
+    ) -> Dataspace {
         Dataspace {
-            uri: "".to_string(),
+            uri,
             path: "".to_string(),
             store_last_write,
             store_created,

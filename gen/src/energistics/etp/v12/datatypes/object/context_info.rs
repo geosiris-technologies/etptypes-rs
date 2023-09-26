@@ -68,9 +68,13 @@ impl AvroDeserializable for ContextInfo {
 
 impl ContextInfo {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(depth: i32, navigable_edges: RelationshipKind) -> ContextInfo {
+    pub fn default_with_params(
+        uri: String,
+        depth: i32,
+        navigable_edges: RelationshipKind,
+    ) -> ContextInfo {
         ContextInfo {
-            uri: "".to_string(),
+            uri,
             depth,
             data_object_types: vec![],
             navigable_edges,

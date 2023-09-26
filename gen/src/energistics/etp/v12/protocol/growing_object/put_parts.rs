@@ -81,11 +81,11 @@ impl PutParts {
     }
 }
 
-impl Default for PutParts {
+impl PutParts {
     /* Protocol 6, MessageType : 5 */
-    fn default() -> PutParts {
+    pub fn default_with_params(uri: String) -> PutParts {
         PutParts {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
             parts: HashMap::new(),
         }

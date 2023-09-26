@@ -20,31 +20,60 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum Protocol {
     /* None */
+    #[serde(rename(serialize = "Core", deserialize = "Core"))]
     Core = 0,
+    #[serde(rename(serialize = "ChannelStreaming", deserialize = "ChannelStreaming"))]
     ChannelStreaming = 1,
+    #[serde(rename(serialize = "ChannelDataFrame", deserialize = "ChannelDataFrame"))]
     ChannelDataFrame = 2,
+    #[serde(rename(serialize = "Discovery", deserialize = "Discovery"))]
     Discovery = 3,
+    #[serde(rename(serialize = "Store", deserialize = "Store"))]
     Store = 4,
+    #[serde(rename(serialize = "StoreNotification", deserialize = "StoreNotification"))]
     StoreNotification = 5,
+    #[serde(rename(serialize = "GrowingObject", deserialize = "GrowingObject"))]
     GrowingObject = 6,
+    #[serde(rename(
+        serialize = "GrowingObjectNotification",
+        deserialize = "GrowingObjectNotification"
+    ))]
     GrowingObjectNotification = 7,
+    #[serde(rename(serialize = "DEPRECATED_8", deserialize = "DEPRECATED_8"))]
     DEPRECATED8 = 8,
+    #[serde(rename(serialize = "DataArray", deserialize = "DataArray"))]
     DataArray = 9,
+    #[serde(rename(serialize = "RESERVED_10", deserialize = "RESERVED_10"))]
     RESERVED10 = 10,
+    #[serde(rename(serialize = "RESERVED_11", deserialize = "RESERVED_11"))]
     RESERVED11 = 11,
+    #[serde(rename(serialize = "RESERVED_12", deserialize = "RESERVED_12"))]
     RESERVED12 = 12,
+    #[serde(rename(serialize = "DiscoveryQuery", deserialize = "DiscoveryQuery"))]
     DiscoveryQuery = 13,
+    #[serde(rename(serialize = "StoreQuery", deserialize = "StoreQuery"))]
     StoreQuery = 14,
+    #[serde(rename(serialize = "RESERVED_15", deserialize = "RESERVED_15"))]
     RESERVED15 = 15,
+    #[serde(rename(serialize = "GrowingObjectQuery", deserialize = "GrowingObjectQuery"))]
     GrowingObjectQuery = 16,
+    #[serde(rename(serialize = "RESERVED_17", deserialize = "RESERVED_17"))]
     RESERVED17 = 17,
+    #[serde(rename(serialize = "Transaction", deserialize = "Transaction"))]
     Transaction = 18,
+    #[serde(rename(serialize = "RESERVED_19", deserialize = "RESERVED_19"))]
     RESERVED19 = 19,
+    #[serde(rename(serialize = "RESERVED_20", deserialize = "RESERVED_20"))]
     RESERVED20 = 20,
+    #[serde(rename(serialize = "ChannelSubscribe", deserialize = "ChannelSubscribe"))]
     ChannelSubscribe = 21,
+    #[serde(rename(serialize = "ChannelDataLoad", deserialize = "ChannelDataLoad"))]
     ChannelDataLoad = 22,
+    #[serde(rename(serialize = "RESERVED_23", deserialize = "RESERVED_23"))]
     RESERVED23 = 23,
+    #[serde(rename(serialize = "Dataspace", deserialize = "Dataspace"))]
     Dataspace = 24,
+    #[serde(rename(serialize = "SupportedTypes", deserialize = "SupportedTypes"))]
     SupportedTypes = 25,
 }
 

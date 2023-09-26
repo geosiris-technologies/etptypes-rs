@@ -82,11 +82,11 @@ impl GetPartsResponse {
     }
 }
 
-impl Default for GetPartsResponse {
+impl GetPartsResponse {
     /* Protocol 6, MessageType : 6 */
-    fn default() -> GetPartsResponse {
+    pub fn default_with_params(uri: String) -> GetPartsResponse {
         GetPartsResponse {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
             parts: HashMap::new(),
         }

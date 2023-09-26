@@ -75,11 +75,11 @@ impl DeleteParts {
     }
 }
 
-impl Default for DeleteParts {
+impl DeleteParts {
     /* Protocol 6, MessageType : 1 */
-    fn default() -> DeleteParts {
+    pub fn default_with_params(uri: String) -> DeleteParts {
         DeleteParts {
-            uri: "".to_string(),
+            uri,
             uids: HashMap::new(),
         }
     }

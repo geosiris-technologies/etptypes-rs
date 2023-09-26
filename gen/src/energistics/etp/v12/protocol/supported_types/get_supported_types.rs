@@ -88,9 +88,9 @@ impl GetSupportedTypes {
 
 impl GetSupportedTypes {
     /* Protocol 25, MessageType : 1 */
-    pub fn default_with_params(scope: ContextScopeKind) -> GetSupportedTypes {
+    pub fn default_with_params(uri: String, scope: ContextScopeKind) -> GetSupportedTypes {
         GetSupportedTypes {
-            uri: "".to_string(),
+            uri,
             scope,
             return_empty_types: false,
             count_objects: false,

@@ -84,11 +84,11 @@ impl PartsDeleted {
     }
 }
 
-impl Default for PartsDeleted {
+impl PartsDeleted {
     /* Protocol 7, MessageType : 3 */
-    fn default() -> PartsDeleted {
+    pub fn default_with_params(uri: String) -> PartsDeleted {
         PartsDeleted {
-            uri: "".to_string(),
+            uri,
             request_uuid: random_uuid(),
             change_time: time_to_etp(SystemTime::now()),
             uids: vec![],

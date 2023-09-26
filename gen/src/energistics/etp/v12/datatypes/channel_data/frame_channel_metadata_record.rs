@@ -91,11 +91,12 @@ impl AvroDeserializable for FrameChannelMetadataRecord {
 impl FrameChannelMetadataRecord {
     /* Protocol , MessageType :  */
     pub fn default_with_params(
+        uri: String,
         data_kind: ChannelDataKind,
         status: ActiveStatusKind,
     ) -> FrameChannelMetadataRecord {
         FrameChannelMetadataRecord {
-            uri: "".to_string(),
+            uri,
             channel_name: "".to_string(),
             data_kind,
             uom: "".to_string(),

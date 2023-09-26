@@ -50,11 +50,11 @@ impl AvroDeserializable for DataArrayIdentifier {
     }
 }
 
-impl Default for DataArrayIdentifier {
+impl DataArrayIdentifier {
     /* Protocol , MessageType :  */
-    fn default() -> DataArrayIdentifier {
+    pub fn default_with_params(uri: String) -> DataArrayIdentifier {
         DataArrayIdentifier {
-            uri: "".to_string(),
+            uri,
             path_in_resource: "".to_string(),
         }
     }

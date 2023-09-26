@@ -95,9 +95,9 @@ impl PartsChanged {
 
 impl PartsChanged {
     /* Protocol 7, MessageType : 2 */
-    pub fn default_with_params(change_kind: ObjectChangeKind) -> PartsChanged {
+    pub fn default_with_params(uri: String, change_kind: ObjectChangeKind) -> PartsChanged {
         PartsChanged {
-            uri: "".to_string(),
+            uri,
             request_uuid: random_uuid(),
             change_kind,
             change_time: time_to_etp(SystemTime::now()),

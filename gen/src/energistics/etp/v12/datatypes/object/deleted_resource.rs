@@ -55,11 +55,11 @@ impl AvroDeserializable for DeletedResource {
     }
 }
 
-impl Default for DeletedResource {
+impl DeletedResource {
     /* Protocol , MessageType :  */
-    fn default() -> DeletedResource {
+    pub fn default_with_params(uri: String) -> DeletedResource {
         DeletedResource {
-            uri: "".to_string(),
+            uri,
             deleted_time: time_to_etp(SystemTime::now()),
             custom_data: HashMap::new(),
         }

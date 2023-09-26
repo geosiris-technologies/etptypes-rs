@@ -81,19 +81,18 @@ impl AvroDeserializable for Resource {
 impl Resource {
     /* Protocol , MessageType :  */
     pub fn default_with_params(
-        source_count: Option<i32>,
-        target_count: Option<i32>,
+        uri: String,
         last_changed: i64,
         store_last_write: i64,
         store_created: i64,
         active_status: ActiveStatusKind,
     ) -> Resource {
         Resource {
-            uri: "".to_string(),
+            uri,
             alternate_uris: vec![],
             name: "".to_string(),
-            source_count,
-            target_count,
+            source_count: None,
+            target_count: None,
             last_changed,
             store_last_write,
             store_created,

@@ -91,9 +91,9 @@ impl ReplacePartsByRange {
 
 impl ReplacePartsByRange {
     /* Protocol 6, MessageType : 7 */
-    pub fn default_with_params(delete_interval: IndexInterval) -> ReplacePartsByRange {
+    pub fn default_with_params(uri: String, delete_interval: IndexInterval) -> ReplacePartsByRange {
         ReplacePartsByRange {
-            uri: "".to_string(),
+            uri,
             delete_interval,
             include_overlapping_intervals: true,
             format: "xml".to_string(),

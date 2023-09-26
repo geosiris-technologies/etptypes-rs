@@ -81,11 +81,11 @@ impl ObjectDeleted {
     }
 }
 
-impl Default for ObjectDeleted {
+impl ObjectDeleted {
     /* Protocol 5, MessageType : 3 */
-    fn default() -> ObjectDeleted {
+    pub fn default_with_params(uri: String) -> ObjectDeleted {
         ObjectDeleted {
-            uri: "".to_string(),
+            uri,
             change_time: time_to_etp(SystemTime::now()),
             request_uuid: random_uuid(),
         }

@@ -20,8 +20,11 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum RelationshipKind {
     /* None */
+    #[serde(rename(serialize = "Primary", deserialize = "Primary"))]
     Primary,
+    #[serde(rename(serialize = "Secondary", deserialize = "Secondary"))]
     Secondary,
+    #[serde(rename(serialize = "Both", deserialize = "Both"))]
     Both,
 }
 

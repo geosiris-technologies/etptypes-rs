@@ -91,17 +91,12 @@ impl FindDataObjects {
 
 impl FindDataObjects {
     /* Protocol 14, MessageType : 1 */
-    pub fn default_with_params(
-        context: ContextInfo,
-        scope: ContextScopeKind,
-        store_last_write_filter: Option<i64>,
-        active_status_filter: Option<ActiveStatusKind>,
-    ) -> FindDataObjects {
+    pub fn default_with_params(context: ContextInfo, scope: ContextScopeKind) -> FindDataObjects {
         FindDataObjects {
             context,
             scope,
-            store_last_write_filter,
-            active_status_filter,
+            store_last_write_filter: None,
+            active_status_filter: None,
             format: "xml".to_string(),
         }
     }

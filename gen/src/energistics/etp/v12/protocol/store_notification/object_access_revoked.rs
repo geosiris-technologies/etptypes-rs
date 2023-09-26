@@ -82,11 +82,11 @@ impl ObjectAccessRevoked {
     }
 }
 
-impl Default for ObjectAccessRevoked {
+impl ObjectAccessRevoked {
     /* Protocol 5, MessageType : 5 */
-    fn default() -> ObjectAccessRevoked {
+    pub fn default_with_params(uri: String) -> ObjectAccessRevoked {
         ObjectAccessRevoked {
-            uri: "".to_string(),
+            uri,
             change_time: time_to_etp(SystemTime::now()),
             request_uuid: random_uuid(),
         }

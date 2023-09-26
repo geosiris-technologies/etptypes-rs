@@ -62,15 +62,11 @@ impl AvroDeserializable for DataObject {
 
 impl DataObject {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(
-        resource: Resource,
-        blob_id: Option<Uuid>,
-        data: Vec<u8>,
-    ) -> DataObject {
+    pub fn default_with_params(resource: Resource, data: Vec<u8>) -> DataObject {
         DataObject {
             resource,
             format: "xml".to_string(),
-            blob_id,
+            blob_id: None,
             data,
         }
     }

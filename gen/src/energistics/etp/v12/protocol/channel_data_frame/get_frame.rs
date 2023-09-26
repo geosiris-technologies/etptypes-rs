@@ -92,9 +92,9 @@ impl GetFrame {
 
 impl GetFrame {
     /* Protocol 2, MessageType : 3 */
-    pub fn default_with_params(requested_interval: IndexInterval) -> GetFrame {
+    pub fn default_with_params(uri: String, requested_interval: IndexInterval) -> GetFrame {
         GetFrame {
-            uri: "".to_string(),
+            uri,
             include_all_channel_secondary_indexes: false,
             requested_interval,
             request_uuid: random_uuid(),

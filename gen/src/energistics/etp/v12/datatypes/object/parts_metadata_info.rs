@@ -62,9 +62,9 @@ impl AvroDeserializable for PartsMetadataInfo {
 
 impl PartsMetadataInfo {
     /* Protocol , MessageType :  */
-    pub fn default_with_params(index: IndexMetadataRecord) -> PartsMetadataInfo {
+    pub fn default_with_params(uri: String, index: IndexMetadataRecord) -> PartsMetadataInfo {
         PartsMetadataInfo {
-            uri: "".to_string(),
+            uri,
             name: "".to_string(),
             index,
             custom_data: HashMap::new(),

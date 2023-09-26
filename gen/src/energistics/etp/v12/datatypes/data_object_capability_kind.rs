@@ -20,13 +20,30 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum DataObjectCapabilityKind {
     /* None */
+    #[serde(rename(serialize = "ActiveTimeoutPeriod", deserialize = "ActiveTimeoutPeriod"))]
     ActiveTimeoutPeriod,
+    #[serde(rename(
+        serialize = "MaxContainedDataObjectCount",
+        deserialize = "MaxContainedDataObjectCount"
+    ))]
     MaxContainedDataObjectCount,
+    #[serde(rename(serialize = "MaxDataObjectSize", deserialize = "MaxDataObjectSize"))]
     MaxDataObjectSize,
+    #[serde(rename(
+        serialize = "OrphanedChildrenPrunedOnDelete",
+        deserialize = "OrphanedChildrenPrunedOnDelete"
+    ))]
     OrphanedChildrenPrunedOnDelete,
+    #[serde(rename(serialize = "SupportsGet", deserialize = "SupportsGet"))]
     SupportsGet,
+    #[serde(rename(serialize = "SupportsPut", deserialize = "SupportsPut"))]
     SupportsPut,
+    #[serde(rename(serialize = "SupportsDelete", deserialize = "SupportsDelete"))]
     SupportsDelete,
+    #[serde(rename(
+        serialize = "MaxSecondaryIndexCount",
+        deserialize = "MaxSecondaryIndexCount"
+    ))]
     MaxSecondaryIndexCount,
 }
 

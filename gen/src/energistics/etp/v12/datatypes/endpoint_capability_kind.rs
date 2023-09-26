@@ -20,22 +20,81 @@ use std::str::FromStr;
 #[serde(rename_all = "PascalCase")]
 pub enum EndpointCapabilityKind {
     /* None */
+    #[serde(rename(serialize = "ActiveTimeoutPeriod", deserialize = "ActiveTimeoutPeriod"))]
     ActiveTimeoutPeriod,
+    #[serde(rename(
+        serialize = "AuthorizationDetails",
+        deserialize = "AuthorizationDetails"
+    ))]
     AuthorizationDetails,
+    #[serde(rename(
+        serialize = "ChangePropagationPeriod",
+        deserialize = "ChangePropagationPeriod"
+    ))]
     ChangePropagationPeriod,
+    #[serde(rename(
+        serialize = "ChangeRetentionPeriod",
+        deserialize = "ChangeRetentionPeriod"
+    ))]
     ChangeRetentionPeriod,
+    #[serde(rename(
+        serialize = "MaxConcurrentMultipart",
+        deserialize = "MaxConcurrentMultipart"
+    ))]
     MaxConcurrentMultipart,
+    #[serde(rename(serialize = "MaxDataObjectSize", deserialize = "MaxDataObjectSize"))]
     MaxDataObjectSize,
+    #[serde(rename(serialize = "MaxPartSize", deserialize = "MaxPartSize"))]
     MaxPartSize,
+    #[serde(rename(
+        serialize = "MaxSessionClientCount",
+        deserialize = "MaxSessionClientCount"
+    ))]
     MaxSessionClientCount,
+    #[serde(rename(
+        serialize = "MaxSessionGlobalCount",
+        deserialize = "MaxSessionGlobalCount"
+    ))]
     MaxSessionGlobalCount,
+    #[serde(rename(
+        serialize = "MaxWebSocketFramePayloadSize",
+        deserialize = "MaxWebSocketFramePayloadSize"
+    ))]
     MaxWebSocketFramePayloadSize,
+    #[serde(rename(
+        serialize = "MaxWebSocketMessagePayloadSize",
+        deserialize = "MaxWebSocketMessagePayloadSize"
+    ))]
     MaxWebSocketMessagePayloadSize,
+    #[serde(rename(
+        serialize = "MultipartMessageTimeoutPeriod",
+        deserialize = "MultipartMessageTimeoutPeriod"
+    ))]
     MultipartMessageTimeoutPeriod,
+    #[serde(rename(
+        serialize = "ResponseTimeoutPeriod",
+        deserialize = "ResponseTimeoutPeriod"
+    ))]
     ResponseTimeoutPeriod,
+    #[serde(rename(
+        serialize = "RequestSessionTimeoutPeriod",
+        deserialize = "RequestSessionTimeoutPeriod"
+    ))]
     RequestSessionTimeoutPeriod,
+    #[serde(rename(
+        serialize = "SessionEstablishmentTimeoutPeriod",
+        deserialize = "SessionEstablishmentTimeoutPeriod"
+    ))]
     SessionEstablishmentTimeoutPeriod,
+    #[serde(rename(
+        serialize = "SupportsAlternateRequestUris",
+        deserialize = "SupportsAlternateRequestUris"
+    ))]
     SupportsAlternateRequestUris,
+    #[serde(rename(
+        serialize = "SupportsMessageHeaderExtensions",
+        deserialize = "SupportsMessageHeaderExtensions"
+    ))]
     SupportsMessageHeaderExtensions,
 }
 

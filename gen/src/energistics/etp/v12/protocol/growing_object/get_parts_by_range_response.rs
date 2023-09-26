@@ -82,11 +82,11 @@ impl GetPartsByRangeResponse {
     }
 }
 
-impl Default for GetPartsByRangeResponse {
+impl GetPartsByRangeResponse {
     /* Protocol 6, MessageType : 10 */
-    fn default() -> GetPartsByRangeResponse {
+    pub fn default_with_params(uri: String) -> GetPartsByRangeResponse {
         GetPartsByRangeResponse {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
             parts: vec![],
         }

@@ -76,11 +76,11 @@ impl FindParts {
     }
 }
 
-impl Default for FindParts {
+impl FindParts {
     /* Protocol 16, MessageType : 1 */
-    fn default() -> FindParts {
+    pub fn default_with_params(uri: String) -> FindParts {
         FindParts {
-            uri: "".to_string(),
+            uri,
             format: "xml".to_string(),
         }
     }
