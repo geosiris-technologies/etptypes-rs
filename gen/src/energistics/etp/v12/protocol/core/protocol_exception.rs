@@ -79,11 +79,11 @@ impl ProtocolException {
     }
 }
 
-impl Default for ProtocolException {
+impl ProtocolException {
     /* Protocol 0, MessageType : 1000 */
-    fn default() -> ProtocolException {
+    pub fn default_with_params(error: Option<ErrorInfo>) -> ProtocolException {
         ProtocolException {
-            error: None,
+            error,
             errors: HashMap::new(),
         }
     }

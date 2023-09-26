@@ -72,15 +72,6 @@ impl GetDataspaces {
     }
 }
 
-impl Default for GetDataspaces {
-    /* Protocol 24, MessageType : 1 */
-    fn default() -> GetDataspaces {
-        GetDataspaces {
-            store_last_write_filter: None,
-        }
-    }
-}
-
 pub static AVRO_SCHEMA: &'static str = r#"{
     "type": "record",
     "namespace": "Energistics.Etp.v12.Protocol.Dataspace",

@@ -32,6 +32,8 @@ fn test_get_resources_serialization() {
             include_secondary_sources: false,
         },
         ContextScopeKind::Self_,
+        None,
+        None,
     );
     let record_a = getress.avro_serialize();
     assert!(record_a.is_ok());

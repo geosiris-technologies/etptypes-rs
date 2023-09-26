@@ -80,12 +80,12 @@ impl GetDeletedResources {
     }
 }
 
-impl Default for GetDeletedResources {
+impl GetDeletedResources {
     /* Protocol 3, MessageType : 5 */
-    fn default() -> GetDeletedResources {
+    pub fn default_with_params(delete_time_filter: Option<i64>) -> GetDeletedResources {
         GetDeletedResources {
             dataspace_uri: "".to_string(),
-            delete_time_filter: None,
+            delete_time_filter,
             data_object_types: vec![],
         }
     }

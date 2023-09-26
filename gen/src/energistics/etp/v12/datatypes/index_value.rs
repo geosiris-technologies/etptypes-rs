@@ -55,13 +55,6 @@ impl AvroDeserializable for IndexValue {
     }
 }
 
-impl Default for IndexValue {
-    /* Protocol , MessageType :  */
-    fn default() -> IndexValue {
-        IndexValue { item: None }
-    }
-}
-
 pub static AVRO_SCHEMA: &'static str = r#"{
     "type": "record",
     "namespace": "Energistics.Etp.v12.Datatypes",

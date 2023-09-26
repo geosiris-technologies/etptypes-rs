@@ -82,6 +82,8 @@ impl Resource {
     /* Protocol , MessageType :  */
     pub fn default_with_params(
         uri: String,
+        source_count: Option<i32>,
+        target_count: Option<i32>,
         last_changed: i64,
         store_last_write: i64,
         store_created: i64,
@@ -91,8 +93,8 @@ impl Resource {
             uri,
             alternate_uris: vec![],
             name: "".to_string(),
-            source_count: None,
-            target_count: None,
+            source_count,
+            target_count,
             last_changed,
             store_last_write,
             store_created,

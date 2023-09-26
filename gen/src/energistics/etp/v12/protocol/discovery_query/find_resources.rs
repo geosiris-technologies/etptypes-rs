@@ -85,18 +85,6 @@ impl FindResources {
     }
 }
 
-impl FindResources {
-    /* Protocol 13, MessageType : 1 */
-    pub fn default_with_params(context: ContextInfo, scope: ContextScopeKind) -> FindResources {
-        FindResources {
-            context,
-            scope,
-            store_last_write_filter: None,
-            active_status_filter: None,
-        }
-    }
-}
-
 pub static AVRO_SCHEMA: &'static str = r#"{
     "type": "record",
     "namespace": "Energistics.Etp.v12.Protocol.DiscoveryQuery",
