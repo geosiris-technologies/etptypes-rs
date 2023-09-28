@@ -50,7 +50,6 @@ pub enum UnionBooleanIntLongFloatDoubleStringArrayOfBooleanArrayOfNullableBoolea
 #[derive(Debug, PartialEq, Clone, serde::Deserialize, serde::Serialize, Derivative)]
 #[serde(rename_all = "PascalCase")]
 pub struct DataValue{
-
 	#[serde(rename = "item")]
     pub item: Option<UnionBooleanIntLongFloatDoubleStringArrayOfBooleanArrayOfNullableBooleanArrayOfIntArrayOfNullableIntArrayOfLongArrayOfNullableLongArrayOfFloatArrayOfDoubleArrayOfStringArrayOfBytesBytesAnySparseArray>,
 

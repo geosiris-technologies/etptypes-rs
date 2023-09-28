@@ -18,6 +18,7 @@ pub struct ObjectPart {
     #[serde(rename = "uid")]
     pub uid: String,
 
+    #[serde(with = "serde_bytes")]
     #[serde(rename = "data")]
     pub data: Vec<u8>,
 }

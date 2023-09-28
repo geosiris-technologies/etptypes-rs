@@ -23,6 +23,7 @@ pub struct Chunk {
     #[serde(rename = "blobId")]
     pub blob_id: Uuid,
 
+    #[serde(with = "serde_bytes")]
     #[serde(rename = "data")]
     pub data: Vec<u8>,
 

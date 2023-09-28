@@ -25,9 +25,11 @@ pub struct DataObject {
     #[derivative(Default(value = r#"String::from("xml")"#))]
     pub format: String,
 
+    #[serde(with = "serde_bytes")]
     #[serde(rename = "blobId")]
     pub blob_id: Option<Uuid>,
 
+    #[serde(with = "serde_bytes")]
     #[serde(rename = "data")]
     #[derivative(Default(value = ""))]
     pub data: Vec<u8>,
